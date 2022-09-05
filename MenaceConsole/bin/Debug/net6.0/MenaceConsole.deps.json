@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "MenaceConsole/1.0.0": {
+        "dependencies": {
+          "Noughts_and_Crosses": "1.0.0"
+        },
+        "runtime": {
+          "MenaceConsole.dll": {}
+        }
+      },
+      "Noughts_and_Crosses/1.0.0": {
+        "runtime": {
+          "Noughts_and_Crosses.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MenaceConsole/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Noughts_and_Crosses/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

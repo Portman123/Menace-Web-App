@@ -1,0 +1,16 @@
+﻿=====PowerShell
+
+https://docs.microsoft.com/en-us/ef/core/cli/powershell
+
+add-migration vN
+remove-migration [-force] [vN]
+
+update-database [vN]
+
+https://docs.microsoft.com/en-us/ef/core/cli/dbcontext-creation?tabs=dotnet-core-cli
+
+=====DotNet
+
+dotnet ef database update InitialCreate
+
+dotnet ef database update --verbose --project MenaceData --startup-project Menace
