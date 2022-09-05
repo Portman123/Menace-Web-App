@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace Noughts_and_Crosses
 {
-    public class GameHistory
+    public class GameHistory : Entity
     {
         public LinkedList<Turn> TurnHistory { get; }
         public Player P1 { get; }
         public Player P2 { get; }
 
+        public GameHistory()
+        {
+        }
         public GameHistory(Player p1, Player p2)
         {
             TurnHistory = new LinkedList<Turn>();

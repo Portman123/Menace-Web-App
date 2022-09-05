@@ -36,6 +36,9 @@ namespace MenaceData
         {
             //modelBuilder.Entity<PlayerHumanOnWeb>()
             //    .HasBaseType<Player>();
+            //modelBuilder.Entity<LinkedList<ValueTuple<Coordinate, Coordinate>>>().HasNoKey();
+            //var schemaName = "SYSTEM";
+            //modelBuilder.Entity<Player>().ToTable("Player", schemaName);
         }
 
         // Series of DbSets
@@ -63,5 +66,8 @@ namespace MenaceData
         public DbSet<PlayerRandom> PlayerRandom { get; set; }
 
         public DbSet<PlayerHumanOnWeb> PlayerHumanOnWeb { get; set; }
+
+        public DbSet<Game> Games { get; set; }
+        public DbSet<GameHistory> GameHistories { get; set; }
     }
 }

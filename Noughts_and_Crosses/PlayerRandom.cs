@@ -9,6 +9,9 @@ namespace Noughts_and_Crosses
     public class PlayerRandom : Player
     {
         public AIRandomMove RandomEngine { get; set; }
+        public PlayerRandom(string name) : base(name)
+        {
+        }
 
         public PlayerRandom(AIRandomMove randomEngine, string name) : base(name)
         {

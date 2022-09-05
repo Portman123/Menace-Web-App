@@ -10,6 +10,10 @@ namespace Noughts_and_Crosses
     {
         public AIOptimalMove OptimalEngine { get; set; }
 
+        public PlayerOptimal(string name) : base(name)
+        {
+        }
+
         public PlayerOptimal(AIOptimalMove optimalEngine, string name) : base(name)
         {
             OptimalEngine = optimalEngine;

@@ -6,11 +6,18 @@ using System.Threading.Tasks;
 
 namespace Noughts_and_Crosses
 {
-    public class WinningPositionIntersect
+    public class WinningPositionIntersect : Entity
     {
         public WinningPosition WinPos1 { get; set; }
         public WinningPosition WinPos2 { get; set; }
         public Coordinate IntersectCoord { get; set; }
+        
+        public WinningPositionIntersect()
+        {
+            WinPos1 = new WinningPosition();
+            WinPos2 = new WinningPosition();
+            IntersectCoord = new Coordinate();
+        }
 
         public WinningPositionIntersect(WinningPosition winPos1, WinningPosition winPos2)
         {

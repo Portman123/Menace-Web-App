@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,51 +8,28 @@ using System.Threading.Tasks;
 
 namespace Noughts_and_Crosses
 {
-    public class AIOptimalMove : IAIEngine
+    public class AIOptimalMove : Entity, IAIEngine
     {
         // this is a bit messy but techinically this could be adapted to play on more than just a 3x3 grid? not sure but it works for now
-        public LinkedList<WinningPosition> WinningPositions = new LinkedList<WinningPosition> ();
-        public LinkedList<(Coordinate, Coordinate)> Corners = new LinkedList<(Coordinate, Coordinate)>();
-        public LinkedList<Coordinate> Sides = new LinkedList<Coordinate> ();
-        public LinkedList<WinningPositionIntersect> Intersections { get; }
+        [NotMapped]
+        public LinkedList<WinningPosition> WinningPositions { get; set; }
+        [NotMapped]
+        public LinkedList<(Coordinate, Coordinate)> Corners { get; set; }
+        [NotMapped]
+        public LinkedList<Coordinate> Sides { get; set; }
+        [NotMapped]
+        public LinkedList<WinningPositionIntersect> Intersections { get; set; }
 
         public AIOptimalMove()
         {
-            // While I could have written code to automatically work this out, I decided it was more readable and quicker to write this way
-            WinningPosition topRow = new WinningPosition(new Coordinate[] { new Coordinate(0, 0), new Coordinate(0, 1), new Coordinate(0, 2)});
-            WinningPosition middleRow = new WinningPosition(new Coordinate[] { new Coordinate(1, 0), new Coordinate(1, 1), new Coordinate(1, 2) });
-            WinningPosition bottomRow = new WinningPosition(new Coordinate[] { new Coordinate(2, 0), new Coordinate(2, 1), new Coordinate(2, 2) });
-            WinningPosition leftColumn = new WinningPosition(new Coordinate[] { new Coordinate(0, 0), new Coordinate(1, 0), new Coordinate(2, 0) });
-            WinningPosition middleColumn = new WinningPosition(new Coordinate[] { new Coordinate(0, 1), new Coordinate(1, 1), new Coordinate(2, 1) });
-            WinningPosition rightColumn = new WinningPosition(new Coordinate[] { new Coordinate(0, 2), new Coordinate(1, 2), new Coordinate(2, 2) });
-            WinningPosition firstDiagonal = new WinningPosition(new Coordinate[] { new Coordinate(0, 0), new Coordinate(1, 1), new Coordinate(2, 2) });
-            WinningPosition secondDiagonal = new WinningPosition(new Coordinate[] { new Coordinate(0, 2), new Coordinate(1, 1), new Coordinate(2, 0) });
-            
-            WinningPositions.AddLast(topRow);
-            WinningPositions.AddLast(middleRow);
-            WinningPositions.AddLast(bottomRow);
-            WinningPositions.AddLast(leftColumn);
-            WinningPositions.AddLast(middleColumn);
-            WinningPositions.AddLast(rightColumn);
-            WinningPositions.AddLast(firstDiagonal);
-            WinningPositions.AddLast(secondDiagonal);
-
-            // Make the Coordinates
-            Corners.AddLast((new Coordinate(0, 0), new Coordinate(2,2)));
-            Corners.AddLast((new Coordinate(0, 2), new Coordinate(2,0)));
-            Corners.AddLast((new Coordinate(2, 0), new Coordinate(0,2)));
-            Corners.AddLast((new Coordinate(2, 2), new Coordinate(0,0)));
-
-            Sides.AddLast(new Coordinate(0, 1));
-            Sides.AddLast(new Coordinate(1, 0));
-            Sides.AddLast(new Coordinate(1, 2));
-            Sides.AddLast(new Coordinate(2, 1));
+            // Initialise data
+            DetermineWinningPositions();
+            DetermineCorners();
+            DetermineSides();
 
             // Determine which winning positions intersect 
             Intersections = DetermineIntersections();
         }
-
-
 
         public int[] PlayTurn(BoardPosition boardPos, int turn)
         {
@@ -308,6 +286,55 @@ namespace Noughts_and_Crosses
                 }
             }
             return available;
+        }
+
+        public LinkedList<WinningPosition> DetermineWinningPositions()
+        {
+            // While I could have written code to automatically work this out, I decided it was more readable and quicker to write this way
+            WinningPositions.Clear();
+            WinningPosition topRow = new WinningPosition(new Coordinate[] { new Coordinate(0, 0), new Coordinate(0, 1), new Coordinate(0, 2) });
+            WinningPosition middleRow = new WinningPosition(new Coordinate[] { new Coordinate(1, 0), new Coordinate(1, 1), new Coordinate(1, 2) });
+            WinningPosition bottomRow = new WinningPosition(new Coordinate[] { new Coordinate(2, 0), new Coordinate(2, 1), new Coordinate(2, 2) });
+            WinningPosition leftColumn = new WinningPosition(new Coordinate[] { new Coordinate(0, 0), new Coordinate(1, 0), new Coordinate(2, 0) });
+            WinningPosition middleColumn = new WinningPosition(new Coordinate[] { new Coordinate(0, 1), new Coordinate(1, 1), new Coordinate(2, 1) });
+            WinningPosition rightColumn = new WinningPosition(new Coordinate[] { new Coordinate(0, 2), new Coordinate(1, 2), new Coordinate(2, 2) });
+            WinningPosition firstDiagonal = new WinningPosition(new Coordinate[] { new Coordinate(0, 0), new Coordinate(1, 1), new Coordinate(2, 2) });
+            WinningPosition secondDiagonal = new WinningPosition(new Coordinate[] { new Coordinate(0, 2), new Coordinate(1, 1), new Coordinate(2, 0) });
+
+            WinningPositions = new LinkedList<WinningPosition>();
+            WinningPositions.AddLast(topRow);
+            WinningPositions.AddLast(middleRow);
+            WinningPositions.AddLast(bottomRow);
+            WinningPositions.AddLast(leftColumn);
+            WinningPositions.AddLast(middleColumn);
+            WinningPositions.AddLast(rightColumn);
+            WinningPositions.AddLast(firstDiagonal);
+            WinningPositions.AddLast(secondDiagonal);
+
+            return WinningPositions;
+        }
+
+        public LinkedList<(Coordinate, Coordinate)> DetermineCorners()
+        {
+            // Make the Coordinates
+            Corners.Clear();
+            Corners.AddLast((new Coordinate(0, 0), new Coordinate(2, 2)));
+            Corners.AddLast((new Coordinate(0, 2), new Coordinate(2, 0)));
+            Corners.AddLast((new Coordinate(2, 0), new Coordinate(0, 2)));
+            Corners.AddLast((new Coordinate(2, 2), new Coordinate(0, 0)));
+
+            return Corners;
+        }
+
+        public LinkedList<Coordinate> DetermineSides()
+        {
+            Sides.Clear();
+            Sides.AddLast(new Coordinate(0, 1));
+            Sides.AddLast(new Coordinate(1, 0));
+            Sides.AddLast(new Coordinate(1, 2));
+            Sides.AddLast(new Coordinate(2, 1));
+
+            return Sides;
         }
     }
 }

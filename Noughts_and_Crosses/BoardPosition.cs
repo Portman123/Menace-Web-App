@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,36 @@ namespace Noughts_and_Crosses
     public class BoardPosition : Entity
     {
         public int[,] Coords { get; }
-        public bool isWinningPosition { get; }
-        public bool isFullBoard { get; }
+
+        public bool isWinningPosition { get; set; }
+
+        public bool isFullBoard { get; set; }
+
+        public string Encoded
+        {
+            get
+            {
+                var value = "";
+
+                for (int i = 0; i < Coords.GetLength(0); i++)
+                {
+                    for (int j = 0; j < Coords.GetLength(1); j++)
+                    {
+                        value += GameSymbol.MapIntToSymbol(Coords[i, j]);
+                    }
+                }
+
+                return value;
+            }
+
+            set
+            {
+                for (int i = 0; i < value.Length; i++)
+                {
+                    Coords[i / 3, i % 3] = GameSymbol.MapSymbolToInt(value[i]);
+                }
+            }
+        }
 
         // Constructor
         public BoardPosition(int[,] coords)

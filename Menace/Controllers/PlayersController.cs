@@ -24,9 +24,7 @@ namespace Menace.Controllers
         // GET: Players
         public async Task<IActionResult> Index()
         {
-              return _context.Player != null ? 
-                          View(await _context.Player.ToListAsync()) :
-                          Problem("Entity set 'MenaceContext.Player'  is null.");
+            return _context.Player != null ? View(await _context.Player.ToListAsync()) : Problem("Entity set 'MenaceContext.Player' is null.");
         }
 
         // GET: Players/Details/5

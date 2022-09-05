@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace Noughts_and_Crosses
 {
-    public class WinningPosition
+    public class WinningPosition : Entity
     {
         public Coordinate[] Coordinates { get; set; }
+
+        public WinningPosition()
+        {
+            Coordinates = new Coordinate[3];
+        }
 
         public WinningPosition(Coordinate[] coords)
         {

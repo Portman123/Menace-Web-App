@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Noughts_and_Crosses
 {
-    public class AIRandomMove : IAIEngine
+    public class AIRandomMove : Entity, IAIEngine
     {
         public int[] PlayTurn(BoardPosition boardPos, int turn)
         {

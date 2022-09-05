@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Noughts_and_Crosses
 {
-    public class Game
+    public class Game : Entity
     {
         public BoardPosition CurrentBoard { get; set; }
 
@@ -14,18 +15,21 @@ namespace Noughts_and_Crosses
 
         public bool Finished { get; set; }
 
-        public Player P1 { get; }
+        public Player P1 { get; set; }
+        [NotMapped]
+        public IReinforcementLearner P1Learner { get; set; }
 
-        public IReinforcementLearner P1Learner { get;  }
-
-        public Player P2 { get; }
-
-        public IReinforcementLearner P2Learner { get; }
+        public Player P2 { get; set; }
+        [NotMapped]
+        public IReinforcementLearner P2Learner { get; set; }
 
         public Player Winner { get; set; }
 
         public int TurnNumber { get; set; }
 
+        public Game()
+        {
+        }
         public Game(Player p1, Player p2)
         {
             TurnNumber = 1;
