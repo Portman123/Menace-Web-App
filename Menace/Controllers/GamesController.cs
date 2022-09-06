@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MenaceData;
 using Noughts_and_Crosses;
+using Menace.ViewModels;
 
 namespace Menace.Controllers
 {
@@ -40,6 +41,23 @@ namespace Menace.Controllers
             if (game == null)
             {
                 return NotFound();
+            }
+
+            return View(game);
+        }
+
+        public IActionResult Play()
+        {
+            return View(new GamePlay());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Play([Bind("Board, CurrentPlayer")] GamePlay game)
+        {
+            if (ModelState.IsValid)
+            {
+                return View(game);
             }
 
             return View(game);

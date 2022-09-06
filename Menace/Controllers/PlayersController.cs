@@ -153,6 +153,13 @@ namespace Menace.Controllers
             var player = await _context.Player.FindAsync(id);
             if (player != null)
             {
+                // First remove all entities with foreign keys pointing to player
+                foreach (Game g in _context.Games)
+                {
+                    if (g.P1 != null && g.P1.Id == player.Id) _context.Games.Remove(g);
+                    else if (g.P2 != null && g.P2.Id == player.Id) _context.Games.Remove(g);
+                }
+                await _context.SaveChangesAsync();
                 _context.Player.Remove(player);
             }
             

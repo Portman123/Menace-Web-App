@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MenaceData.Migrations
 {
     [DbContext(typeof(MenaceContext))]
-    [Migration("20220905144253_v1")]
+    [Migration("20220906130608_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,6 +88,16 @@ namespace MenaceData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Encoded")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isFullBoard")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isWinningPosition")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("BoardPosition");
@@ -114,9 +124,6 @@ namespace MenaceData.Migrations
                     b.Property<int>("TurnNumber")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("WinnerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CurrentBoardId");
@@ -124,8 +131,6 @@ namespace MenaceData.Migrations
                     b.HasIndex("P1Id");
 
                     b.HasIndex("P2Id");
-
-                    b.HasIndex("WinnerId");
 
                     b.ToTable("Games");
                 });
@@ -278,19 +283,11 @@ namespace MenaceData.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Noughts_and_Crosses.Player", "Winner")
-                        .WithMany()
-                        .HasForeignKey("WinnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("CurrentBoard");
 
                     b.Navigation("P1");
 
                     b.Navigation("P2");
-
-                    b.Navigation("Winner");
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.Matchbox", b =>

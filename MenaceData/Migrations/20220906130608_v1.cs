@@ -46,7 +46,10 @@ namespace MenaceData.Migrations
                 name: "BoardPosition",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    isWinningPosition = table.Column<bool>(type: "bit", nullable: false),
+                    isFullBoard = table.Column<bool>(type: "bit", nullable: false),
+                    Encoded = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -151,7 +154,6 @@ namespace MenaceData.Migrations
                     Finished = table.Column<bool>(type: "bit", nullable: false),
                     P1Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     P2Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WinnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TurnNumber = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -162,7 +164,7 @@ namespace MenaceData.Migrations
                         column: x => x.CurrentBoardId,
                         principalTable: "BoardPosition",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Games_Player_P1Id",
                         column: x => x.P1Id,
@@ -175,12 +177,6 @@ namespace MenaceData.Migrations
                         principalTable: "Player",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Games_Player_WinnerId",
-                        column: x => x.WinnerId,
-                        principalTable: "Player",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -222,11 +218,6 @@ namespace MenaceData.Migrations
                 name: "IX_Games_P2Id",
                 table: "Games",
                 column: "P2Id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Games_WinnerId",
-                table: "Games",
-                column: "WinnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Matchbox_AIMenaceId",

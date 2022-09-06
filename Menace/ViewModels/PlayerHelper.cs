@@ -10,6 +10,12 @@ namespace Menace.ViewModels
         AIRandom
     }
 
+    public enum GameType
+    {
+        MenaceP1 = 0,
+        MenaceP2 = 1
+    }
+
     public static class PlayerHelper
     {
         public static string GetPlayerType(Player player)

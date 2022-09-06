@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "nlU3Jf4KyC0Rw2hJKqOGSekX0v++cEqsUkPA3l55doA=",
+  "Hash": "Q39w34Rwr/LkWZEHmW3HH85TK/dhB6cOJLUAuewmPbA=",
   "Source": "Menace",
   "BasePath": "_content/Menace",
   "Mode": "Default",
@@ -83,6 +83,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\janan\\OneDrive\\Manchester\\0 - Project\\WebApp\\Menace\\Menace\\wwwroot\\js\\NandCApplet.js",
+      "SourceId": "Menace",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\janan\\OneDrive\\Manchester\\0 - Project\\WebApp\\Menace\\Menace\\wwwroot\\",
+      "BasePath": "_content/Menace",
+      "RelativePath": "js/NandCApplet.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\NandCApplet.js"
     },
     {
       "Identity": "C:\\Users\\janan\\OneDrive\\Manchester\\0 - Project\\WebApp\\Menace\\Menace\\wwwroot\\js\\site.js",

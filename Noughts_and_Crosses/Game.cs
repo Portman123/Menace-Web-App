@@ -23,6 +23,7 @@ namespace Noughts_and_Crosses
         [NotMapped]
         public IReinforcementLearner P2Learner { get; set; }
 
+        [NotMapped]
         public Player Winner { get; set; }
 
         public int TurnNumber { get; set; }
@@ -157,6 +158,11 @@ namespace Noughts_and_Crosses
                 P2.Draws++;
             }
             else Console.WriteLine("Something has gone wrong...");
+        }
+
+        public Player ReturnWinner()
+        {
+            return Winner;
         }
     }
 }
