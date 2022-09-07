@@ -9,8 +9,10 @@ namespace Menace.Controllers
     public class BuildMenaceController : Controller
     {
         private readonly MenaceContext _context;
-        //private readonly Player P1;
-        //private readonly Player P2;
+        private Game game;
+        //private PlayerMenace menace;
+        //private PlayerHumanOnWeb human;
+        //private BoardPosition boardPosition;
 
         public BuildMenaceController(MenaceContext context)
         {
@@ -18,18 +20,24 @@ namespace Menace.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult BuildSetup()
         {
             //return _context.Matchbox != null ? View(_context.Matchbox.ToList()) : Problem("Entity set 'MenaceContext.Player' is null.");
             return View();
         }
 
         [HttpPost]
-        public IActionResult Index(GameCreate createGameInput)
+        public IActionResult BuildSetup(GameCreate createGameInput)
         {
             if (ModelState.IsValid)
             {
                 var newGame = GameFactory.CreateGame(createGameInput, _context);
+                game = newGame;
+                //boardPosition = new BoardPosition(newGame.CurrentBoard.Coords);
+
+                //// (!potentially dangerous!)
+                //// Assumes that one of the players are a menace player 
+                //menace = newGame.P1Learner != null ? newGame.P1 as PlayerMenace: newGame.P2 as PlayerMenace;
 
                 _context.Add(newGame);
                 _context.SaveChanges();
@@ -42,7 +50,23 @@ namespace Menace.Controllers
 
         public IActionResult Build()
         {
-            return View();
+            return View(new GamePlay());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Build([Bind("Board, CurrentPlayer")] GamePlay game)
+        {
+            if (ModelState.IsValid)
+            {
+                //// update board position in model of game 
+                //boardPosition.Encoded = game.Board;
+                //game.Board = menace.PlayTurn(boardPosition).After.Encoded;
+
+                return View(game);
+            }
+
+            return View(game);
         }
 
     }

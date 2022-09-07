@@ -7,5 +7,6 @@
         public string Board { get; set; } = EmptyBoardPostion;
 
         public string CurrentPlayer { get; set; } = "X";
+
     }
 }

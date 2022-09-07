@@ -3,6 +3,7 @@
 @model GamePlay
 
 @{
+    //
     string GetTileClass(string board, int x, int y)
     {
         var tileValue = GetTileValue(board, x, y);
@@ -10,6 +11,7 @@
         return string.IsNullOrWhiteSpace(tileValue) ? "" : $"player{tileValue}";
     }
 
+    // Reading tile value from string
     string GetTileValue(string board, int x, int y)
     {
         return board.Substring(x * 3 + y, 1);
@@ -47,12 +49,12 @@
         <button id="reset">Reset</button>
     </section>
 
-    <form asp-action="Play">
+    <form asp-action="Play" id="submitForm">
         <div class="form-group">
-            <input type="submit" value="Submit" class="btn btn-primary" id="submit"/>
+            <input type="submit" value="Submit" class="btn btn-primary" id="submitButton" />
         </div>
-        <input type="hidden" asp-for="Board" id="hiddenBoardPosition"/>
-        <input type="hidden" asp-for="CurrentPlayer" id="hiddenCurrentPlayer"/>
+        <input type="hidden" asp-for="Board" id="hiddenBoardPosition" />
+        <input type="hidden" asp-for="CurrentPlayer" id="hiddenCurrentPlayer" />
     </form>
 </div>
 

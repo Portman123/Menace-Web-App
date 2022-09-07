@@ -9,7 +9,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const hiddenBoardPosition = document.querySelector('#hiddenBoardPosition');
     const hiddenCurrentPlayer = document.querySelector('#hiddenCurrentPlayer');
-    const submitButton = document.querySelector('#submit');
+    const submitForm = document.querySelector('#submitForm');
+    const submitButton = document.querySelector('#submitButton');
 
     console.log(`${hiddenCurrentPlayer.value}:[${hiddenBoardPosition.value}]`);
 
@@ -110,6 +111,10 @@ window.addEventListener('DOMContentLoaded', () => {
             updateBoard(index);
             handleResultValidation();
             changePlayer();
+
+            saveState();
+            if (!submitForm) console.log('No form!');
+            submitForm.submit();
         }
     }
 
@@ -135,10 +140,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     resetButton.addEventListener('click', resetBoard);
 
-    const saveBoard = () => {
+    const saveState = () => {
+        console.log('Saving state...');
         hiddenBoardPosition.value = board.map(c => c == '' ? ' ' : c).join('');
         hiddenCurrentPlayer.value = currentPlayer;
     }
 
-    submitButton.addEventListener('click', saveBoard);
+    submitButton.addEventListener('click', saveState);
 });
