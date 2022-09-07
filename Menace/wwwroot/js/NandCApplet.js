@@ -113,7 +113,6 @@ window.addEventListener('DOMContentLoaded', () => {
             changePlayer();
 
             saveState();
-            if (!submitForm) console.log('No form!');
             submitForm.submit();
         }
     }
@@ -141,7 +140,6 @@ window.addEventListener('DOMContentLoaded', () => {
     resetButton.addEventListener('click', resetBoard);
 
     const saveState = () => {
-        console.log('Saving state...');
         hiddenBoardPosition.value = board.map(c => c == '' ? ' ' : c).join('');
         hiddenCurrentPlayer.value = currentPlayer;
     }

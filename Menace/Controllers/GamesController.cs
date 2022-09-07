@@ -48,12 +48,13 @@ namespace Menace.Controllers
 
         public IActionResult Play()
         {
-            return View(new GamePlay());
+
+            return View(new GamePlayState());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Play([Bind("Board, CurrentPlayer")] GamePlay game)
+        public IActionResult Play([Bind("Board, CurrentPlayer, PlayerId1, PlayerId2")] GamePlayState game)
         {
             if (ModelState.IsValid)
             {

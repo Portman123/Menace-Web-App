@@ -50,12 +50,12 @@ namespace Menace.Controllers
 
         public IActionResult Build()
         {
-            return View(new GamePlay());
+            return View(new GamePlayState());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Build([Bind("Board, CurrentPlayer")] GamePlay game)
+        public IActionResult Build([Bind("Board, CurrentPlayer")] GamePlayState game)
         {
             if (ModelState.IsValid)
             {

@@ -58,7 +58,7 @@ namespace Noughts_and_Crosses
                 TurnNumber++;
 
                 // Check Game End
-                if (CurrentBoard.CheckWin() != 0 || CurrentBoard.BoardFull()) break;
+                if (CurrentBoard.IsGameOver) break;
 
                 // Player 2 Turn 
                 Turn p2Turn = P2.PlayTurn(CurrentBoard, -1, TurnNumber);
@@ -68,7 +68,7 @@ namespace Noughts_and_Crosses
                 TurnNumber++;
 
                 // Check Game End
-                if (CurrentBoard.CheckWin() != 0 || CurrentBoard.BoardFull()) break;
+                if (CurrentBoard.IsGameOver) break;
             }
             CurrentBoard.PrintBoard();
             AnnounceWinner();
@@ -97,7 +97,7 @@ namespace Noughts_and_Crosses
 
 
                 // Check Game End
-                if (CurrentBoard.CheckWin() != 0 || CurrentBoard.BoardFull()) break;
+                if (CurrentBoard.IsGameOver) break;
 
                 // Player 2 Turn 
                 Turn p2Turn = P2.PlayTurn(CurrentBoard, -1, turnNumber);
@@ -107,7 +107,7 @@ namespace Noughts_and_Crosses
 
 
                 // Check Game End
-                if (CurrentBoard.CheckWin() != 0 || CurrentBoard.BoardFull()) break;
+                if (CurrentBoard.IsGameOver) break;
             }
             Finished = true;
             DetermineWinner();

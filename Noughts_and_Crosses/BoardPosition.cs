@@ -11,9 +11,21 @@ namespace Noughts_and_Crosses
     {
         public int[,] Coords { get; }
 
-        public bool isWinningPosition { get; set; }
+        public bool IsWinningPosition
+        {
+            get
+            {
+                return CheckWin() != 0;
+            }
+        }
 
-        public bool isFullBoard { get; set; }
+        public bool IsGameOver
+        {
+            get
+            {
+                return IsWinningPosition || BoardFull();
+            }
+        }
 
         public string Encoded
         {
@@ -45,23 +57,12 @@ namespace Noughts_and_Crosses
         public BoardPosition(int[,] coords)
         {
             Coords = coords;
-
-            // Check if this is a winning position
-            if (CheckWin() != 0) isWinningPosition = true;
-            else isWinningPosition = false;
-
-            // Check if the board is full
-            isFullBoard = BoardFull();
         }
 
         // No constructor arguments passed: assume empty board
         public BoardPosition()
         {
             Coords = new int[,] { { 0,0,0},{ 0,0,0},{ 0,0,0} };
-
-            // Check if this is a winning position
-            isWinningPosition = false ;
-            isFullBoard = false ;
         }
 
         public BoardPosition(int[] coords)

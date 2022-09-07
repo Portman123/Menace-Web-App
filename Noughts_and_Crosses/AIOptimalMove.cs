@@ -12,11 +12,14 @@ namespace Noughts_and_Crosses
     {
         // this is a bit messy but techinically this could be adapted to play on more than just a 3x3 grid? not sure but it works for now
         [NotMapped]
-        public LinkedList<WinningPosition> WinningPositions { get; set; }
+        public LinkedList<WinningPosition> WinningPositions = new LinkedList<WinningPosition>();
+
         [NotMapped]
-        public LinkedList<(Coordinate, Coordinate)> Corners { get; set; }
+        public LinkedList<(Coordinate, Coordinate)> Corners = new LinkedList<(Coordinate, Coordinate)>();
+
         [NotMapped]
-        public LinkedList<Coordinate> Sides { get; set; }
+        public LinkedList<Coordinate> Sides = new LinkedList<Coordinate>();
+
         [NotMapped]
         public LinkedList<WinningPositionIntersect> Intersections { get; set; }
 

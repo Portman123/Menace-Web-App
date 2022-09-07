@@ -1,6 +1,6 @@
 ﻿@using Menace.ViewModels
 
-@model GamePlay
+@model GamePlayState
 
 @{
     //
@@ -55,6 +55,8 @@
         </div>
         <input type="hidden" asp-for="Board" id="hiddenBoardPosition" />
         <input type="hidden" asp-for="CurrentPlayer" id="hiddenCurrentPlayer" />
+        <input type="hidden" asp-for="PlayerId1" id="hiddenPlayerId1" />
+        <input type="hidden" asp-for="PlayerId2" id="hiddenPlayerId2" />
     </form>
 </div>
 
