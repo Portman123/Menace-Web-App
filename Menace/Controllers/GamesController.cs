@@ -46,18 +46,68 @@ namespace Menace.Controllers
             return View(game);
         }
 
+        private Player GetPlayer(string name)
+        {
+            var player = _context.Player.Where(p => p.Name == name).FirstOrDefault();
+
+            if (player == null)
+            {
+                player = new PlayerHumanOnWeb(name);
+
+                _context.Player.Add(player);
+            }
+
+            return player;
+        }
+
         public IActionResult Play()
         {
+            var board = new BoardPosition();
 
-            return View(new GamePlayState());
+            _context.BoardPosition.Add(board);
+
+            var player1 = GetPlayer("Player 1");
+
+            var player2 = GetPlayer("Player 2");
+
+            var newGame = new GamePlayState
+            {
+                BoardPositionId = board.Id,
+                PlayerId1 = player1.Id,
+                PlayerId2 = player2.Id
+            };
+
+            _context.SaveChanges();
+
+            return View(newGame);
         }
+
+        private int MapPlayerLetterToPlayerNumber(string letter) => letter == "X" ? -1 : 1;
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Play([Bind("Board, CurrentPlayer, PlayerId1, PlayerId2")] GamePlayState game)
+        public IActionResult Play([Bind("Board, CurrentPlayer, BoardPositionId, PlayerId1, PlayerId2")] GamePlayState game)
         {
             if (ModelState.IsValid)
             {
+                var board = _context.BoardPosition.Where(i => i.Id == game.BoardPositionId).FirstOrDefault();
+
+                board.Encoded = game.Board;
+
+                _context.BoardPosition.Update(board);
+
+                var player1 = _context.Player.Where(p => p.Id == game.PlayerId1).FirstOrDefault();
+
+                var player2 = _context.Player.Where(p => p.Id == game.PlayerId2).FirstOrDefault();
+
+                var activePlayer = player1 is PlayerHumanOnWeb ? player2 : player1;
+
+                var turn = activePlayer.PlayTurn(board, MapPlayerLetterToPlayerNumber(game.CurrentPlayer), board.TurnNumber);
+
+                game.Board = turn.After.Encoded;
+
+                _context.SaveChanges();
+
                 return View(game);
             }
 

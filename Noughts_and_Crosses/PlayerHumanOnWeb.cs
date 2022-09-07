@@ -19,7 +19,7 @@ namespace Noughts_and_Crosses
 
         public override Turn PlayTurn(BoardPosition CurrentBoard, int turn, int turnNumber)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }
