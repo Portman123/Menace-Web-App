@@ -26,14 +26,11 @@ namespace Noughts_and_Crosses
         [NotMapped]
         public Player Winner { get; set; }
 
-        public int TurnNumber { get; set; }
-
         public Game()
         {
         }
         public Game(Player p1, Player p2)
         {
-            TurnNumber = 1;
             CurrentBoard = new BoardPosition();
             P1 = p1;
             P1Learner = p1 as IReinforcementLearner;
@@ -51,21 +48,19 @@ namespace Noughts_and_Crosses
             while (true)
             {
                 // Player 1 turn
-                Turn p1Turn = P1.PlayTurn(CurrentBoard, 1, TurnNumber);
+                Turn p1Turn = P1.PlayTurn(CurrentBoard, 1, CurrentBoard.TurnNumber);
                 CurrentBoard = p1Turn.After;
                 History.AddMove(p1Turn);
                 CurrentBoard.PrintBoard();
-                TurnNumber++;
 
                 // Check Game End
                 if (CurrentBoard.IsGameOver) break;
 
                 // Player 2 Turn 
-                Turn p2Turn = P2.PlayTurn(CurrentBoard, -1, TurnNumber);
+                Turn p2Turn = P2.PlayTurn(CurrentBoard, -1, CurrentBoard.TurnNumber);
                 CurrentBoard = p2Turn.After;
                 History.AddMove(p2Turn);
                 CurrentBoard.PrintBoard();
-                TurnNumber++;
 
                 // Check Game End
                 if (CurrentBoard.IsGameOver) break;
