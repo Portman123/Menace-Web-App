@@ -27,6 +27,11 @@ namespace Noughts_and_Crosses
             }
         }
 
+        public int TurnNumber
+        {
+            get { return 9 - Encoded.Where(c => c == ' ').Count() + 1;  }
+        }
+
         public string Encoded
         {
             get
