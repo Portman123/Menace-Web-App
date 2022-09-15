@@ -8,23 +8,23 @@ namespace Noughts_and_Crosses
 {
     public class GameHistory : Entity
     {
-        public LinkedList<Turn> TurnHistory { get; }
-        public Player P1 { get; }
-        public Player P2 { get; }
+        public LinkedList<Turn> Turns { get; set; }
+        public Player P1 { get; set; }
+        public Player P2 { get; set; }
 
         public GameHistory()
         {
         }
         public GameHistory(Player p1, Player p2)
         {
-            TurnHistory = new LinkedList<Turn>();
+            Turns = new LinkedList<Turn>();
             P1 = p1;
             P2 = p2;
         }
 
         public void AddMove(Turn t)
         {
-            TurnHistory.AddLast(t);
+            Turns.AddLast(t);
         }
 
         public void Display()
@@ -38,7 +38,7 @@ namespace Noughts_and_Crosses
             Console.WriteLine("");
             Console.WriteLine("");
 
-            foreach (Turn t in TurnHistory)
+            foreach (Turn t in Turns)
             {
                 Console.Write(t.MoveMaker.Name);
                 Console.Write("'s Turn: ");

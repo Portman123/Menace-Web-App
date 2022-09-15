@@ -8,16 +8,17 @@ namespace Noughts_and_Crosses
 {
     public class Turn : Entity
     {
-        public Player MoveMaker { get; }
-        public BoardPosition Before { get; }
-        public BoardPosition After { get; }
-        public int X { get; }
-        public int Y { get; }
-        public int TurnNumber { get; }
+        public Player MoveMaker { get; set; }
+        public BoardPosition Before { get; set; }
+        public BoardPosition After { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int TurnNumber { get; set; }
 
         public Turn()
         {
         }
+
         public Turn (Player moveMaker, BoardPosition before, BoardPosition after, int x, int y, int turnNumber)
         {
             MoveMaker = moveMaker;

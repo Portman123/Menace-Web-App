@@ -11,7 +11,7 @@ namespace Noughts_and_Crosses
         public void Reinforce(Game g, PlayerMenace menace)
         {
             // for each turn in the game's history where menace played a turn
-            foreach (Turn t in g.History.TurnHistory)
+            foreach (Turn t in g.History.Turns)
             {
                 if (t.MoveMaker == menace)
                 {

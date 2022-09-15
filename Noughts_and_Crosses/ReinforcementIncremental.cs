@@ -14,7 +14,7 @@ namespace Noughts_and_Crosses
             if (g.P1 != menace && g.P2 != menace) throw new Exception("Reinforcement Error: it would seem MENACE did not play in the game given");
 
             // for each turn in the game's history where menace played a turn
-            foreach (Turn t in g.History.TurnHistory)
+            foreach (Turn t in g.History.Turns)
             {
                 if (t.MoveMaker == menace)
                 {

@@ -54,17 +54,6 @@ namespace MenaceData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GameHistories",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GameHistories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Player",
                 columns: table => new
                 {
@@ -125,24 +114,7 @@ namespace MenaceData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Turn",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    GameHistoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Turn", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Turn_GameHistories_GameHistoryId",
-                        column: x => x.GameHistoryId,
-                        principalTable: "GameHistories",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Games",
+                name: "Game",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -153,21 +125,46 @@ namespace MenaceData.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Games", x => x.Id);
+                    table.PrimaryKey("PK_Game", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Games_BoardPosition_CurrentBoardBoardPositionId",
+                        name: "FK_Game_BoardPosition_CurrentBoardBoardPositionId",
                         column: x => x.CurrentBoardBoardPositionId,
                         principalTable: "BoardPosition",
                         principalColumn: "BoardPositionId",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Games_Player_P1Id",
+                        name: "FK_Game_Player_P1Id",
                         column: x => x.P1Id,
                         principalTable: "Player",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Games_Player_P2Id",
+                        name: "FK_Game_Player_P2Id",
+                        column: x => x.P2Id,
+                        principalTable: "Player",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GameHistory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    P1Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    P2Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameHistory", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GameHistory_Player_P1Id",
+                        column: x => x.P1Id,
+                        principalTable: "Player",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_GameHistory_Player_P2Id",
                         column: x => x.P2Id,
                         principalTable: "Player",
                         principalColumn: "Id",
@@ -194,6 +191,47 @@ namespace MenaceData.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Turn",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MoveMakerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BeforeBoardPositionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AfterBoardPositionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    X = table.Column<int>(type: "int", nullable: false),
+                    Y = table.Column<int>(type: "int", nullable: false),
+                    TurnNumber = table.Column<int>(type: "int", nullable: false),
+                    GameHistoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Turn", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Turn_BoardPosition_AfterBoardPositionId",
+                        column: x => x.AfterBoardPositionId,
+                        principalTable: "BoardPosition",
+                        principalColumn: "BoardPositionId",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Turn_BoardPosition_BeforeBoardPositionId",
+                        column: x => x.BeforeBoardPositionId,
+                        principalTable: "BoardPosition",
+                        principalColumn: "BoardPositionId",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Turn_GameHistory_GameHistoryId",
+                        column: x => x.GameHistoryId,
+                        principalTable: "GameHistory",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Turn_Player_MoveMakerId",
+                        column: x => x.MoveMakerId,
+                        principalTable: "Player",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
             migrationBuilder.InsertData(
                 table: "BoardPosition",
                 column: "BoardPositionId",
@@ -205,18 +243,28 @@ namespace MenaceData.Migrations
                 column: "MatchboxId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_CurrentBoardBoardPositionId",
-                table: "Games",
+                name: "IX_Game_CurrentBoardBoardPositionId",
+                table: "Game",
                 column: "CurrentBoardBoardPositionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_P1Id",
-                table: "Games",
+                name: "IX_Game_P1Id",
+                table: "Game",
                 column: "P1Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_P2Id",
-                table: "Games",
+                name: "IX_Game_P2Id",
+                table: "Game",
+                column: "P2Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameHistory_P1Id",
+                table: "GameHistory",
+                column: "P1Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameHistory_P2Id",
+                table: "GameHistory",
                 column: "P2Id");
 
             migrationBuilder.CreateIndex(
@@ -245,9 +293,24 @@ namespace MenaceData.Migrations
                 column: "RandomEngineId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Turn_AfterBoardPositionId",
+                table: "Turn",
+                column: "AfterBoardPositionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Turn_BeforeBoardPositionId",
+                table: "Turn",
+                column: "BeforeBoardPositionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Turn_GameHistoryId",
                 table: "Turn",
                 column: "GameHistoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Turn_MoveMakerId",
+                table: "Turn",
+                column: "MoveMakerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -256,7 +319,7 @@ namespace MenaceData.Migrations
                 name: "Bead");
 
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "Game");
 
             migrationBuilder.DropTable(
                 name: "Turn");
@@ -265,13 +328,13 @@ namespace MenaceData.Migrations
                 name: "Matchbox");
 
             migrationBuilder.DropTable(
-                name: "Player");
-
-            migrationBuilder.DropTable(
-                name: "GameHistories");
+                name: "GameHistory");
 
             migrationBuilder.DropTable(
                 name: "BoardPosition");
+
+            migrationBuilder.DropTable(
+                name: "Player");
 
             migrationBuilder.DropTable(
                 name: "AIMenace");

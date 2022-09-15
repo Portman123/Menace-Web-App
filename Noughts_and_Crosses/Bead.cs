@@ -8,8 +8,8 @@ namespace Noughts_and_Crosses
 {
     public class Bead : Entity
     {
-        public int X { get; set;  }
-        public int Y { get; set;  }
+        public int X { get; set; }
+        public int Y { get; set; }
         public int Count { get; set; }
 
         public Bead()

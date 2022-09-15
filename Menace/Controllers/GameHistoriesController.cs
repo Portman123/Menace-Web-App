@@ -22,20 +22,20 @@ namespace Menace.Controllers
         // GET: GameHistories
         public async Task<IActionResult> Index()
         {
-              return _context.GameHistories != null ? 
-                          View(await _context.GameHistories.ToListAsync()) :
+              return _context.GameHistory != null ? 
+                          View(await _context.GameHistory.ToListAsync()) :
                           Problem("Entity set 'MenaceContext.GameHistories'  is null.");
         }
 
         // GET: GameHistories/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.GameHistories == null)
+            if (id == null || _context.GameHistory == null)
             {
                 return NotFound();
             }
 
-            var gameHistory = await _context.GameHistories
+            var gameHistory = await _context.GameHistory
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (gameHistory == null)
             {
@@ -71,12 +71,12 @@ namespace Menace.Controllers
         // GET: GameHistories/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null || _context.GameHistories == null)
+            if (id == null || _context.GameHistory == null)
             {
                 return NotFound();
             }
 
-            var gameHistory = await _context.GameHistories.FindAsync(id);
+            var gameHistory = await _context.GameHistory.FindAsync(id);
             if (gameHistory == null)
             {
                 return NotFound();
@@ -122,12 +122,12 @@ namespace Menace.Controllers
         // GET: GameHistories/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null || _context.GameHistories == null)
+            if (id == null || _context.GameHistory == null)
             {
                 return NotFound();
             }
 
-            var gameHistory = await _context.GameHistories
+            var gameHistory = await _context.GameHistory
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (gameHistory == null)
             {
@@ -142,14 +142,14 @@ namespace Menace.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.GameHistories == null)
+            if (_context.GameHistory == null)
             {
                 return Problem("Entity set 'MenaceContext.GameHistories'  is null.");
             }
-            var gameHistory = await _context.GameHistories.FindAsync(id);
+            var gameHistory = await _context.GameHistory.FindAsync(id);
             if (gameHistory != null)
             {
-                _context.GameHistories.Remove(gameHistory);
+                _context.GameHistory.Remove(gameHistory);
             }
             
             await _context.SaveChangesAsync();
@@ -158,7 +158,7 @@ namespace Menace.Controllers
 
         private bool GameHistoryExists(Guid id)
         {
-          return (_context.GameHistories?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.GameHistory?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

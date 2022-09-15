@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MenaceData.Migrations
 {
     [DbContext(typeof(MenaceContext))]
-    [Migration("20220915191910_v1")]
+    [Migration("20220915200233_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -125,7 +125,7 @@ namespace MenaceData.Migrations
 
                     b.HasIndex("P2Id");
 
-                    b.ToTable("Games");
+                    b.ToTable("Game");
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.GameHistory", b =>
@@ -134,9 +134,19 @@ namespace MenaceData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("P1Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("P2Id")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.ToTable("GameHistories");
+                    b.HasIndex("P1Id");
+
+                    b.HasIndex("P2Id");
+
+                    b.ToTable("GameHistory");
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.Matchbox", b =>
@@ -196,12 +206,38 @@ namespace MenaceData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AfterBoardPositionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BeforeBoardPositionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<Guid?>("GameHistoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("MoveMakerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TurnNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("X")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("AfterBoardPositionId");
+
+                    b.HasIndex("BeforeBoardPositionId");
+
                     b.HasIndex("GameHistoryId");
+
+                    b.HasIndex("MoveMakerId");
 
                     b.ToTable("Turn");
                 });
@@ -283,6 +319,25 @@ namespace MenaceData.Migrations
                     b.Navigation("P2");
                 });
 
+            modelBuilder.Entity("Noughts_and_Crosses.GameHistory", b =>
+                {
+                    b.HasOne("Noughts_and_Crosses.Player", "P1")
+                        .WithMany()
+                        .HasForeignKey("P1Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Noughts_and_Crosses.Player", "P2")
+                        .WithMany()
+                        .HasForeignKey("P2Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("P1");
+
+                    b.Navigation("P2");
+                });
+
             modelBuilder.Entity("Noughts_and_Crosses.Matchbox", b =>
                 {
                     b.HasOne("Noughts_and_Crosses.AIMenace", null)
@@ -298,9 +353,33 @@ namespace MenaceData.Migrations
 
             modelBuilder.Entity("Noughts_and_Crosses.Turn", b =>
                 {
+                    b.HasOne("Noughts_and_Crosses.BoardPosition", "After")
+                        .WithMany()
+                        .HasForeignKey("AfterBoardPositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Noughts_and_Crosses.BoardPosition", "Before")
+                        .WithMany()
+                        .HasForeignKey("BeforeBoardPositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Noughts_and_Crosses.GameHistory", null)
-                        .WithMany("TurnHistory")
+                        .WithMany("Turns")
                         .HasForeignKey("GameHistoryId");
+
+                    b.HasOne("Noughts_and_Crosses.Player", "MoveMaker")
+                        .WithMany()
+                        .HasForeignKey("MoveMakerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("After");
+
+                    b.Navigation("Before");
+
+                    b.Navigation("MoveMaker");
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.PlayerMenace", b =>
@@ -343,7 +422,7 @@ namespace MenaceData.Migrations
 
             modelBuilder.Entity("Noughts_and_Crosses.GameHistory", b =>
                 {
-                    b.Navigation("TurnHistory");
+                    b.Navigation("Turns");
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.Matchbox", b =>

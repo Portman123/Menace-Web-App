@@ -24,20 +24,20 @@ namespace Menace.Controllers
         // GET: Games
         public async Task<IActionResult> Index()
         {
-              return _context.Games != null ? 
-                          View(await _context.Games.ToListAsync()) :
+              return _context.Game != null ? 
+                          View(await _context.Game.ToListAsync()) :
                           Problem("Entity set 'MenaceContext.Games'  is null.");
         }
 
         // GET: Games/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.Games == null)
+            if (id == null || _context.Game == null)
             {
                 return NotFound();
             }
 
-            var game = await _context.Games
+            var game = await _context.Game
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (game == null)
             {
@@ -186,12 +186,12 @@ namespace Menace.Controllers
         // GET: Games/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null || _context.Games == null)
+            if (id == null || _context.Game == null)
             {
                 return NotFound();
             }
 
-            var game = await _context.Games.FindAsync(id);
+            var game = await _context.Game.FindAsync(id);
             if (game == null)
             {
                 return NotFound();
@@ -237,12 +237,12 @@ namespace Menace.Controllers
         // GET: Games/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null || _context.Games == null)
+            if (id == null || _context.Game == null)
             {
                 return NotFound();
             }
 
-            var game = await _context.Games
+            var game = await _context.Game
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (game == null)
             {
@@ -257,14 +257,14 @@ namespace Menace.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Games == null)
+            if (_context.Game == null)
             {
                 return Problem("Entity set 'MenaceContext.Games'  is null.");
             }
-            var game = await _context.Games.FindAsync(id);
+            var game = await _context.Game.FindAsync(id);
             if (game != null)
             {
-                _context.Games.Remove(game);
+                _context.Game.Remove(game);
             }
             
             await _context.SaveChangesAsync();
@@ -273,7 +273,7 @@ namespace Menace.Controllers
 
         private bool GameExists(Guid id)
         {
-          return (_context.Games?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Game?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -40,6 +40,7 @@ namespace MenaceData
 
             modelBuilder.Entity<BoardPosition>()
                 .HasData(new BoardPosition {  } );
+
         }
 
         // Series of DbSets
@@ -68,7 +69,11 @@ namespace MenaceData
 
         public DbSet<PlayerHumanOnWeb> PlayerHumanOnWeb { get; set; }
 
-        public DbSet<Game> Games { get; set; }
-        public DbSet<GameHistory> GameHistories { get; set; }
+        public DbSet<Game> Game { get; set; }
+
+        public DbSet<GameHistory> GameHistory { get; set; }
+
+        public DbSet<Turn> Turn { get; set; }
+
     }
 }
