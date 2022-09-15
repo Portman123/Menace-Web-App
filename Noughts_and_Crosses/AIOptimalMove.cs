@@ -63,7 +63,7 @@ namespace Noughts_and_Crosses
 
 
         // WIN
-        // If there is o row, column, or diagonal with two of my pieces and a blank space,
+        // If there is a row, column, or diagonal with two of my pieces and a blank space,
         //      Then play the blank space (thus winning the game). 
         public Coordinate Win(BoardPosition boardPos, int player)
         {

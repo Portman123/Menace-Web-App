@@ -2,6 +2,7 @@
 
 https://docs.microsoft.com/en-us/ef/core/cli/powershell
 
+EntityFrameworkCore\Add-Migration
 add-migration vN
 remove-migration [-force] [vN]
 

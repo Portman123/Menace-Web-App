@@ -3,7 +3,7 @@ using Noughts_and_Crosses;
 
 namespace MenaceData
 {
-    public class MenaceContext : DbContext
+    public partial class MenaceContext : DbContext
     {
         // Web apps need databases 
         // Microsoft Entity Framework Core is an Object Relational Mapper
@@ -19,13 +19,14 @@ namespace MenaceData
         //      which are the link between the entity classes and the Database
         //
         // This class will inherit from DbContext and be the custom created link
-
+        // LazyLoadingEnabled
         public MenaceContext()
         {
-
         }
 
-        public MenaceContext(DbContextOptions options) : base(options) { }
+        public MenaceContext(DbContextOptions options) : base(options)
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -34,11 +35,11 @@ namespace MenaceData
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<PlayerHumanOnWeb>()
-            //    .HasBaseType<Player>();
-            //modelBuilder.Entity<LinkedList<ValueTuple<Coordinate, Coordinate>>>().HasNoKey();
-            //var schemaName = "SYSTEM";
-            //modelBuilder.Entity<Player>().ToTable("Player", schemaName);
+            modelBuilder.Entity<BoardPosition>()
+                .HasKey(b => b.Encoded);
+
+            modelBuilder.Entity<BoardPosition>()
+                .HasData(new BoardPosition {  } );
         }
 
         // Series of DbSets

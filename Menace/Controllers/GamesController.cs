@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MenaceData;
 using Noughts_and_Crosses;
 using Menace.ViewModels;
+using Menace.Services;
 
 namespace Menace.Controllers
 {
@@ -46,7 +47,7 @@ namespace Menace.Controllers
             return View(game);
         }
 
-        private Player GetPlayer(string name)
+        private Player GetPlayerHuman(string name)
         {
             var player = _context.Player.Where(p => p.Name == name).FirstOrDefault();
 
@@ -60,21 +61,37 @@ namespace Menace.Controllers
             return player;
         }
 
+        private Player GetPlayerMenace(string name)
+        {
+            var player = _context.Player.Where(p => p.Name == name).FirstOrDefault();
+
+            if (player == null)
+            {
+                var ai = new AIMenace();
+                player = new PlayerMenace(ai, name);
+                
+                _context.AIMenace.Add(ai);
+                _context.Player.Add(player);
+
+            }
+
+            return player;
+        }
+
         public IActionResult Play()
         {
             var board = new BoardPosition();
 
-            _context.BoardPosition.Add(board);
+            var player1 = GetPlayerHuman("Player 1");
 
-            var player1 = GetPlayer("Player 1");
-
-            var player2 = GetPlayer("Player 2");
+            var player2 = GetPlayerMenace("Player Menace");
 
             var newGame = new GamePlayState
             {
-                BoardPositionId = board.Id,
                 PlayerId1 = player1.Id,
-                PlayerId2 = player2.Id
+                Player1Type = PlayerType.Human,
+                PlayerId2 = player2.Id,
+                Player2Type = PlayerType.AIMenace
             };
 
             _context.SaveChanges();
@@ -86,29 +103,58 @@ namespace Menace.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Play([Bind("Board, CurrentPlayer, BoardPositionId, PlayerId1, PlayerId2")] GamePlayState game)
+        public IActionResult Play([Bind("Board, CurrentPlayer, PlayerId1, Player1Type, PlayerId2, Player2Type")] GamePlayState game)
         {
             if (ModelState.IsValid)
             {
-                var board = _context.BoardPosition.Where(i => i.Id == game.BoardPositionId).FirstOrDefault();
+                var boardBefore = new BoardPosition
+                {
+                    Encoded = game.Board
+                };
 
-                board.Encoded = game.Board;
+                _context.BoardPosition.AddIfNotExists(boardBefore, b => b.Encoded == boardBefore.Encoded);
 
-                _context.BoardPosition.Update(board);
+                var player1 = PlayerFactory.GetPlayer(_context, game.PlayerId1, game.Player1Type);
 
-                var player1 = _context.Player.Where(p => p.Id == game.PlayerId1).FirstOrDefault();
+                var player2 = PlayerFactory.GetPlayer(_context, game.PlayerId2, game.Player2Type);
 
-                var player2 = _context.Player.Where(p => p.Id == game.PlayerId2).FirstOrDefault();
+                // this works because it is assumed there is a human player and an AI player
+                var activePlayer = player2 as PlayerMenace;
 
-                var activePlayer = player1 is PlayerHumanOnWeb ? player2 : player1;
+                if (activePlayer != null)
+                {
+                    var turn = activePlayer.PlayTurn(boardBefore, MapPlayerLetterToPlayerNumber(game.CurrentPlayer), boardBefore.TurnNumber);
 
-                var turn = activePlayer.PlayTurn(board, MapPlayerLetterToPlayerNumber(game.CurrentPlayer), board.TurnNumber);
+                    _context.BoardPosition.AddIfNotExists(turn.After, b => b.Encoded == turn.After.Encoded);
 
-                game.Board = turn.After.Encoded;
+                    var matchbox = activePlayer.MenaceEngine.Matchboxes.Single(m => m.BoardPosition.Encoded == boardBefore.Encoded);
 
-                _context.SaveChanges();
+                    if (_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id))
+                    {
+                        _context.Entry(matchbox.BoardPosition).State = EntityState.Unchanged;
+                    }
 
-                return View(game);
+                    foreach (var bead in matchbox.Beads)
+                    {
+                        _context.Bead.AddIfNotExists(bead, b => b.Id == bead.Id);
+                    }
+
+                    _context.SaveChanges();
+
+                    // Reload UI with new game state
+                    ModelState.Clear();
+
+                    var newGameState = new GamePlayState
+                    {
+                        Board = turn.After.Encoded,
+                        PlayerId1 = player1.Id,
+                        Player1Type = PlayerType.Human,
+                        PlayerId2 = player2.Id,
+                        Player2Type = PlayerType.AIMenace
+                    };
+
+                    return View(newGameState);
+                }
             }
 
             return View(game);

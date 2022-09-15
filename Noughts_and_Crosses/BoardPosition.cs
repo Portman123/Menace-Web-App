@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Noughts_and_Crosses
 {
-    public class BoardPosition : Entity
+    public class BoardPosition
     {
         public int[,] Coords { get; }
 

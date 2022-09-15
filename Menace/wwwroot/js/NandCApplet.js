@@ -1,7 +1,11 @@
 ﻿
 
+//$(document).ready(() => {
+//$(window).load(() => {
+//window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
+    console.log("hello world");
 
-window.addEventListener('DOMContentLoaded', () => {
     const tiles = Array.from(document.querySelectorAll('.tile'));
     const playerDisplay = document.querySelector('.display-player');
     const resetButton = document.querySelector('#reset');

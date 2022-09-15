@@ -8,8 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddMvc();
-builder.Services.AddDbContext<MenaceContext>(options
-    => options.UseSqlServer(builder.Configuration.GetConnectionString("MenaceConnection")));
+builder.Services.AddDbContext<MenaceContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MenaceConnection"));
+});
 
 var app = builder.Build();
 

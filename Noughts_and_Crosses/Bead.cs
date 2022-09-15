@@ -12,6 +12,11 @@ namespace Noughts_and_Crosses
         public int Y { get; set;  }
         public int Count { get; set; }
 
+        public Bead()
+        {
+
+        }
+
         public Bead(int x, int y)
         {
             Count = 1;

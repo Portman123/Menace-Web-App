@@ -46,14 +46,11 @@ namespace MenaceData.Migrations
                 name: "BoardPosition",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    isWinningPosition = table.Column<bool>(type: "bit", nullable: false),
-                    isFullBoard = table.Column<bool>(type: "bit", nullable: false),
-                    Encoded = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Encoded = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BoardPosition", x => x.Id);
+                    table.PrimaryKey("PK_BoardPosition", x => x.Encoded);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,7 +106,7 @@ namespace MenaceData.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BoardPositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BoardPositionEncoded = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AIMenaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -121,11 +118,11 @@ namespace MenaceData.Migrations
                         principalTable: "AIMenace",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Matchbox_BoardPosition_BoardPositionId",
-                        column: x => x.BoardPositionId,
+                        name: "FK_Matchbox_BoardPosition_BoardPositionEncoded",
+                        column: x => x.BoardPositionEncoded,
                         principalTable: "BoardPosition",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Encoded",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -150,20 +147,19 @@ namespace MenaceData.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CurrentBoardId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrentBoardEncoded = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Finished = table.Column<bool>(type: "bit", nullable: false),
                     P1Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    P2Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TurnNumber = table.Column<int>(type: "int", nullable: false)
+                    P2Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Games", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Games_BoardPosition_CurrentBoardId",
-                        column: x => x.CurrentBoardId,
+                        name: "FK_Games_BoardPosition_CurrentBoardEncoded",
+                        column: x => x.CurrentBoardEncoded,
                         principalTable: "BoardPosition",
-                        principalColumn: "Id",
+                        principalColumn: "Encoded",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Games_Player_P1Id",
@@ -199,15 +195,20 @@ namespace MenaceData.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.InsertData(
+                table: "BoardPosition",
+                column: "Encoded",
+                value: "         ");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Bead_MatchboxId",
                 table: "Bead",
                 column: "MatchboxId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_CurrentBoardId",
+                name: "IX_Games_CurrentBoardEncoded",
                 table: "Games",
-                column: "CurrentBoardId");
+                column: "CurrentBoardEncoded");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Games_P1Id",
@@ -225,9 +226,9 @@ namespace MenaceData.Migrations
                 column: "AIMenaceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Matchbox_BoardPositionId",
+                name: "IX_Matchbox_BoardPositionEncoded",
                 table: "Matchbox",
-                column: "BoardPositionId");
+                column: "BoardPositionEncoded");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Player_MenaceEngineId",

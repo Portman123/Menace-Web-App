@@ -22,6 +22,7 @@
     ViewData["Title"] = "PlayView";
 }
 
+
 <h1>Play Game</h1>
 
 <h4>Game</h4>
@@ -55,9 +56,10 @@
         </div>
         <input type="hidden" asp-for="Board" id="hiddenBoardPosition" />
         <input type="hidden" asp-for="CurrentPlayer" id="hiddenCurrentPlayer" />
-        <input type="hidden" asp-for="BoardPositionId" id="hiddenBoardPositionId" />
         <input type="hidden" asp-for="PlayerId1" id="hiddenPlayerId1" />
+        <input type="hidden" asp-for="Player1Type" id="hiddenPlayer1Type" />
         <input type="hidden" asp-for="PlayerId2" id="hiddenPlayerId2" />
+        <input type="hidden" asp-for="Player2Type" id="hiddenPlayer2Type" />
     </form>
 </div>
 

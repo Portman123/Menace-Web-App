@@ -1,0 +1,13 @@
+﻿USE [Menace]
+
+DROP TABLE Player
+DROP TABLE Games
+DROP TABLE Turn
+DROP TABLE GameHistories
+DROP TABLE Bead
+DROP TABLE Matchbox
+DROP TABLE BoardPosition
+DROP TABLE AIMenace
+DROP TABLE AIOptimalMove
+DROP TABLE AIRandomMove
+GO

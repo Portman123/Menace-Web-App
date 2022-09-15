@@ -1,4 +1,6 @@
 ﻿using Menace.ViewModels;
+using MenaceData;
+using Microsoft.EntityFrameworkCore;
 using Noughts_and_Crosses;
 
 namespace Menace.Services
@@ -22,6 +24,30 @@ namespace Menace.Services
                 default:
                     throw new Exception($"Unexpected player type {input.Type}");
             }
+        }
+
+        public static Player GetPlayer(MenaceContext context, Guid playerId, PlayerType playerType)
+        {
+            switch (playerType)
+            {
+                case PlayerType.Human:
+                    return context.Player.Where(p => p.Id == playerId).FirstOrDefault();
+                case PlayerType.AIOptimal:
+                    throw new NotImplementedException();
+                case PlayerType.AIRandom:
+                    throw new NotImplementedException();
+                case PlayerType.AIMenace:
+                    var menace = context.PlayerMenace
+                        .Where(p => p.Id == playerId)
+                        //.Include(p => p.MenaceEngine)
+                        .Include("MenaceEngine.Matchboxes.Beads")
+                        .Include("MenaceEngine.Matchboxes.BoardPosition")
+                        .FirstOrDefault();
+                    return menace;
+                default:
+                    throw new Exception($"Unexpected player type {playerType}");
+            }
+
         }
     }
 }

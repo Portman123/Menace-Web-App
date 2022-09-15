@@ -82,17 +82,18 @@ namespace MenaceData.Migrations
 
             modelBuilder.Entity("Noughts_and_Crosses.BoardPosition", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Encoded")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Encoded");
 
                     b.ToTable("BoardPosition");
+
+                    b.HasData(
+                        new
+                        {
+                            Encoded = "         "
+                        });
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.Game", b =>
@@ -101,8 +102,9 @@ namespace MenaceData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CurrentBoardId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CurrentBoardEncoded")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("Finished")
                         .HasColumnType("bit");
@@ -115,7 +117,7 @@ namespace MenaceData.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CurrentBoardId");
+                    b.HasIndex("CurrentBoardEncoded");
 
                     b.HasIndex("P1Id");
 
@@ -144,14 +146,15 @@ namespace MenaceData.Migrations
                     b.Property<Guid?>("AIMenaceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BoardPositionId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("BoardPositionEncoded")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AIMenaceId");
 
-                    b.HasIndex("BoardPositionId");
+                    b.HasIndex("BoardPositionEncoded");
 
                     b.ToTable("Matchbox");
                 });
@@ -256,7 +259,7 @@ namespace MenaceData.Migrations
                 {
                     b.HasOne("Noughts_and_Crosses.BoardPosition", "CurrentBoard")
                         .WithMany()
-                        .HasForeignKey("CurrentBoardId")
+                        .HasForeignKey("CurrentBoardEncoded")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -287,7 +290,7 @@ namespace MenaceData.Migrations
 
                     b.HasOne("Noughts_and_Crosses.BoardPosition", "BoardPosition")
                         .WithMany()
-                        .HasForeignKey("BoardPositionId")
+                        .HasForeignKey("BoardPositionEncoded")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
