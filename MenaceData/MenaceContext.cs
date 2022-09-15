@@ -36,7 +36,7 @@ namespace MenaceData
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BoardPosition>()
-                .HasKey(b => b.Encoded);
+                .HasKey(b => b.BoardPositionId);
 
             modelBuilder.Entity<BoardPosition>()
                 .HasData(new BoardPosition {  } );

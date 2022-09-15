@@ -109,10 +109,10 @@ namespace Menace.Controllers
             {
                 var boardBefore = new BoardPosition
                 {
-                    Encoded = game.Board
+                    BoardPositionId = game.Board
                 };
 
-                _context.BoardPosition.AddIfNotExists(boardBefore, b => b.Encoded == boardBefore.Encoded);
+                //_context.BoardPosition.AddIfNotExists(boardBefore, b => b.BoardPositionId == boardBefore.BoardPositionId);
 
                 var player1 = PlayerFactory.GetPlayer(_context, game.PlayerId1, game.Player1Type);
 
@@ -125,13 +125,13 @@ namespace Menace.Controllers
                 {
                     var turn = activePlayer.PlayTurn(boardBefore, MapPlayerLetterToPlayerNumber(game.CurrentPlayer), boardBefore.TurnNumber);
 
-                    _context.BoardPosition.AddIfNotExists(turn.After, b => b.Encoded == turn.After.Encoded);
+                    //_context.BoardPosition.AddIfNotExists(turn.After, b => b.BoardPositionId == turn.After.BoardPositionId);
 
-                    var matchbox = activePlayer.MenaceEngine.Matchboxes.Single(m => m.BoardPosition.Encoded == boardBefore.Encoded);
+                    var matchbox = activePlayer.MenaceEngine.Matchboxes.Single(m => m.BoardPosition.BoardPositionId == boardBefore.BoardPositionId);
 
                     if (_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id))
                     {
-                        _context.Entry(matchbox.BoardPosition).State = EntityState.Unchanged;
+                        //_context.Entry(matchbox.BoardPosition).State = EntityState.Unchanged;
                     }
 
                     foreach (var bead in matchbox.Beads)
@@ -146,7 +146,7 @@ namespace Menace.Controllers
 
                     var newGameState = new GamePlayState
                     {
-                        Board = turn.After.Encoded,
+                        Board = turn.After.BoardPositionId,
                         PlayerId1 = player1.Id,
                         Player1Type = PlayerType.Human,
                         PlayerId2 = player2.Id,

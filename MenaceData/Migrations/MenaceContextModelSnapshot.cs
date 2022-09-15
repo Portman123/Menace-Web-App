@@ -82,17 +82,17 @@ namespace MenaceData.Migrations
 
             modelBuilder.Entity("Noughts_and_Crosses.BoardPosition", b =>
                 {
-                    b.Property<string>("Encoded")
+                    b.Property<string>("BoardPositionId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Encoded");
+                    b.HasKey("BoardPositionId");
 
                     b.ToTable("BoardPosition");
 
                     b.HasData(
                         new
                         {
-                            Encoded = "         "
+                            BoardPositionId = "         "
                         });
                 });
 
@@ -102,7 +102,7 @@ namespace MenaceData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CurrentBoardEncoded")
+                    b.Property<string>("CurrentBoardBoardPositionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -117,7 +117,7 @@ namespace MenaceData.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CurrentBoardEncoded");
+                    b.HasIndex("CurrentBoardBoardPositionId");
 
                     b.HasIndex("P1Id");
 
@@ -146,15 +146,14 @@ namespace MenaceData.Migrations
                     b.Property<Guid?>("AIMenaceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("BoardPositionEncoded")
-                        .IsRequired()
+                    b.Property<string>("BoardPositionId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AIMenaceId");
 
-                    b.HasIndex("BoardPositionEncoded");
+                    b.HasIndex("BoardPositionId");
 
                     b.ToTable("Matchbox");
                 });
@@ -259,7 +258,7 @@ namespace MenaceData.Migrations
                 {
                     b.HasOne("Noughts_and_Crosses.BoardPosition", "CurrentBoard")
                         .WithMany()
-                        .HasForeignKey("CurrentBoardEncoded")
+                        .HasForeignKey("CurrentBoardBoardPositionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -290,9 +289,7 @@ namespace MenaceData.Migrations
 
                     b.HasOne("Noughts_and_Crosses.BoardPosition", "BoardPosition")
                         .WithMany()
-                        .HasForeignKey("BoardPositionEncoded")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BoardPositionId");
 
                     b.Navigation("BoardPosition");
                 });
