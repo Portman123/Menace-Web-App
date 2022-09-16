@@ -1,4 +1,6 @@
-﻿
+﻿function WrapBoard(board) { return `[${board}]`; }
+
+function UnwrapBoard(board) { return board.substring(1, 10); }
 
 //$(document).ready(() => {
 //$(window).load(() => {
@@ -11,19 +13,22 @@ window.addEventListener('load', () => {
     const resetButton = document.querySelector('#reset');
     const announcer = document.querySelector('.announcer');
 
-    const hiddenBoardPosition = document.querySelector('#hiddenBoardPosition');
-    const hiddenCurrentPlayer = document.querySelector('#hiddenCurrentPlayer');
+    const hiddenBoardBeforeInput = document.querySelector('#hiddenBoardBeforeInput');
+    const hiddenBoardAfterInput = document.querySelector('#hiddenBoardAfterInput');
+    const hiddenCurrentPlayerSymbol = document.querySelector('#hiddenCurrentPlayerSymbol');
+    const hiddenGameHistoryId = document.querySelector('#hiddenGameHistoryId');
+
     const submitForm = document.querySelector('#submitForm');
     const submitButton = document.querySelector('#submitButton');
 
-    console.log(`${hiddenCurrentPlayer.value}:[${hiddenBoardPosition.value}]`);
+    console.log(`${hiddenCurrentPlayerSymbol.value}:[${hiddenBoardBeforeInput.value}]:[${hiddenBoardAfterInput.value}]:[${hiddenGameHistoryId.value}]`);
 
     /*!!Zap it!!*/
-    let board = Array.from(hiddenBoardPosition.value).map(c => c == ' ' ? '' : c);
+    let board = Array.from(UnwrapBoard(hiddenBoardBeforeInput.value)).map(c => c == ' ' ? '' : c);
 
     console.log(board);
 
-    let currentPlayer = hiddenCurrentPlayer.value;
+    let currentPlayer = hiddenCurrentPlayerSymbol.value;
     let isGameActive = true;
 
     const PLAYERX_WON = 'PLAYERX_WON';
@@ -144,8 +149,8 @@ window.addEventListener('load', () => {
     resetButton.addEventListener('click', resetBoard);
 
     const saveState = () => {
-        hiddenBoardPosition.value = board.map(c => c == '' ? ' ' : c).join('');
-        hiddenCurrentPlayer.value = currentPlayer;
+        hiddenBoardAfterInput.value = WrapBoard(board.map(c => c == '' ? ' ' : c).join(''));
+        hiddenCurrentPlayerSymbol.value = currentPlayer;
     }
 
     submitButton.addEventListener('click', saveState);

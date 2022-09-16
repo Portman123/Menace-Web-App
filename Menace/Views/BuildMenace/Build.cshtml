@@ -85,7 +85,6 @@
                     </ul>
                 </div>
             </nav>
-
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h2>Play</h2>
@@ -93,19 +92,19 @@
 
                 <div class="my-4 w-100 bg-dark text-centre" id="myChart" width="900" height="380">
                     <section class="display text-light text-centre">
-                        Player <span class="display-player @( $"player{Model.CurrentPlayer}" )">@Model.CurrentPlayer</span>'s turn
+                        Player <span class="display-player @( $"player{Model.CurrentPlayerSymbol}" )">@Model.CurrentPlayerSymbol</span>'s turn
                     </section>
                     <br />
                     <section class="containerCustom">
-                        <div class="tile @( GetTileClass(Model.Board, 0, 0 ) )">@GetTileValue(Model.Board, 0, 0)</div>
-                        <div class="tile @( GetTileClass(Model.Board, 0, 1 ) )">@GetTileValue(Model.Board, 0, 1)</div>
-                        <div class="tile @( GetTileClass(Model.Board, 0, 2 ) )">@GetTileValue(Model.Board, 0, 2)</div>
-                        <div class="tile @( GetTileClass(Model.Board, 1, 0 ) )">@GetTileValue(Model.Board, 1, 0)</div>
-                        <div class="tile @( GetTileClass(Model.Board, 1, 1 ) )">@GetTileValue(Model.Board, 1, 1)</div>
-                        <div class="tile @( GetTileClass(Model.Board, 1, 2 ) )">@GetTileValue(Model.Board, 1, 2)</div>
-                        <div class="tile @( GetTileClass(Model.Board, 2, 0 ) )">@GetTileValue(Model.Board, 2, 0)</div>
-                        <div class="tile @( GetTileClass(Model.Board, 2, 1 ) )">@GetTileValue(Model.Board, 2, 1)</div>
-                        <div class="tile @( GetTileClass(Model.Board, 2, 2 ) )">@GetTileValue(Model.Board, 2, 2)</div>
+                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 0)</div>
+                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 1)</div>
+                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 2)</div>
+                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 0)</div>
+                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 1)</div>
+                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 2)</div>
+                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 0)</div>
+                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 1)</div>
+                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 2)</div>
                     </section>
                     <br />
                     <section class="display announcer hide text-light text-centre"></section>
@@ -117,11 +116,10 @@
                         <div class="form-group">
                             <input type="submit" value="Submit" class="btn btn-primary" id="submit" />
                         </div>
-                        <input type="hidden" asp-for="Board" id="hiddenBoardPosition" />
-                        <input type="hidden" asp-for="CurrentPlayer" id="hiddenCurrentPlayer" />
+                        <input type="hidden" asp-for="BoardBeforeInput" id="hiddenBoardPosition" />
+                        <input type="hidden" asp-for="BoardBeforeInput" id="hiddenCurrentPlayer" />
                     </form>
                 </div>
-
                 @section Scripts {
                     @{
                         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -173,7 +171,7 @@
                             <table class="table table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th>Board Position</th>
+                                        <th>BoardBeforeInput Position</th>
                                         <th>Bead Count</th>
                                         <th>Best Move</th>
                                         <th></th>

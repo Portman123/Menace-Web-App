@@ -30,19 +30,19 @@
 
 <div class="my-4 w-100 bg-dark text-centre" id="myChart" width="900" height="380">
     <section class="display text-light text-centre">
-        Player <span class="display-player @( $"player{Model.CurrentPlayer}" )">@Model.CurrentPlayer</span>'s turn
+        Player <span class="display-player @( $"player{Model.CurrentPlayerSymbol}" )">@Model.CurrentPlayerSymbol</span>'s turn
     </section>
     <br />
     <section class="containerCustom">
-        <div class="tile @( GetTileClass(Model.Board, 0, 0 ) )">@GetTileValue(Model.Board, 0, 0)</div>
-        <div class="tile @( GetTileClass(Model.Board, 0, 1 ) )">@GetTileValue(Model.Board, 0, 1)</div>
-        <div class="tile @( GetTileClass(Model.Board, 0, 2 ) )">@GetTileValue(Model.Board, 0, 2)</div>
-        <div class="tile @( GetTileClass(Model.Board, 1, 0 ) )">@GetTileValue(Model.Board, 1, 0)</div>
-        <div class="tile @( GetTileClass(Model.Board, 1, 1 ) )">@GetTileValue(Model.Board, 1, 1)</div>
-        <div class="tile @( GetTileClass(Model.Board, 1, 2 ) )">@GetTileValue(Model.Board, 1, 2)</div>
-        <div class="tile @( GetTileClass(Model.Board, 2, 0 ) )">@GetTileValue(Model.Board, 2, 0)</div>
-        <div class="tile @( GetTileClass(Model.Board, 2, 1 ) )">@GetTileValue(Model.Board, 2, 1)</div>
-        <div class="tile @( GetTileClass(Model.Board, 2, 2 ) )">@GetTileValue(Model.Board, 2, 2)</div>
+        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 0)</div>
+        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 1)</div>
+        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 2)</div>
+        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 0)</div>
+        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 1)</div>
+        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 2)</div>
+        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 0)</div>
+        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 1)</div>
+        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 2)</div>
     </section>
     <br />
     <section class="display announcer hide text-light text-centre"></section>
@@ -54,13 +54,29 @@
         <div class="form-group">
             <input type="submit" value="Submit" class="btn btn-primary" id="submitButton" />
         </div>
-        <input type="hidden" asp-for="Board" id="hiddenBoardPosition" />
-        <input type="hidden" asp-for="CurrentPlayer" id="hiddenCurrentPlayer" />
-        <input type="hidden" asp-for="PlayerId1" id="hiddenPlayerId1" />
-        <input type="hidden" asp-for="Player1Type" id="hiddenPlayer1Type" />
-        <input type="hidden" asp-for="PlayerId2" id="hiddenPlayerId2" />
-        <input type="hidden" asp-for="Player2Type" id="hiddenPlayer2Type" />
+        <input type="hidden" asp-for="BoardBeforeInput" id="hiddenBoardBeforeInput" />
+        <input type="hidden" asp-for="BoardAfterInput" id="hiddenBoardAfterInput" />
+        <input type="hidden" asp-for="CurrentPlayerSymbol" id="hiddenCurrentPlayerSymbol" />
+        <input type="hidden" asp-for="GameHistoryId" id="hiddenGameHistoryId" />
     </form>
+</div>
+
+<div>
+    @{
+        if(ViewBag.errors != null)
+        {
+            foreach(var error in ViewBag.errors)
+            {
+                //If there are any errors for a field...
+                if(@error.errors.Count > 0)
+                {
+                    // We show the first error for that field
+                    <p>@error.errors[0].ErrorMessage</p>
+                }
+            }
+        }
+
+    }
 </div>
 
 <div>

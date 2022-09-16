@@ -9,6 +9,25 @@ namespace Noughts_and_Crosses
 {
     public class BoardPosition
     {
+        public static Coordinate GetMove(BoardPosition before, BoardPosition after)
+        {
+            for (int i = 0; i < before.BoardPositionId.Length; i++)
+            {
+                if (before.BoardPositionId[i] != after.BoardPositionId[i])
+                {
+                    return new Coordinate
+                    {
+                        X = i / 3,
+                        Y = i % 3
+                    };
+                }
+            }
+
+            return null;
+        }
+
+        public const string EmptyBoardPostion = "         ";
+
         public int[,] Coords { get; }
 
         public bool IsWinningPosition
@@ -67,7 +86,9 @@ namespace Noughts_and_Crosses
         // No constructor arguments passed: assume empty board
         public BoardPosition()
         {
-            Coords = new int[,] { { 0,0,0},{ 0,0,0},{ 0,0,0} };
+            Coords = new int[,] { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+
+            BoardPositionId = EmptyBoardPostion;
         }
 
         public BoardPosition(int[] coords)

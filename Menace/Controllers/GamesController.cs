@@ -24,9 +24,9 @@ namespace Menace.Controllers
         // GET: Games
         public async Task<IActionResult> Index()
         {
-              return _context.Game != null ? 
-                          View(await _context.Game.ToListAsync()) :
-                          Problem("Entity set 'MenaceContext.Games'  is null.");
+            return _context.Game != null ?
+                        View(await _context.Game.ToListAsync()) :
+                        Problem("Entity set 'MenaceContext.Games'  is null.");
         }
 
         // GET: Games/Details/5
@@ -69,7 +69,7 @@ namespace Menace.Controllers
             {
                 var ai = new AIMenace();
                 player = new PlayerMenace(ai, name);
-                
+
                 _context.AIMenace.Add(ai);
                 _context.Player.Add(player);
 
@@ -80,84 +80,85 @@ namespace Menace.Controllers
 
         public IActionResult Play()
         {
-            var board = new BoardPosition();
-
             var player1 = GetPlayerHuman("Player 1");
 
             var player2 = GetPlayerMenace("Player Menace");
 
-            var newGame = new GamePlayState
-            {
-                PlayerId1 = player1.Id,
-                Player1Type = PlayerType.Human,
-                PlayerId2 = player2.Id,
-                Player2Type = PlayerType.AIMenace
-            };
+            var newGame = new GameHistory(player1, player2);
+
+            _context.Add(newGame);
 
             _context.SaveChanges();
 
-            return View(newGame);
+            var gameState = new GamePlayState
+            {
+                BoardBeforeInput = GamePlayState.WrapBoard(BoardPosition.EmptyBoardPostion),
+                GameHistoryId = newGame.Id
+            };
+
+            return View(gameState);
         }
 
         private int MapPlayerLetterToPlayerNumber(string letter) => letter == "X" ? -1 : 1;
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Play([Bind("Board, CurrentPlayer, PlayerId1, Player1Type, PlayerId2, Player2Type")] GamePlayState game)
+        public IActionResult Play([Bind("BoardBeforeInput, BoardAfterInput, CurrentPlayerSymbol, GameHistoryId")] GamePlayState gameState)
         {
             if (ModelState.IsValid)
             {
-                var boardBefore = new BoardPosition
+                // Load state from inputs
+                var boardBeforeInput = new BoardPosition
                 {
-                    BoardPositionId = game.Board
+                    BoardPositionId = GamePlayState.UnwrapBoard(gameState.BoardBeforeInput)
                 };
 
-                //_context.BoardPosition.AddIfNotExists(boardBefore, b => b.BoardPositionId == boardBefore.BoardPositionId);
-
-                var player1 = PlayerFactory.GetPlayer(_context, game.PlayerId1, game.Player1Type);
-
-                var player2 = PlayerFactory.GetPlayer(_context, game.PlayerId2, game.Player2Type);
-
-                // this works because it is assumed there is a human player and an AI player
-                var activePlayer = player2 as PlayerMenace;
-
-                if (activePlayer != null)
+                var boardAfterInput = new BoardPosition
                 {
-                    var turn = activePlayer.PlayTurn(boardBefore, MapPlayerLetterToPlayerNumber(game.CurrentPlayer), boardBefore.TurnNumber);
+                    BoardPositionId = GamePlayState.UnwrapBoard(gameState.BoardAfterInput)
+                };
 
-                    //_context.BoardPosition.AddIfNotExists(turn.After, b => b.BoardPositionId == turn.After.BoardPositionId);
+                var game = _context.GameHistory.Where(g => g.Id == gameState.GameHistoryId)
+                    .Include(g => g.P1)
+                    .Include(g => g.P2)
+                    .Include(g => g.Turns)
+                    .Single();
 
-                    var matchbox = activePlayer.MenaceEngine.Matchboxes.Single(m => m.BoardPosition.BoardPositionId == boardBefore.BoardPositionId);
+                var humanPlayer = PlayerFactory.GetPlayer(_context, game.P1.Id, PlayerType.Human);
 
-                    if (_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id))
-                    {
-                        //_context.Entry(matchbox.BoardPosition).State = EntityState.Unchanged;
-                    }
+                var aiPlayer = PlayerFactory.GetPlayer(_context, game.P2.Id, PlayerType.AIMenace) as PlayerMenace;
 
-                    foreach (var bead in matchbox.Beads)
-                    {
-                        _context.Bead.AddIfNotExists(bead, b => b.Id == bead.Id);
-                    }
+                // Add turn just played to Game History
+                var humanMove = BoardPosition.GetMove(boardBeforeInput, boardAfterInput);
 
-                    _context.SaveChanges();
+                var humanTurn = new Turn(humanPlayer, boardBeforeInput, boardAfterInput, humanMove.X, humanMove.Y, boardAfterInput.TurnNumber);
 
-                    // Reload UI with new game state
-                    ModelState.Clear();
+                //game.AddMove(humanTurn);
 
-                    var newGameState = new GamePlayState
-                    {
-                        Board = turn.After.BoardPositionId,
-                        PlayerId1 = player1.Id,
-                        Player1Type = PlayerType.Human,
-                        PlayerId2 = player2.Id,
-                        Player2Type = PlayerType.AIMenace
-                    };
+                // Make AI play its turn
+                var aiTurn = aiPlayer.PlayTurn(boardAfterInput, MapPlayerLetterToPlayerNumber(gameState.CurrentPlayerSymbol), boardAfterInput.TurnNumber);
 
-                    return View(newGameState);
-                }
+                //game.AddMove(aiTurn);
+
+                //var matchbox = aiPlayer.MenaceEngine.Matchboxes.Single(m => m.BoardPosition.BoardPositionId == boardAfterInput.BoardPositionId);
+
+                //_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id);
+
+                _context.SaveChanges();
+
+                // Reload UI with new game state
+                ModelState.Clear();
+
+                var newGameState = new GamePlayState
+                {
+                    BoardBeforeInput = GamePlayState.WrapBoard(aiTurn.After.BoardPositionId),
+                    GameHistoryId = gameState.GameHistoryId
+                };
+
+                return View(newGameState);
             }
 
-            return View(game);
+            return View(gameState);
         }
 
         // GET: Games/Create
@@ -266,14 +267,14 @@ namespace Menace.Controllers
             {
                 _context.Game.Remove(game);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GameExists(Guid id)
         {
-          return (_context.Game?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Game?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -2,18 +2,24 @@
 {
     public class GamePlayState
     {
-        public const string EmptyBoardPostion = "         ";
+        public static string WrapBoard(string board) => $"[{board}]";
 
-        public string Board { get; set; } = EmptyBoardPostion;
+        public static string UnwrapBoard(string board) => board.Substring(1, 9);
 
-        public string CurrentPlayer { get; set; } = "X";
+        public string BoardBeforeInput { get; set; }
 
-        public Guid PlayerId1 { get; set; }
+        public string BoardAfterInput { get; set; }
 
-        public PlayerType Player1Type { get; set; }
+        public string CurrentPlayerSymbol { get; set; } = "X";
 
-        public Guid PlayerId2 { get; set; }
+        public Guid GameHistoryId { get; set; }
 
-        public PlayerType Player2Type { get; set; }
+        //public Guid PlayerId1 { get; set; }
+
+        //public PlayerType Player1Type { get; set; }
+
+        //public Guid PlayerId2 { get; set; }
+
+        //public PlayerType Player2Type { get; set; }
     }
 }

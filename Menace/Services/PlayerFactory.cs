@@ -31,7 +31,7 @@ namespace Menace.Services
             switch (playerType)
             {
                 case PlayerType.Human:
-                    return context.Player.Where(p => p.Id == playerId).FirstOrDefault();
+                    return context.Player.Where(p => p.Id == playerId).Single();
                 case PlayerType.AIOptimal:
                     throw new NotImplementedException();
                 case PlayerType.AIRandom:
@@ -39,10 +39,10 @@ namespace Menace.Services
                 case PlayerType.AIMenace:
                     var menace = context.PlayerMenace
                         .Where(p => p.Id == playerId)
-                        //.Include(p => p.MenaceEngine)
+                        .Include("MenaceEngine.Matchboxes")
                         .Include("MenaceEngine.Matchboxes.Beads")
                         .Include("MenaceEngine.Matchboxes.BoardPosition")
-                        .FirstOrDefault();
+                        .Single();
                     return menace;
                 default:
                     throw new Exception($"Unexpected player type {playerType}");
