@@ -157,6 +157,7 @@ namespace MenaceData.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BoardPositionId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -215,11 +216,11 @@ namespace MenaceData.Migrations
                     b.Property<Guid?>("GameHistoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MoveMakerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("TurnNumber")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("TurnPlayerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("X")
                         .HasColumnType("int");
@@ -235,7 +236,7 @@ namespace MenaceData.Migrations
 
                     b.HasIndex("GameHistoryId");
 
-                    b.HasIndex("MoveMakerId");
+                    b.HasIndex("TurnPlayerId");
 
                     b.ToTable("Turn");
                 });
@@ -295,19 +296,19 @@ namespace MenaceData.Migrations
                     b.HasOne("Noughts_and_Crosses.BoardPosition", "CurrentBoard")
                         .WithMany()
                         .HasForeignKey("CurrentBoardBoardPositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Noughts_and_Crosses.Player", "P1")
                         .WithMany()
                         .HasForeignKey("P1Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Noughts_and_Crosses.Player", "P2")
                         .WithMany()
                         .HasForeignKey("P2Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("CurrentBoard");
@@ -322,13 +323,13 @@ namespace MenaceData.Migrations
                     b.HasOne("Noughts_and_Crosses.Player", "P1")
                         .WithMany()
                         .HasForeignKey("P1Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Noughts_and_Crosses.Player", "P2")
                         .WithMany()
                         .HasForeignKey("P2Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("P1");
@@ -344,7 +345,9 @@ namespace MenaceData.Migrations
 
                     b.HasOne("Noughts_and_Crosses.BoardPosition", "BoardPosition")
                         .WithMany()
-                        .HasForeignKey("BoardPositionId");
+                        .HasForeignKey("BoardPositionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("BoardPosition");
                 });
@@ -354,30 +357,30 @@ namespace MenaceData.Migrations
                     b.HasOne("Noughts_and_Crosses.BoardPosition", "After")
                         .WithMany()
                         .HasForeignKey("AfterBoardPositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Noughts_and_Crosses.BoardPosition", "Before")
                         .WithMany()
                         .HasForeignKey("BeforeBoardPositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Noughts_and_Crosses.GameHistory", null)
                         .WithMany("Turns")
                         .HasForeignKey("GameHistoryId");
 
-                    b.HasOne("Noughts_and_Crosses.Player", "MoveMaker")
+                    b.HasOne("Noughts_and_Crosses.Player", "TurnPlayer")
                         .WithMany()
-                        .HasForeignKey("MoveMakerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("TurnPlayerId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("After");
 
                     b.Navigation("Before");
 
-                    b.Navigation("MoveMaker");
+                    b.Navigation("TurnPlayer");
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.PlayerMenace", b =>

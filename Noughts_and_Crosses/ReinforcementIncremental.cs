@@ -16,7 +16,7 @@ namespace Noughts_and_Crosses
             // for each turn in the game's history where menace played a turn
             foreach (Turn t in g.History.Turns)
             {
-                if (t.MoveMaker == menace)
+                if (t.TurnPlayer == menace)
                 {
                     // Fetch the box Menace used to play the turn
                     Matchbox boxUsed = menace.MenaceEngine.MatchboxByBoardPos(t.Before);

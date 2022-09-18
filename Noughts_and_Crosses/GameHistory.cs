@@ -40,7 +40,7 @@ namespace Noughts_and_Crosses
 
             foreach (Turn t in Turns)
             {
-                Console.Write(t.MoveMaker.Name);
+                Console.Write(t.TurnPlayer.Name);
                 Console.Write("'s Turn: ");
                 Console.WriteLine("");
                 Console.Write(t.X);

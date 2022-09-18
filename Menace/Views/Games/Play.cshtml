@@ -20,6 +20,8 @@
 
 @{
     ViewData["Title"] = "PlayView";
+
+    var board = GamePlayState.UnwrapBoard(Model.BoardBeforeInput);
 }
 
 
@@ -34,15 +36,15 @@
     </section>
     <br />
     <section class="containerCustom">
-        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 0)</div>
-        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 1)</div>
-        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 2)</div>
-        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 0)</div>
-        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 1)</div>
-        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 2)</div>
-        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 0)</div>
-        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 1)</div>
-        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 2)</div>
+        <div class="tile @( GetTileClass(board, 0, 0 ) )">@GetTileValue(board, 0, 0)</div>
+        <div class="tile @( GetTileClass(board, 0, 1 ) )">@GetTileValue(board, 0, 1)</div>
+        <div class="tile @( GetTileClass(board, 0, 2 ) )">@GetTileValue(board, 0, 2)</div>
+        <div class="tile @( GetTileClass(board, 1, 0 ) )">@GetTileValue(board, 1, 0)</div>
+        <div class="tile @( GetTileClass(board, 1, 1 ) )">@GetTileValue(board, 1, 1)</div>
+        <div class="tile @( GetTileClass(board, 1, 2 ) )">@GetTileValue(board, 1, 2)</div>
+        <div class="tile @( GetTileClass(board, 2, 0 ) )">@GetTileValue(board, 2, 0)</div>
+        <div class="tile @( GetTileClass(board, 2, 1 ) )">@GetTileValue(board, 2, 1)</div>
+        <div class="tile @( GetTileClass(board, 2, 2 ) )">@GetTileValue(board, 2, 2)</div>
     </section>
     <br />
     <section class="display announcer hide text-light text-centre"></section>

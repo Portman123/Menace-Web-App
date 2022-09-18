@@ -108,15 +108,20 @@ namespace Menace.Controllers
             if (ModelState.IsValid)
             {
                 // Load state from inputs
+
                 var boardBeforeInput = new BoardPosition
                 {
                     BoardPositionId = GamePlayState.UnwrapBoard(gameState.BoardBeforeInput)
                 };
 
+                boardBeforeInput = _context.BoardPosition.GetOrAddIfNotExists(boardBeforeInput, b => b.BoardPositionId == boardBeforeInput.BoardPositionId);
+
                 var boardAfterInput = new BoardPosition
                 {
                     BoardPositionId = GamePlayState.UnwrapBoard(gameState.BoardAfterInput)
                 };
+
+                boardAfterInput = _context.BoardPosition.GetOrAddIfNotExists(boardAfterInput, b => b.BoardPositionId == boardAfterInput.BoardPositionId);
 
                 var game = _context.GameHistory.Where(g => g.Id == gameState.GameHistoryId)
                     .Include(g => g.P1)
@@ -124,25 +129,41 @@ namespace Menace.Controllers
                     .Include(g => g.Turns)
                     .Single();
 
-                var humanPlayer = PlayerFactory.GetPlayer(_context, game.P1.Id, PlayerType.Human);
+                var humanPlayer = game.P1;
+
+                //var humanPlayer = PlayerFactory.GetPlayer(_context, game.P1.Id, PlayerType.Human);
 
                 var aiPlayer = PlayerFactory.GetPlayer(_context, game.P2.Id, PlayerType.AIMenace) as PlayerMenace;
+
+                game.P2 = aiPlayer;
 
                 // Add turn just played to Game History
                 var humanMove = BoardPosition.GetMove(boardBeforeInput, boardAfterInput);
 
-                var humanTurn = new Turn(humanPlayer, boardBeforeInput, boardAfterInput, humanMove.X, humanMove.Y, boardAfterInput.TurnNumber);
+                var humanTurn = new Turn(humanPlayer, boardBeforeInput, boardAfterInput, humanMove.X, humanMove.Y, boardBeforeInput.TurnNumber);
 
-                //game.AddMove(humanTurn);
+                _context.Turn.Add(humanTurn);
+
+                game.AddMove(humanTurn);
 
                 // Make AI play its turn
                 var aiTurn = aiPlayer.PlayTurn(boardAfterInput, MapPlayerLetterToPlayerNumber(gameState.CurrentPlayerSymbol), boardAfterInput.TurnNumber);
 
-                //game.AddMove(aiTurn);
+                _context.Turn.Add(aiTurn);
 
-                //var matchbox = aiPlayer.MenaceEngine.Matchboxes.Single(m => m.BoardPosition.BoardPositionId == boardAfterInput.BoardPositionId);
+                game.AddMove(aiTurn);
 
-                //_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id);
+                var matchbox = aiPlayer.MenaceEngine.Matchboxes.Single(m => m.BoardPosition.BoardPositionId == boardAfterInput.BoardPositionId);
+
+                if (_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id))
+                {
+                    _context.Entry(matchbox).Reference(m => m.BoardPosition).IsModified = false;
+
+                    foreach (var bead in matchbox.Beads)
+                    {
+                        _context.Bead.Add(bead);
+                    }
+                }
 
                 _context.SaveChanges();
 

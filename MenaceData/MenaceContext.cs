@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Noughts_and_Crosses; 
+using Noughts_and_Crosses;
 
 namespace MenaceData
 {
@@ -35,21 +35,72 @@ namespace MenaceData
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // BoardPosition
             modelBuilder.Entity<BoardPosition>()
                 .HasKey(b => b.BoardPositionId);
 
             modelBuilder.Entity<BoardPosition>()
-                .HasData(new BoardPosition {  } );
+                .HasData(new BoardPosition { });
 
+            // Game
+            modelBuilder.Entity<Game>()
+                .HasOne(g => g.P1)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Game>()
+                .HasOne(g => g.P2)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Game>()
+                .HasOne(g => g.CurrentBoard)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // GameHistory
+            modelBuilder.Entity<GameHistory>()
+                .HasOne(g => g.P1)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<GameHistory>()
+                .HasOne(g => g.P2)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<GameHistory>()
+                .HasOne(g => g.P2)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Matchbox
+            modelBuilder.Entity<Matchbox>()
+                .HasOne(m => m.BoardPosition)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Turn
+            modelBuilder.Entity<Turn>()
+                .HasOne(t => t.Before)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Turn>()
+                .HasOne(t => t.After)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Turn>()
+                .HasOne(t => t.TurnPlayer)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
         }
 
         // Series of DbSets
         //  Represents an entity used for CRUD operations
         //      DbContext represents the database 
         //      DbSet represents the tables in the DB
-        //public DbSet<AIMenace> Menace { get; set; }
-
-        //public DbSet<Game> Game { get; set; }
 
         public DbSet<BoardPosition> BoardPosition { get; set; }
 
@@ -69,11 +120,10 @@ namespace MenaceData
 
         public DbSet<PlayerHumanOnWeb> PlayerHumanOnWeb { get; set; }
 
-        public DbSet<Game> Game { get; set; }
-
         public DbSet<GameHistory> GameHistory { get; set; }
 
         public DbSet<Turn> Turn { get; set; }
 
+        public DbSet<Game> Game { get; set; }
     }
 }

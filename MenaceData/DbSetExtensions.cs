@@ -14,5 +14,20 @@ namespace MenaceData
 
             return !exists;
         }
+
+        public static T GetOrAddIfNotExists<T>(this DbSet<T> dbSet, T entity, Expression<Func<T, bool>> predicate) where T : class, new()
+        {
+            var existing = dbSet.Where(predicate).FirstOrDefault();
+
+            if (existing == null)
+            {
+                dbSet.Add(entity);
+
+                return entity;
+            }
+
+            return existing;
+        }
+
     }
 }
