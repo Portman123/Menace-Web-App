@@ -10,16 +10,17 @@ window.addEventListener('load', () => {
 
     const tiles = Array.from(document.querySelectorAll('.tile'));
     const playerDisplay = document.querySelector('.display-player');
-    const resetButton = document.querySelector('#reset');
+    //const resetButton = document.querySelector('#reset');
     const announcer = document.querySelector('.announcer');
 
     const hiddenBoardBeforeInput = document.querySelector('#hiddenBoardBeforeInput');
     const hiddenBoardAfterInput = document.querySelector('#hiddenBoardAfterInput');
     const hiddenCurrentPlayerSymbol = document.querySelector('#hiddenCurrentPlayerSymbol');
     const hiddenGameHistoryId = document.querySelector('#hiddenGameHistoryId');
+    const hiddenIsGameActive = document.querySelector('#hiddenIsGameActive');
 
     const submitForm = document.querySelector('#submitForm');
-    const submitButton = document.querySelector('#submitButton');
+    //const submitButton = document.querySelector('#submitButton');
 
     console.log(`${hiddenCurrentPlayerSymbol.value}:[${hiddenBoardBeforeInput.value}]:[${hiddenBoardAfterInput.value}]:[${hiddenGameHistoryId.value}]`);
 
@@ -29,7 +30,7 @@ window.addEventListener('load', () => {
     console.log(board);
 
     let currentPlayer = hiddenCurrentPlayerSymbol.value;
-    let isGameActive = true;
+    let isGameActive = hiddenIsGameActive.value.toLowerCase() === 'true';
 
     const PLAYERX_WON = 'PLAYERX_WON';
     const PLAYERO_WON = 'PLAYERO_WON';
@@ -124,34 +125,45 @@ window.addEventListener('load', () => {
             saveState();
             submitForm.submit();
         }
-    }
-
-    const resetBoard = () => {
-        board = ['', '', '', '', '', '', '', '', ''];
-        isGameActive = true;
-        announcer.classList.add('hide');
-
-        if (currentPlayer === 'O') {
-            changePlayer();
+        else {
+            alert('invalid');
         }
-
-        tiles.forEach(tile => {
-            tile.innerText = '';
-            tile.classList.remove('playerX');
-            tile.classList.remove('playerO');
-        });
     }
 
-    tiles.forEach((tile, index) => {
-        tile.addEventListener('click', () => userAction(tile, index));
-    });
+    //const resetBoard = () => {
+    //    board = ['', '', '', '', '', '', '', '', ''];
+    //    isGameActive = true;
+    //    announcer.classList.add('hide');
 
-    resetButton.addEventListener('click', resetBoard);
+    //    if (currentPlayer === 'O') {
+    //        changePlayer();
+    //    }
+
+    //    tiles.forEach(tile => {
+    //        tile.innerText = '';
+    //        tile.classList.remove('playerX');
+    //        tile.classList.remove('playerO');
+    //    });
+    //}
 
     const saveState = () => {
         hiddenBoardAfterInput.value = WrapBoard(board.map(c => c == '' ? ' ' : c).join(''));
         hiddenCurrentPlayerSymbol.value = currentPlayer;
     }
 
-    submitButton.addEventListener('click', saveState);
+    //submitButton.addEventListener('click', saveState);
+
+    // Initialize UI to play game or show result of previous game and offer new game
+    if (isGameActive) {
+        //resetButton.style.display = "none";
+
+        tiles.forEach((tile, index) => {
+            tile.addEventListener('click', () => userAction(tile, index));
+        });
+    }
+    else {
+        handleResultValidation();
+
+        //resetButton.addEventListener('click', resetBoard);
+    }
 });

@@ -10,7 +10,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddMvc();
 builder.Services.AddDbContext<MenaceContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MenaceConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MenaceConnectionSql"));
 });
 
 var app = builder.Build();

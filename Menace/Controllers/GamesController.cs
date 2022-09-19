@@ -80,6 +80,7 @@ namespace Menace.Controllers
 
         public IActionResult Play()
         {
+            // Set-up game
             var player1 = GetPlayerHuman("Player 1");
 
             var player2 = GetPlayerMenace("Player Menace");
@@ -90,16 +91,45 @@ namespace Menace.Controllers
 
             _context.SaveChanges();
 
+            // Set-up UI
+            ModelState.Clear();
+
             var gameState = new GamePlayState
             {
                 BoardBeforeInput = GamePlayState.WrapBoard(BoardPosition.EmptyBoardPostion),
-                GameHistoryId = newGame.Id
+                GameHistoryId = newGame.Id,
+                IsGameActive = true
             };
 
             return View(gameState);
         }
 
         private int MapPlayerLetterToPlayerNumber(string letter) => letter == "X" ? -1 : 1;
+
+        private IActionResult HandleEndOfGame(GameHistory game, Turn lastTurn, string currentPlayerSymbol)
+        {
+            // Record final state
+            game.IsGameFinished = true;
+
+            if (lastTurn.After.IsWinningPosition)
+            {
+                game.Winner = lastTurn.TurnPlayer;
+            }
+
+            _context.SaveChanges();
+
+            // Display end of game UI
+            ModelState.Clear();
+
+            var finalState = new GamePlayState
+            {
+                BoardBeforeInput = GamePlayState.WrapBoard(lastTurn.After.BoardPositionId),
+                CurrentPlayerSymbol = currentPlayerSymbol,
+                IsGameActive = false
+            };
+
+            return View(finalState);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -108,7 +138,7 @@ namespace Menace.Controllers
             if (ModelState.IsValid)
             {
                 // Load state from inputs
-
+                // Load boards from before and after user input
                 var boardBeforeInput = new BoardPosition
                 {
                     BoardPositionId = GamePlayState.UnwrapBoard(gameState.BoardBeforeInput)
@@ -123,6 +153,7 @@ namespace Menace.Controllers
 
                 boardAfterInput = _context.BoardPosition.GetOrAddIfNotExists(boardAfterInput, b => b.BoardPositionId == boardAfterInput.BoardPositionId);
 
+                // Load game history with players
                 var game = _context.GameHistory.Where(g => g.Id == gameState.GameHistoryId)
                     .Include(g => g.P1)
                     .Include(g => g.P2)
@@ -146,8 +177,16 @@ namespace Menace.Controllers
 
                 game.AddMove(humanTurn);
 
+                // Did human player make winning move or last move (draw)?
+                if (humanTurn.After.IsGameOver)
+                {
+                    return HandleEndOfGame(game, humanTurn, "X");
+                }
+
                 // Make AI play its turn
                 var aiTurn = aiPlayer.PlayTurn(boardAfterInput, MapPlayerLetterToPlayerNumber(gameState.CurrentPlayerSymbol), boardAfterInput.TurnNumber);
+
+                aiTurn.After = _context.BoardPosition.GetOrAddIfNotExists(aiTurn.After, b => b.BoardPositionId == aiTurn.After.BoardPositionId);
 
                 _context.Turn.Add(aiTurn);
 
@@ -165,6 +204,12 @@ namespace Menace.Controllers
                     }
                 }
 
+                // Did AI player make winning move or last move (draw)?
+                if (aiTurn.After.IsGameOver)
+                {
+                    return HandleEndOfGame(game, aiTurn, "O");
+                }
+
                 _context.SaveChanges();
 
                 // Reload UI with new game state
@@ -173,7 +218,8 @@ namespace Menace.Controllers
                 var newGameState = new GamePlayState
                 {
                     BoardBeforeInput = GamePlayState.WrapBoard(aiTurn.After.BoardPositionId),
-                    GameHistoryId = gameState.GameHistoryId
+                    GameHistoryId = gameState.GameHistoryId,
+                    IsGameActive = true
                 };
 
                 return View(newGameState);

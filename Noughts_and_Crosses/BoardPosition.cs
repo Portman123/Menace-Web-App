@@ -120,25 +120,37 @@ namespace Noughts_and_Crosses
             return Coords[location.X, location.Y];
         }
 
+        /*
+            const winningConditions = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ]; 
+         */
         // There are 8 winning positions that need to be checked
         public int CheckWin()
         {
             // Top Row
-            if (Coords[0, 0] == Coords[0, 1] && Coords[0, 1] == Coords[0, 2]) return Coords[0, 0];
+            if (Coords[0, 0] != 0 && Coords[0, 0] == Coords[0, 1] && Coords[0, 1] == Coords[0, 2]) return Coords[0, 0];
             // Middle Row
-            if (Coords[1, 0] == Coords[1, 1] && Coords[1, 1] == Coords[1, 2]) return Coords[1, 0];
+            if (Coords[1, 0] != 0 && Coords[1, 0] == Coords[1, 1] && Coords[1, 1] == Coords[1, 2]) return Coords[1, 0];
             // Bottom Row
-            if (Coords[2, 0] == Coords[2, 1] && Coords[2, 1] == Coords[2, 2]) return Coords[2, 0];
+            if (Coords[2, 0] != 0 && Coords[2, 0] == Coords[2, 1] && Coords[2, 1] == Coords[2, 2]) return Coords[2, 0];
             // Left Column
-            if (Coords[0, 0] == Coords[1, 0] && Coords[1, 0] == Coords[2, 0]) return Coords[0, 0];
+            if (Coords[0, 0] != 0 && Coords[0, 0] == Coords[1, 0] && Coords[1, 0] == Coords[2, 0]) return Coords[0, 0];
             // Middle Column
-            if (Coords[0, 1] == Coords[1, 1] && Coords[1, 1] == Coords[2, 1]) return Coords[0, 1];
+            if (Coords[0, 1] != 0 && Coords[0, 1] == Coords[1, 1] && Coords[1, 1] == Coords[2, 1]) return Coords[0, 1];
             // Right Column
-            if (Coords[0, 2] == Coords[1, 2] && Coords[1, 2] == Coords[2, 2]) return Coords[0, 2];
+            if (Coords[0, 2] != 0 && Coords[0, 2] == Coords[1, 2] && Coords[1, 2] == Coords[2, 2]) return Coords[0, 2];
             // First Diagonal 
-            if (Coords[0, 0] == Coords[1, 1] && Coords[1, 1] == Coords[2, 2]) return Coords[0, 0];
+            if (Coords[0, 0] != 0 && Coords[0, 0] == Coords[1, 1] && Coords[1, 1] == Coords[2, 2]) return Coords[0, 0];
             // Second Diagonal
-            if (Coords[0, 2] == Coords[1, 1] && Coords[1, 1] == Coords[2, 0]) return Coords[0, 2];
+            if (Coords[0, 2] != 0 && Coords[0, 2] == Coords[1, 1] && Coords[1, 1] == Coords[2, 0]) return Coords[0, 2];
 
             // nobody has won yet
             return 0;

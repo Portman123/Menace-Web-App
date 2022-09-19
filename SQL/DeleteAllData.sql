@@ -1,12 +1,13 @@
 ﻿USE [Menace]
 
---DELETE Player
 DELETE Games
 DELETE Turn
 DELETE GameHistories
+DELETE Player
 DELETE Bead
 DELETE Matchbox
---DELETE BoardPosition
---DELETE AIMenace
+DELETE AIMenace
 DELETE AIOptimalMove
 DELETE AIRandomMove
+DELETE BoardPosition
+--DELETE __EFMigrationsHistory

@@ -30,7 +30,8 @@ namespace MenaceData
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Menace;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            //optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Menace;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            optionsBuilder.UseSqlServer(@"Server=localhost;Database=Menace;Trusted_Connection=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -70,7 +71,7 @@ namespace MenaceData
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<GameHistory>()
-                .HasOne(g => g.P2)
+                .HasOne(g => g.Winner)
                 .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
 

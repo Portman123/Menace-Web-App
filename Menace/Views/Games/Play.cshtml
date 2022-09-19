@@ -48,29 +48,39 @@
     </section>
     <br />
     <section class="display announcer hide text-light text-centre"></section>
-    <section class="controls">
-        <button id="reset">Reset</button>
-    </section>
-
-    <form asp-action="Play" id="submitForm">
-        <div class="form-group">
-            <input type="submit" value="Submit" class="btn btn-primary" id="submitButton" />
-        </div>
-        <input type="hidden" asp-for="BoardBeforeInput" id="hiddenBoardBeforeInput" />
-        <input type="hidden" asp-for="BoardAfterInput" id="hiddenBoardAfterInput" />
-        <input type="hidden" asp-for="CurrentPlayerSymbol" id="hiddenCurrentPlayerSymbol" />
-        <input type="hidden" asp-for="GameHistoryId" id="hiddenGameHistoryId" />
-    </form>
+    @{
+        if (Model.IsGameActive)
+        {
+            <form asp-action="Play" id="submitForm">
+                <input type="hidden" asp-for="BoardBeforeInput" id="hiddenBoardBeforeInput" />
+                <input type="hidden" asp-for="BoardAfterInput" id="hiddenBoardAfterInput" />
+                <input type="hidden" asp-for="CurrentPlayerSymbol" id="hiddenCurrentPlayerSymbol" />
+                <input type="hidden" asp-for="GameHistoryId" id="hiddenGameHistoryId" />
+                <input type="hidden" asp-for="IsGameActive" id="hiddenIsGameActive" />
+            </form>
+        }
+        else
+        {
+            <div class="form-group">
+                <input type="submit" value="New Game" class="btn btn-primary" id="submitButton" onclick="location.href='@( Url.Action("Play", "Games") )'" />
+            </div>
+            <input type="hidden" id="hiddenBoardBeforeInput" value="@Model.BoardBeforeInput" />
+            <input type="hidden" id="hiddenBoardAfterInput" />
+            <input type="hidden" id="hiddenCurrentPlayerSymbol" value="@Model.CurrentPlayerSymbol"/>
+            <input type="hidden" id="hiddenGameHistoryId" />
+            <input type="hidden" id="hiddenIsGameActive" value="@Model.IsGameActive" />
+        }
+    }
 </div>
 
 <div>
     @{
-        if(ViewBag.errors != null)
+        if (ViewBag.errors != null)
         {
-            foreach(var error in ViewBag.errors)
+            foreach (var error in ViewBag.errors)
             {
                 //If there are any errors for a field...
-                if(@error.errors.Count > 0)
+                if (@error.errors.Count > 0)
                 {
                     // We show the first error for that field
                     <p>@error.errors[0].ErrorMessage</p>

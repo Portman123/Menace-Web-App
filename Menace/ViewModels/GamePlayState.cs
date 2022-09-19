@@ -14,6 +14,8 @@
 
         public Guid GameHistoryId { get; set; }
 
+        public bool IsGameActive { get; set; }
+
         //public Guid PlayerId1 { get; set; }
 
         //public PlayerType Player1Type { get; set; }

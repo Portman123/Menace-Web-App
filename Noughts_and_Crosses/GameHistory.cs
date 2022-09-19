@@ -11,6 +11,8 @@ namespace Noughts_and_Crosses
         public LinkedList<Turn> Turns { get; set; }
         public Player P1 { get; set; }
         public Player P2 { get; set; }
+        public bool IsGameFinished { get; set; }
+        public Player? Winner { get; set; }
 
         public GameHistory()
         {

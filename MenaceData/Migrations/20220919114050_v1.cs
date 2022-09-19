@@ -149,7 +149,9 @@ namespace MenaceData.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     P1Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    P2Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    P2Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsGameFinished = table.Column<bool>(type: "bit", nullable: false),
+                    WinnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -162,6 +164,11 @@ namespace MenaceData.Migrations
                     table.ForeignKey(
                         name: "FK_GameHistory_Player_P2Id",
                         column: x => x.P2Id,
+                        principalTable: "Player",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_GameHistory_Player_WinnerId",
+                        column: x => x.WinnerId,
                         principalTable: "Player",
                         principalColumn: "Id");
                 });
@@ -258,6 +265,11 @@ namespace MenaceData.Migrations
                 name: "IX_GameHistory_P2Id",
                 table: "GameHistory",
                 column: "P2Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameHistory_WinnerId",
+                table: "GameHistory",
+                column: "WinnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Matchbox_AIMenaceId",

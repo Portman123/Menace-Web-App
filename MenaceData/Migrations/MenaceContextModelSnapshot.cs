@@ -132,10 +132,16 @@ namespace MenaceData.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsGameFinished")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("P1Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("P2Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("WinnerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -143,6 +149,8 @@ namespace MenaceData.Migrations
                     b.HasIndex("P1Id");
 
                     b.HasIndex("P2Id");
+
+                    b.HasIndex("WinnerId");
 
                     b.ToTable("GameHistory");
                 });
@@ -332,9 +340,16 @@ namespace MenaceData.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Noughts_and_Crosses.Player", "Winner")
+                        .WithMany()
+                        .HasForeignKey("WinnerId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("P1");
 
                     b.Navigation("P2");
+
+                    b.Navigation("Winner");
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.Matchbox", b =>
