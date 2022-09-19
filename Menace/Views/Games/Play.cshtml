@@ -47,7 +47,9 @@
         <div class="tile @( GetTileClass(board, 2, 2 ) )">@GetTileValue(board, 2, 2)</div>
     </section>
     <br />
-    <section class="display announcer hide text-light text-centre"></section>
+    <div class="text-center">
+        <section class="display announcer hide text-light text-centre"></section>
+    </div>
     @{
         if (Model.IsGameActive)
         {
@@ -61,12 +63,13 @@
         }
         else
         {
-            <div class="form-group">
+            <div class="form-group text-center">
                 <input type="submit" value="New Game" class="btn btn-primary" id="submitButton" onclick="location.href='@( Url.Action("Play", "Games") )'" />
             </div>
+            <div></div>
             <input type="hidden" id="hiddenBoardBeforeInput" value="@Model.BoardBeforeInput" />
             <input type="hidden" id="hiddenBoardAfterInput" />
-            <input type="hidden" id="hiddenCurrentPlayerSymbol" value="@Model.CurrentPlayerSymbol"/>
+            <input type="hidden" id="hiddenCurrentPlayerSymbol" value="@Model.CurrentPlayerSymbol" />
             <input type="hidden" id="hiddenGameHistoryId" />
             <input type="hidden" id="hiddenIsGameActive" value="@Model.IsGameActive" />
         }
