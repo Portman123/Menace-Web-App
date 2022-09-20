@@ -22,9 +22,17 @@ namespace Menace.Controllers
         // GET: GameHistories
         public async Task<IActionResult> Index()
         {
-              return _context.GameHistory != null ? 
-                          View(await _context.GameHistory.ToListAsync()) :
-                          Problem("Entity set 'MenaceContext.GameHistories'  is null.");
+            if (_context.GameHistory == null)
+            {
+                return Problem("Entity set 'MenaceContext.GameHistories'  is null.");
+            }
+
+            var data = await _context.GameHistory
+                .Include(g => g.P1)
+                .Include(g => g.P2)
+                .ToListAsync();
+
+            return View(data);
         }
 
         // GET: GameHistories/Details/5

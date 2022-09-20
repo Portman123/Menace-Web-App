@@ -107,7 +107,7 @@
                     @{
                         if (Model.IsGameActive)
                         {
-                            <form asp-action="Play" id="submitForm">
+                            <form asp-action="Build" id="submitForm">
                                 <input type="hidden" asp-for="BoardBeforeInput" id="hiddenBoardBeforeInput" />
                                 <input type="hidden" asp-for="BoardAfterInput" id="hiddenBoardAfterInput" />
                                 <input type="hidden" asp-for="CurrentPlayerSymbol" id="hiddenCurrentPlayerSymbol" />
@@ -118,7 +118,7 @@
                         else
                         {
                             <div class="form-group">
-                                <input type="submit" value="New Game" class="btn btn-primary" id="submitButton" onclick="location.href='@( Url.Action("Play", "Games") )'" />
+                                <input type="submit" value="New Game" class="btn btn-primary" id="submitButton" onclick="location.href='@( Url.Action("Build", "BuildMenace") )'" />
                             </div>
                             <input type="hidden" id="hiddenBoardBeforeInput" value="@Model.BoardBeforeInput" />
                             <input type="hidden" id="hiddenBoardAfterInput" />

@@ -37,28 +37,81 @@ namespace Menace.Controllers
             return View();
         }
 
+        private Turn PlayMenaceTurn(GameHistory game, PlayerMenace aiPlayer, BoardPosition initialBoardPosition, string playerSymbol, int turnNumber)
+        {
+            initialBoardPosition = _context.BoardPosition.GetOrAddIfNotExists(initialBoardPosition, b => b.BoardPositionId == initialBoardPosition.BoardPositionId);
+
+            var aiTurn = aiPlayer.PlayTurn(initialBoardPosition, MapPlayerLetterToPlayerNumber(playerSymbol), turnNumber);
+
+            aiTurn.After = _context.BoardPosition.GetOrAddIfNotExists(aiTurn.After, b => b.BoardPositionId == aiTurn.After.BoardPositionId);
+
+            _context.Turn.Add(aiTurn);
+
+            game.AddMove(aiTurn);
+
+            var matchbox = aiPlayer.MenaceEngine.Matchboxes.Single(m => m.BoardPosition.BoardPositionId == initialBoardPosition.BoardPositionId);
+
+            if (_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id))
+            {
+                _context.Entry(matchbox).Reference(m => m.BoardPosition).IsModified = false;
+
+                foreach (var bead in matchbox.Beads)
+                {
+                    _context.Bead.Add(bead);
+                }
+            }
+
+            return aiTurn;
+        }
+
+        private Turn RecordHumanTurn(GameHistory game, Player humanPlayer, BoardPosition boardBeforeInput, BoardPosition boardAfterInput)
+        {
+            var humanMove = BoardPosition.GetMove(boardBeforeInput, boardAfterInput);
+
+            var humanTurn = new Turn(humanPlayer, boardBeforeInput, boardAfterInput, humanMove.X, humanMove.Y, boardBeforeInput.TurnNumber);
+
+            _context.Turn.Add(humanTurn);
+
+            game.AddMove(humanTurn);
+
+            return humanTurn;
+        }
+
         [HttpGet]
         public IActionResult Build(GameCreate createGameInput)
         {
             // Set-up game
-            Player player1 = null;
-            Player player2 = null;
+            Player player1;
+            Player player2;
 
             if (createGameInput.Type == GameType.MenaceP1)
             {
-                player1 = GetPlayerMenace($"MenaceP1 {_context.Player.Count()}");
-                player2 = GetPlayerHuman($"Human {_context.Player.Count() + 1}");
+                player1 = GetOrCreatePlayerMenace($"Menace as P1 #{_context.Player.Count()}");
+                player2 = GetOrPlayerHuman($"Human #{_context.Player.Count() + 1}");
             }
             else if (createGameInput.Type == GameType.MenaceP2)
             {
-                player1 = GetPlayerHuman($"Human {_context.Player.Count()}");
-                player2 = GetPlayerMenace($"MenaceP2 {_context.Player.Count() + 1}");
+                player1 = GetOrPlayerHuman($"Human #{_context.Player.Count()}");
+                player2 = GetOrCreatePlayerMenace($"Menace as P2 #{_context.Player.Count() + 1}");
             }
             else { throw new Exception("Invalid input when choosing if Menace is P1 or P2"); }
 
             var newGame = new GameHistory(player1, player2);
 
             _context.Add(newGame);
+
+            var boardPosition = new BoardPosition();
+
+            var playerSymbol = "X";
+
+            if (player1 is PlayerMenace)
+            {
+                PlayMenaceTurn(newGame, player1 as PlayerMenace, boardPosition, playerSymbol, 1);
+
+                boardPosition = newGame.Turns.Last().After;
+
+                playerSymbol = "O";
+            }
 
             _context.SaveChanges();
 
@@ -67,9 +120,10 @@ namespace Menace.Controllers
 
             var gameState = new GamePlayState
             {
-                BoardBeforeInput = GamePlayState.WrapBoard(BoardPosition.EmptyBoardPostion),
+                BoardBeforeInput = GamePlayState.WrapBoard(boardPosition.BoardPositionId),
                 GameHistoryId = newGame.Id,
-                IsGameActive = true
+                IsGameActive = true,
+                CurrentPlayerSymbol = playerSymbol
             };
 
             return View(gameState);
@@ -83,19 +137,18 @@ namespace Menace.Controllers
             if (ModelState.IsValid)
             {
                 // Load state from inputs
-                // Load boards from before and after user input
+                // --------------------------------------------
+                
+                // boards from before and after user input
                 var boardBeforeInput = new BoardPosition
                 {
                     BoardPositionId = GamePlayState.UnwrapBoard(gameState.BoardBeforeInput)
                 };
-
                 boardBeforeInput = _context.BoardPosition.GetOrAddIfNotExists(boardBeforeInput, b => b.BoardPositionId == boardBeforeInput.BoardPositionId);
-
                 var boardAfterInput = new BoardPosition
                 {
                     BoardPositionId = GamePlayState.UnwrapBoard(gameState.BoardAfterInput)
                 };
-
                 boardAfterInput = _context.BoardPosition.GetOrAddIfNotExists(boardAfterInput, b => b.BoardPositionId == boardAfterInput.BoardPositionId);
 
                 // Load game history with players
@@ -105,56 +158,33 @@ namespace Menace.Controllers
                     .Include(g => g.Turns)
                     .Single();
 
-                var humanPlayer = game.P1;
+                var humanPlayer = game.P1 is PlayerMenace ? game.P2 : game.P1;
 
-                //var humanPlayer = PlayerFactory.GetPlayer(_context, game.P1.Id, PlayerType.Human);
+                var nonHumanPlayer = game.P1 is PlayerMenace ? game.P1 : game.P2;
 
-                var aiPlayer = PlayerFactory.GetPlayer(_context, game.P2.Id, PlayerType.AIMenace) as PlayerMenace;
+                var aiPlayer = PlayerFactory.GetPlayer(_context, nonHumanPlayer.Id, PlayerType.AIMenace) as PlayerMenace;
 
-                game.P2 = aiPlayer;
+                var humanSymbol = humanPlayer == game.P1 ? "X" : "O";
 
-                // Add turn just played to Game History
-                var humanMove = BoardPosition.GetMove(boardBeforeInput, boardAfterInput);
+                var aiSymbol = nonHumanPlayer == game.P1 ? "X" : "O";
 
-                var humanTurn = new Turn(humanPlayer, boardBeforeInput, boardAfterInput, humanMove.X, humanMove.Y, boardBeforeInput.TurnNumber);
+                // Human player's turn
+                var humanTurn = RecordHumanTurn(game, humanPlayer, boardBeforeInput, boardAfterInput);
 
-                _context.Turn.Add(humanTurn);
-
-                game.AddMove(humanTurn);
-
-                // Did human player make winning move or last move (draw)?
+                // Check win
                 if (humanTurn.After.IsGameOver)
                 {
-                    return HandleEndOfGame(game, humanTurn, "X");
+                    return HandleEndOfGame(game, humanTurn, humanSymbol);
                 }
 
-                // Make AI play its turn
-                var aiTurn = aiPlayer.PlayTurn(boardAfterInput, MapPlayerLetterToPlayerNumber(gameState.CurrentPlayerSymbol), boardAfterInput.TurnNumber);
+                // AI player's turn
+                var aiTurn = PlayMenaceTurn(game, aiPlayer, boardAfterInput, aiSymbol, boardAfterInput.TurnNumber);
 
-                aiTurn.After = _context.BoardPosition.GetOrAddIfNotExists(aiTurn.After, b => b.BoardPositionId == aiTurn.After.BoardPositionId);
-
-                _context.Turn.Add(aiTurn);
-
-                game.AddMove(aiTurn);
-
-                var matchbox = aiPlayer.MenaceEngine.Matchboxes.Single(m => m.BoardPosition.BoardPositionId == boardAfterInput.BoardPositionId);
-
-                if (_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id))
-                {
-                    _context.Entry(matchbox).Reference(m => m.BoardPosition).IsModified = false;
-
-                    foreach (var bead in matchbox.Beads)
-                    {
-                        _context.Bead.Add(bead);
-                    }
-                }
-
-                // Did AI player make winning move or last move (draw)?
+                // Check win
                 if (aiTurn.After.IsGameOver)
                 {
-                    return HandleEndOfGame(game, aiTurn, "O");
+                    return HandleEndOfGame(game, aiTurn, aiSymbol);
                 }
-
                 _context.SaveChanges();
 
                 // Reload UI with new game state
@@ -164,9 +194,9 @@ namespace Menace.Controllers
                 {
                     BoardBeforeInput = GamePlayState.WrapBoard(aiTurn.After.BoardPositionId),
                     GameHistoryId = gameState.GameHistoryId,
-                    IsGameActive = true
+                    IsGameActive = true,
+                    CurrentPlayerSymbol = humanSymbol
                 };
-
                 return View(newGameState);
             }
 
@@ -205,7 +235,7 @@ namespace Menace.Controllers
             return View(finalState);
         }
 
-        private Player GetPlayerHuman(string name)
+        private Player GetOrPlayerHuman(string name)
         {
             var player = _context.Player.Where(p => p.Name == name).FirstOrDefault();
 
@@ -219,7 +249,7 @@ namespace Menace.Controllers
             return player;
         }
 
-        private Player GetPlayerMenace(string name)
+        private Player GetOrCreatePlayerMenace(string name)
         {
             var player = _context.Player.Where(p => p.Name == name).FirstOrDefault();
 
