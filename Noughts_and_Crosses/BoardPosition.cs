@@ -42,7 +42,7 @@ namespace Noughts_and_Crosses
         {
             get
             {
-                return IsWinningPosition || IsBoardFull();
+                return IsWinningPosition || BoardFull();
             }
         }
 
@@ -156,7 +156,7 @@ namespace Noughts_and_Crosses
             return 0;
         }
 
-        public bool IsBoardFull()
+        public bool BoardFull()
         {
             for (int i = 0; i < 3; i++)
             {

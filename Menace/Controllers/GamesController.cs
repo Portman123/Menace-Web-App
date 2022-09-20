@@ -106,7 +106,7 @@ namespace Menace.Controllers
 
         private int MapPlayerLetterToPlayerNumber(string letter) => letter == "X" ? -1 : 1;
 
-        private IActionResult HandleEndOfGame(GameHistory game, Turn lastTurn, string currentPlayerSymbol, PlayerMenace aiPlayer)
+        private IActionResult HandleEndOfGame(GameHistory game, Turn lastTurn, string currentPlayerSymbol)
         {
             // Record final state
             game.IsGameFinished = true;
@@ -114,27 +114,6 @@ namespace Menace.Controllers
             if (lastTurn.After.IsWinningPosition)
             {
                 game.Winner = lastTurn.TurnPlayer;
-                game.Winner.Wins++;
-                // Convoluted but meh
-                if (game.P1 == game.Winner)
-                {
-                    game.P2.Losses++;
-                }
-                else
-                {
-                    game.P1.Losses++;
-                }
-            }
-            else
-            {
-                game.P1.Draws++;
-                game.P2.Draws++;
-            }
-
-            // Reinforce aiPlayer
-            if (aiPlayer != null)
-            {
-                ReinforcementIncremental.Reinforce(game, aiPlayer);
             }
 
             _context.SaveChanges();
@@ -201,7 +180,7 @@ namespace Menace.Controllers
                 // Did human player make winning move or last move (draw)?
                 if (humanTurn.After.IsGameOver)
                 {
-                    return HandleEndOfGame(game, humanTurn, "X", aiPlayer);
+                    return HandleEndOfGame(game, humanTurn, "X");
                 }
 
                 // Make AI play its turn
@@ -228,7 +207,7 @@ namespace Menace.Controllers
                 // Did AI player make winning move or last move (draw)?
                 if (aiTurn.After.IsGameOver)
                 {
-                    return HandleEndOfGame(game, aiTurn, "O", aiPlayer);
+                    return HandleEndOfGame(game, aiTurn, "O");
                 }
 
                 _context.SaveChanges();
