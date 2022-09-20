@@ -86,13 +86,13 @@ namespace Menace.Controllers
 
             if (createGameInput.Type == GameType.MenaceP1)
             {
-                player1 = GetOrCreatePlayerMenace($"Menace as P1 #{_context.Player.Count()}");
-                player2 = GetOrPlayerHuman($"Human #{_context.Player.Count() + 1}");
+                player1 = GetOrCreatePlayerMenace($"Menace as P1 #{_context.PlayerMenace.Count()}");
+                player2 = GetOrPlayerHuman($"Human #{_context.PlayerHumanOnWeb.Count() + 1}");
             }
             else if (createGameInput.Type == GameType.MenaceP2)
             {
-                player1 = GetOrPlayerHuman($"Human #{_context.Player.Count()}");
-                player2 = GetOrCreatePlayerMenace($"Menace as P2 #{_context.Player.Count() + 1}");
+                player1 = GetOrPlayerHuman($"Human #{_context.PlayerHumanOnWeb.Count()}");
+                player2 = GetOrCreatePlayerMenace($"Menace as P2 #{_context.PlayerMenace.Count() + 1}");
             }
             else { throw new Exception("Invalid input when choosing if Menace is P1 or P2"); }
 
