@@ -1,11 +1,5 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@using Menace.ViewModels
-@using Noughts_and_Crosses
-@*@model IEnumerable<Noughts_and_Crosses.Matchbox>*@
+﻿@using Menace.ViewModels
+
 @model GamePlayState
 
 @{
@@ -26,6 +20,8 @@
 
 @{
     ViewData["Title"] = "PlayView";
+
+    var board = GamePlayState.UnwrapBoard(Model.BoardBeforeInput);
 }
 
 
@@ -96,29 +92,41 @@
                     </section>
                     <br />
                     <section class="containerCustom">
-                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 0)</div>
-                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 1)</div>
-                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 0, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 0, 2)</div>
-                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 0)</div>
-                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 1)</div>
-                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 1, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 1, 2)</div>
-                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 0 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 0)</div>
-                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 1 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 1)</div>
-                        <div class="tile @( GetTileClass(Model.BoardBeforeInput, 2, 2 ) )">@GetTileValue(Model.BoardBeforeInput, 2, 2)</div>
+                        <div class="tile @( GetTileClass(board, 0, 0 ) )">@GetTileValue(board, 0, 0)</div>
+                        <div class="tile @( GetTileClass(board, 0, 1 ) )">@GetTileValue(board, 0, 1)</div>
+                        <div class="tile @( GetTileClass(board, 0, 2 ) )">@GetTileValue(board, 0, 2)</div>
+                        <div class="tile @( GetTileClass(board, 1, 0 ) )">@GetTileValue(board, 1, 0)</div>
+                        <div class="tile @( GetTileClass(board, 1, 1 ) )">@GetTileValue(board, 1, 1)</div>
+                        <div class="tile @( GetTileClass(board, 1, 2 ) )">@GetTileValue(board, 1, 2)</div>
+                        <div class="tile @( GetTileClass(board, 2, 0 ) )">@GetTileValue(board, 2, 0)</div>
+                        <div class="tile @( GetTileClass(board, 2, 1 ) )">@GetTileValue(board, 2, 1)</div>
+                        <div class="tile @( GetTileClass(board, 2, 2 ) )">@GetTileValue(board, 2, 2)</div>
                     </section>
                     <br />
                     <section class="display announcer hide text-light text-centre"></section>
-                    <section class="controls">
-                        <button id="reset">Reset</button>
-                    </section>
-
-                    <form asp-action="Build">
-                        <div class="form-group">
-                            <input type="submit" value="Submit" class="btn btn-primary" id="submit" />
-                        </div>
-                        <input type="hidden" asp-for="BoardBeforeInput" id="hiddenBoardPosition" />
-                        <input type="hidden" asp-for="BoardBeforeInput" id="hiddenCurrentPlayer" />
-                    </form>
+                    @{
+                        if (Model.IsGameActive)
+                        {
+                            <form asp-action="Play" id="submitForm">
+                                <input type="hidden" asp-for="BoardBeforeInput" id="hiddenBoardBeforeInput" />
+                                <input type="hidden" asp-for="BoardAfterInput" id="hiddenBoardAfterInput" />
+                                <input type="hidden" asp-for="CurrentPlayerSymbol" id="hiddenCurrentPlayerSymbol" />
+                                <input type="hidden" asp-for="GameHistoryId" id="hiddenGameHistoryId" />
+                                <input type="hidden" asp-for="IsGameActive" id="hiddenIsGameActive" />
+                            </form>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <input type="submit" value="New Game" class="btn btn-primary" id="submitButton" onclick="location.href='@( Url.Action("Play", "Games") )'" />
+                            </div>
+                            <input type="hidden" id="hiddenBoardBeforeInput" value="@Model.BoardBeforeInput" />
+                            <input type="hidden" id="hiddenBoardAfterInput" />
+                            <input type="hidden" id="hiddenCurrentPlayerSymbol" value="@Model.CurrentPlayerSymbol" />
+                            <input type="hidden" id="hiddenGameHistoryId" />
+                            <input type="hidden" id="hiddenIsGameActive" value="@Model.IsGameActive" />
+                        }
+                    }
                 </div>
                 @section Scripts {
                     @{

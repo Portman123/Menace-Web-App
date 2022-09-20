@@ -138,19 +138,18 @@ namespace Menace.Controllers
             if (ModelState.IsValid)
             {
                 // Load state from inputs
+                //-----------------------
                 // Load boards from before and after user input
                 var boardBeforeInput = new BoardPosition
                 {
                     BoardPositionId = GamePlayState.UnwrapBoard(gameState.BoardBeforeInput)
                 };
-
                 boardBeforeInput = _context.BoardPosition.GetOrAddIfNotExists(boardBeforeInput, b => b.BoardPositionId == boardBeforeInput.BoardPositionId);
 
                 var boardAfterInput = new BoardPosition
                 {
                     BoardPositionId = GamePlayState.UnwrapBoard(gameState.BoardAfterInput)
                 };
-
                 boardAfterInput = _context.BoardPosition.GetOrAddIfNotExists(boardAfterInput, b => b.BoardPositionId == boardAfterInput.BoardPositionId);
 
                 // Load game history with players
