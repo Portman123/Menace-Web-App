@@ -174,7 +174,7 @@ namespace Menace.Controllers
                 // Check win
                 if (humanTurn.After.IsGameOver)
                 {
-                    return HandleEndOfGame(game, humanTurn, humanSymbol);
+                    return HandleEndOfGame(game, humanTurn, humanSymbol, aiPlayer);
                 }
 
                 // AI player's turn
@@ -183,7 +183,7 @@ namespace Menace.Controllers
                 // Check win
                 if (aiTurn.After.IsGameOver)
                 {
-                    return HandleEndOfGame(game, aiTurn, aiSymbol);
+                    return HandleEndOfGame(game, aiTurn, aiSymbol, aiPlayer);
                 }
                 _context.SaveChanges();
 
@@ -210,7 +210,7 @@ namespace Menace.Controllers
         //-----------------
         private int MapPlayerLetterToPlayerNumber(string letter) => letter == "X" ? -1 : 1;
 
-        private IActionResult HandleEndOfGame(GameHistory game, Turn lastTurn, string currentPlayerSymbol)
+        private IActionResult HandleEndOfGame(GameHistory game, Turn lastTurn, string currentPlayerSymbol, PlayerMenace aiPlayer)
         {
             // Record final state
             game.IsGameFinished = true;
@@ -218,6 +218,27 @@ namespace Menace.Controllers
             if (lastTurn.After.IsWinningPosition)
             {
                 game.Winner = lastTurn.TurnPlayer;
+                game.Winner.Wins++;
+                // Convoluted but meh
+                if (game.P1 == game.Winner)
+                {
+                    game.P2.Losses++;
+                }
+                else
+                {
+                    game.P1.Losses++;
+                }
+            }
+            else
+            {
+                game.P1.Draws++;
+                game.P2.Draws++;
+            }
+
+            // Reinforce aiPlayer
+            if (aiPlayer != null)
+            {
+                ReinforcementIncremental.Reinforce(game, aiPlayer);
             }
 
             _context.SaveChanges();
@@ -261,9 +282,11 @@ namespace Menace.Controllers
                 _context.AIMenace.Add(ai);
                 _context.Player.Add(player);
 
+                return player;
             }
 
-            return player;
+            //return player;
+            return PlayerFactory.GetPlayer(_context, _context.Player.Where(p => p.Name == name).FirstOrDefault().Id, PlayerType.AIMenace);
         }
 
     }
