@@ -1,4 +1,6 @@
-﻿namespace Menace.ViewModels
+﻿using Noughts_and_Crosses;
+
+namespace Menace.ViewModels
 {
     public class GamePlayState
     {
@@ -16,11 +18,18 @@
 
         public bool IsGameActive { get; set; }
 
-        //public Guid PlayerId1 { get; set; }
+        public GameType GameType { get; set; }
+
+
+        //public LinkedList<Matchbox> MenaceEngine { get; set; }
+
+        //public Matchbox currentMatchbox { get; set; }
+
+        public Guid Player1Id { get; set; }
 
         //public PlayerType Player1Type { get; set; }
 
-        //public Guid PlayerId2 { get; set; }
+        public Guid Player2Id { get; set; }
 
         //public PlayerType Player2Type { get; set; }
     }

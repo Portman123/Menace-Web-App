@@ -18,6 +18,7 @@ window.addEventListener('load', () => {
     const hiddenCurrentPlayerSymbol = document.querySelector('#hiddenCurrentPlayerSymbol');
     const hiddenGameHistoryId = document.querySelector('#hiddenGameHistoryId');
     const hiddenIsGameActive = document.querySelector('#hiddenIsGameActive');
+    //const hiddenMenaceEngine = document.querySelector('#hiddenMenaceEngine');
 
     const submitForm = document.querySelector('#submitForm');
     //const submitButton = document.querySelector('#submitButton');

@@ -32,6 +32,20 @@ namespace Menace.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (createGameInput.Type == GameType.MenaceP1)
+                {
+                    createGameInput.Player1Id = GetOrCreatePlayerMenace($"Player Menace {_context.PlayerMenace.Count()}").Id;
+                    createGameInput.Player2Id = GetOrPlayerHuman("Player Human").Id;
+                }
+                else if (createGameInput.Type == GameType.MenaceP2)
+                {
+                    createGameInput.Player1Id = GetOrPlayerHuman("Player Human").Id;
+                    createGameInput.Player2Id = GetOrCreatePlayerMenace($"Player Menace {_context.PlayerMenace.Count()}").Id;
+                }
+                else { throw new Exception("Invalid input when choosing if Menace is P1 or P2"); }
+
+                _context.SaveChanges();
+
                 return RedirectToAction(nameof(Build), createGameInput);
             }
             return View();
@@ -86,13 +100,13 @@ namespace Menace.Controllers
 
             if (createGameInput.Type == GameType.MenaceP1)
             {
-                player1 = GetOrCreatePlayerMenace($"Menace as P1 #{_context.PlayerMenace.Count()}");
-                player2 = GetOrPlayerHuman($"Human #{_context.PlayerHumanOnWeb.Count() + 1}");
+                player1 = PlayerFactory.GetPlayer(_context, createGameInput.Player1Id, PlayerType.AIMenace);
+                player2 = PlayerFactory.GetPlayer(_context, createGameInput.Player2Id, PlayerType.Human);
             }
             else if (createGameInput.Type == GameType.MenaceP2)
             {
-                player1 = GetOrPlayerHuman($"Human #{_context.PlayerHumanOnWeb.Count()}");
-                player2 = GetOrCreatePlayerMenace($"Menace as P2 #{_context.PlayerMenace.Count() + 1}");
+                player1 = PlayerFactory.GetPlayer(_context, createGameInput.Player1Id, PlayerType.Human);
+                player2 = PlayerFactory.GetPlayer(_context, createGameInput.Player2Id, PlayerType.AIMenace);
             }
             else { throw new Exception("Invalid input when choosing if Menace is P1 or P2"); }
 
@@ -123,7 +137,8 @@ namespace Menace.Controllers
                 BoardBeforeInput = GamePlayState.WrapBoard(boardPosition.BoardPositionId),
                 GameHistoryId = newGame.Id,
                 IsGameActive = true,
-                CurrentPlayerSymbol = playerSymbol
+                CurrentPlayerSymbol = playerSymbol,
+                GameType = player1 is PlayerMenace ? GameType.MenaceP1 : GameType.MenaceP2
             };
 
             return View(gameState);
@@ -132,7 +147,7 @@ namespace Menace.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Build([Bind("BoardBeforeInput, BoardAfterInput, CurrentPlayerSymbol, GameHistoryId")] GamePlayState gameState)
+        public IActionResult Build([Bind("BoardBeforeInput, BoardAfterInput, CurrentPlayerSymbol, GameHistoryId, GameType")] GamePlayState gameState)
         {
             if (ModelState.IsValid)
             {
@@ -174,7 +189,7 @@ namespace Menace.Controllers
                 // Check win
                 if (humanTurn.After.IsGameOver)
                 {
-                    return HandleEndOfGame(game, humanTurn, humanSymbol, aiPlayer);
+                    return HandleEndOfGame(game, humanTurn, humanSymbol, aiPlayer, gameState.GameType);
                 }
 
                 // AI player's turn
@@ -183,7 +198,7 @@ namespace Menace.Controllers
                 // Check win
                 if (aiTurn.After.IsGameOver)
                 {
-                    return HandleEndOfGame(game, aiTurn, aiSymbol, aiPlayer);
+                    return HandleEndOfGame(game, aiTurn, aiSymbol, aiPlayer, gameState.GameType);
                 }
                 _context.SaveChanges();
 
@@ -195,7 +210,8 @@ namespace Menace.Controllers
                     BoardBeforeInput = GamePlayState.WrapBoard(aiTurn.After.BoardPositionId),
                     GameHistoryId = gameState.GameHistoryId,
                     IsGameActive = true,
-                    CurrentPlayerSymbol = humanSymbol
+                    CurrentPlayerSymbol = humanSymbol,
+                    GameType = gameState.GameType
                 };
                 return View(newGameState);
             }
@@ -210,7 +226,7 @@ namespace Menace.Controllers
         //-----------------
         private int MapPlayerLetterToPlayerNumber(string letter) => letter == "X" ? -1 : 1;
 
-        private IActionResult HandleEndOfGame(GameHistory game, Turn lastTurn, string currentPlayerSymbol, PlayerMenace aiPlayer)
+        private IActionResult HandleEndOfGame(GameHistory game, Turn lastTurn, string currentPlayerSymbol, PlayerMenace aiPlayer, GameType gameType)
         {
             // Record final state
             game.IsGameFinished = true;
@@ -250,7 +266,10 @@ namespace Menace.Controllers
             {
                 BoardBeforeInput = GamePlayState.WrapBoard(lastTurn.After.BoardPositionId),
                 CurrentPlayerSymbol = currentPlayerSymbol,
-                IsGameActive = false
+                IsGameActive = false,
+                GameType = gameType == GameType.MenaceP1 ? GameType.MenaceP2 : GameType.MenaceP1,
+                Player1Id = game.P2.Id,
+                Player2Id = game.P1.Id
             };
 
             return View(finalState);
