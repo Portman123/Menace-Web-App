@@ -98,10 +98,14 @@ namespace Menace.Controllers
             Player player1;
             Player player2;
 
+
             if (createGameInput.Type == GameType.MenaceP1)
             {
                 player1 = PlayerFactory.GetPlayer(_context, createGameInput.Player1Id, PlayerType.AIMenace);
-                player2 = PlayerFactory.GetPlayer(_context, createGameInput.Player2Id, PlayerType.Human);
+                // if you've been sent empty guid then find any Player Human (this is sent from Players.Index.cshtml when you click play on a Menace)
+                // THIS IS BAD CODE.
+                if (createGameInput.Player2Id == Guid.Empty) player2 = PlayerFactory.GetPlayer(_context, _context.Player.Where(p => p.Name == "Player Human").FirstOrDefault().Id, PlayerType.Human);
+                else { player2 = PlayerFactory.GetPlayer(_context, createGameInput.Player2Id, PlayerType.Human); }
             }
             else if (createGameInput.Type == GameType.MenaceP2)
             {
@@ -342,6 +346,8 @@ namespace Menace.Controllers
             // Add new matchboxes and beads.
             foreach (Matchbox matchbox in playerMenace.MenaceEngine.Matchboxes)
             {
+                matchbox.BoardPosition = _context.BoardPosition.GetOrAddIfNotExists(matchbox.BoardPosition, b => b.BoardPositionId == matchbox.BoardPosition.BoardPositionId);
+
                 if (_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id))
                 {
                     _context.Entry(matchbox).Reference(m => m.BoardPosition).IsModified = false;

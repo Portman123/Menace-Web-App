@@ -29,33 +29,41 @@
             <th>
                 @Html.DisplayNameFor(model => model.Losses)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => (model as PlayerMenace).MenaceEngine.Matchboxes)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @PlayerHelper.GetPlayerType(item)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Wins)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Draws)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Losses)
-            </td>
-            <td>
-                <!--<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |-->
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @PlayerHelper.GetPlayerType(item)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Wins)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Draws)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Losses)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => (item as PlayerMenace).MenaceEngine.Matchboxes.Count)
+                </td>
+                <td>
+                    <a href="#" onclick="location.href='@( Url.Action("Build", "BuildMenace",
+                                    new GameCreate { Type = GameType.MenaceP1, Player1Id = item.Id, Player2Id = Guid.Empty} ) )'">Play</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
