@@ -21,7 +21,6 @@
 
 @{
     ViewData["Title"] = "PlayView";
-
     var board = GamePlayState.UnwrapBoard(Model.BoardBeforeInput);
 }
 
@@ -62,7 +61,8 @@
                     </h5>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="btn" href="#">
+                            <a class="btn" onclick="location.href='@( Url.Action("TrainOptimal", "BuildMenace",
+                                    new GameCreate { Type = Model.GameType, Player1Id = Model.Player1Id, Player2Id = Model.Player2Id } ) )'" />>
                                 <span data-feather="file" class="align-text-bottom"></span>
                                 Optimal AI
                             </a>

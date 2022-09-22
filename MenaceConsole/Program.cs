@@ -5,8 +5,8 @@ var trainOnStartup = args.Contains("-train", StringComparer.OrdinalIgnoreCase);
 Player Menace1 = new PlayerMenace(new AIMenace(), "Menace1");
 Player Menace2 = new PlayerMenace(new AIMenace(), "Menace2");
 Player Rando = new PlayerRandom(new AIRandomMove(), "Rando");
-Player Optimo1 = new PlayerOptimal(new AIOptimalMove(), "Optimo");
-Player Optimo2 = new PlayerOptimal(new AIOptimalMove(), "Optimo");
+Player Optimo1 = new PlayerOptimal("Optimo");
+Player Optimo2 = new PlayerOptimal("Optimo");
 Player Human1 = new PlayerHumanOnConsole("Human1");
 
 if (trainOnStartup)
@@ -49,28 +49,28 @@ while (true)
     Menace1.LogDiagnostics();
 }
 
-// Test DetermineIntersections Method
-AIOptimalMove temp = new AIOptimalMove();
-if (temp.Intersections.Count == 0) Console.WriteLine("empty");
+//// Test DetermineIntersections Method
+//AIOptimalMove temp = new AIOptimalMove();
+//if (temp.Intersections.Count == 0) Console.WriteLine("empty");
 
-foreach (var Intersect in temp.Intersections)
-{
-    BoardPosition board = new BoardPosition();
-    foreach (var coord1 in Intersect.WinPos1.Coordinates)
-    {
-        board = new BoardPosition(board.MakeMove(coord1.X, coord1.Y, 1).Coords);
-    }
-    foreach (var coord2 in Intersect.WinPos2.Coordinates)
-    {
-        board = new BoardPosition(board.MakeMove(coord2.X, coord2.Y, -1).Coords);
-    }
-    board.PrintBoard();
-}
-// Test DetermineIntersections Method
+//foreach (var Intersect in temp.Intersections)
+//{
+//    BoardPosition board = new BoardPosition();
+//    foreach (var coord1 in Intersect.WinPos1.Coordinates)
+//    {
+//        board = new BoardPosition(board.MakeMove(coord1.X, coord1.Y, 1).Coords);
+//    }
+//    foreach (var coord2 in Intersect.WinPos2.Coordinates)
+//    {
+//        board = new BoardPosition(board.MakeMove(coord2.X, coord2.Y, -1).Coords);
+//    }
+//    board.PrintBoard();
+//}
+//// Test DetermineIntersections Method
 
-Console.WriteLine("");
-Console.WriteLine(temp.Intersections.Count);
-Console.WriteLine("");
+//Console.WriteLine("");
+//Console.WriteLine(temp.Intersections.Count);
+//Console.WriteLine("");
 
 
 //for (int i = 0; i < 1000; i++)
