@@ -31,7 +31,7 @@ namespace Noughts_and_Crosses
 
 
         // Find Matchbox/Check Existence in Menace by specifying board position
-        public Matchbox MatchboxByBoardPos(BoardPosition boardPosition)
+        public Matchbox MatchboxByBoardPos(BoardPosition boardPosition) //=> Matchboxes.Where(m => m.BoardPosition.SameAs(boardPosition)).FirstOrDefault();
         {
             // If the matchbox exists in MENACE then return it
             foreach (Matchbox box in Matchboxes)
@@ -44,16 +44,8 @@ namespace Noughts_and_Crosses
             // Return null if it doesn't
             return null;
         }
-        public bool CheckExistence(BoardPosition boardPosition)
-        {
-            // If the matchbox exists in MENACE then return true
-            foreach (Matchbox box in Matchboxes)
-            {
-                if (box.BoardPosition.SameAs(boardPosition)) return true;
-            }
-            // Return false if it doesn't
-            return false;
-        }
+
+        public bool CheckExistence(BoardPosition boardPosition) => Matchboxes.Any(m => m.BoardPosition.SameAs(boardPosition));
 
         // DIAGNOSTIC METHODS
         //  Returns number of Matchboxes present in MENACE

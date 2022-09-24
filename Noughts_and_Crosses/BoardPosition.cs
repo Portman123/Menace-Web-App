@@ -168,17 +168,7 @@ namespace Noughts_and_Crosses
             return true;
         }
 
-        public bool SameAs(BoardPosition comparrison)
-        {
-            for (int x=0; x < 3; x++)
-            {
-                for (int y=0; y < 3; y++)
-                {
-                    if (!(Coords[x, y] == comparrison.Coords[x,y])) return false;
-                }
-            }
-            return true;
-        }
+        public bool SameAs(BoardPosition comparison) => BoardPositionId.Equals(comparison.BoardPositionId);
 
         public void PrintBoard()
         {

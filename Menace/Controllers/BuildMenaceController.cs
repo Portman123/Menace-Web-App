@@ -98,14 +98,11 @@ namespace Menace.Controllers
             Player player1;
             Player player2;
 
-
             if (createGameInput.Type == GameType.MenaceP1)
             {
                 player1 = PlayerFactory.GetPlayer(_context, createGameInput.Player1Id, PlayerType.AIMenace);
-                // if you've been sent empty guid then find any Player Human (this is sent from Players.Index.cshtml when you click play on a Menace)
-                // THIS IS BAD CODE.
-                if (createGameInput.Player2Id == Guid.Empty) player2 = PlayerFactory.GetPlayer(_context, _context.Player.Where(p => p.Name == "Player Human").FirstOrDefault().Id, PlayerType.Human);
-                else { player2 = PlayerFactory.GetPlayer(_context, createGameInput.Player2Id, PlayerType.Human); }
+                player2 = PlayerFactory.GetPlayer(_context, createGameInput.Player2Id, PlayerType.Human);
+
             }
             else if (createGameInput.Type == GameType.MenaceP2)
             {
@@ -113,6 +110,8 @@ namespace Menace.Controllers
                 player2 = PlayerFactory.GetPlayer(_context, createGameInput.Player2Id, PlayerType.AIMenace);
             }
             else { throw new Exception("Invalid input when choosing if Menace is P1 or P2"); }
+
+            var aiPlayer = player1 as PlayerMenace ?? player2 as PlayerMenace;
 
             var newGame = new GameHistory(player1, player2);
 
@@ -142,7 +141,8 @@ namespace Menace.Controllers
                 GameHistoryId = newGame.Id,
                 IsGameActive = true,
                 CurrentPlayerSymbol = playerSymbol,
-                GameType = player1 is PlayerMenace ? GameType.MenaceP1 : GameType.MenaceP2
+                GameType = createGameInput.Type,
+                Beads = aiPlayer.MenaceEngine.MatchboxByBoardPos(boardPosition)?.Beads
             };
 
             return View(gameState);
@@ -209,13 +209,16 @@ namespace Menace.Controllers
                 // Reload UI with new game state
                 ModelState.Clear();
 
+                var matchbox = aiPlayer.MenaceEngine.MatchboxByBoardPos(aiTurn.Before);
+
                 var newGameState = new GamePlayState
                 {
                     BoardBeforeInput = GamePlayState.WrapBoard(aiTurn.After.BoardPositionId),
                     GameHistoryId = gameState.GameHistoryId,
                     IsGameActive = true,
                     CurrentPlayerSymbol = humanSymbol,
-                    GameType = gameState.GameType
+                    GameType = gameState.GameType,
+                    Beads = matchbox?.Beads
                 };
                 return View(newGameState);
             }
@@ -273,7 +276,8 @@ namespace Menace.Controllers
                 IsGameActive = false,
                 GameType = gameType == GameType.MenaceP1 ? GameType.MenaceP2 : GameType.MenaceP1,
                 Player1Id = game.P2.Id,
-                Player2Id = game.P1.Id
+                Player2Id = game.P1.Id,
+                Beads = aiPlayer.MenaceEngine.MatchboxByBoardPos(lastTurn.Before)?.Beads
             };
 
             return View(finalState);

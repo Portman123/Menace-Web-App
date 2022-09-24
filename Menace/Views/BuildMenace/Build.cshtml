@@ -63,8 +63,8 @@
                         <li class="nav-item">
                             <a class="btn" onclick="location.href='@( Url.Action("TrainOptimal", "BuildMenace",
                                     new GameCreate { Type = Model.GameType, Player1Id = Model.Player1Id, Player2Id = Model.Player2Id } ) )'" />>
-                                <span data-feather="file" class="align-text-bottom"></span>
-                                Optimal AI
+                            <span data-feather="file" class="align-text-bottom"></span>
+                            Optimal AI
                             </a>
                         </li>
                         <li class="nav-item">
@@ -132,73 +132,74 @@
                     }
                 </div>
                 @section Scripts {
-                    @{
-                        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-                        <script src="~/js/NandCApplet.js"></script>
-                    }
+                @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                    <script src="~/js/NandCApplet.js"></script>
                 }
-
-                    <div>
-                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                            <h2>Diagnostics</h2>
-                        </div>
-
+                }
+                @{
+                    if (Model.Beads != null)
+                    {
                         <div>
-                            <h4>Move Ranking</h4>
+                            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                                <h2>Diagnostics</h2>
+                            </div>
 
+                            <div>
+                                <h4>Move Ranking</h4>
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>X Coord</th>
+                                                <th>Y Coord</th>
+                                                <th>Bead Count</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var bead in Model.Beads.OrderBy(b => -b.Count).ThenBy(b => b.X).ThenBy(b => b.Y))
+                                            {
+                                                <tr>
+                                                    <td>@bead.X</td>
+                                                    <td>@bead.Y</td>
+                                                    <td>@bead.Count</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <h4>Matchboxes</h4>
                             <div class="table-responsive">
                                 <table class="table table-striped table-sm">
                                     <thead>
                                         <tr>
-                                            <th>Ranking</th>
-                                            <th>Coordinate</th>
+                                            <th>BoardBeforeInput Position</th>
                                             <th>Bead Count</th>
+                                            <th>Best Move</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>2</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
+                                        @*@foreach (var item in Model)
+                                            {
+                                            <tr>
+                                            <td>@Html.DisplayFor(modelItem => item.BoardPosition)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.GetNumberOfBeads())</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Beads.Max())</td>
+                                            <td>
+                                            <a asp-action="Details" asp-route-id="">Details</a>
+                                            </td>
+                                            </tr>
+                                            }*@
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-
-                    <h4>Matchboxes</h4>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-sm">
-                            <thead>
-                                <tr>
-                                    <th>BoardBeforeInput Position</th>
-                                    <th>Bead Count</th>
-                                    <th>Best Move</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @*@foreach (var item in Model)
-                                {
-                                <tr>
-                                <td>@Html.DisplayFor(modelItem => item.BoardPosition)</td>
-                                <td>@Html.DisplayFor(modelItem => item.GetNumberOfBeads())</td>
-                                <td>@Html.DisplayFor(modelItem => item.Beads.Max())</td>
-                                <td>
-                                <a asp-action="Details" asp-route-id="">Details</a>
-                                </td>
-                                </tr>
-                                }*@
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                    }
+                }
             </main>
         </div>
     </div>

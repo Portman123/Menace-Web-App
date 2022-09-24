@@ -58,10 +58,15 @@
                     @Html.DisplayFor(modelItem => (item as PlayerMenace).MenaceEngine.Matchboxes.Count)
                 </td>
                 <td>
-                    <a href="#" onclick="location.href='@( Url.Action("Build", "BuildMenace",
-                                    new GameCreate { Type = GameType.MenaceP1, Player1Id = item.Id, Player2Id = Guid.Empty} ) )'">Play</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @{
+                        if (item.Name != "Player Human")
+                        {
+                            <a href="#" onclick="location.href='@( Url.Action("Build", "BuildMenace",
+                                    new GameCreate { Type = GameType.MenaceP1, Player1Id = item.Id, Player2Id = Model.Single(p => p.Name == "Player Human").Id} ) )'">Play</a>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    }
                 </td>
             </tr>
         }

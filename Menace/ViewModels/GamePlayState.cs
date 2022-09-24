@@ -20,6 +20,8 @@ namespace Menace.ViewModels
 
         public GameType GameType { get; set; }
 
+        public LinkedList<Bead>? Beads { get; set; }
+
 
         //public LinkedList<Matchbox> MenaceEngine { get; set; }
 

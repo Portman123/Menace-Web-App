@@ -24,7 +24,7 @@ namespace Menace.Controllers
         // GET: Players
         public async Task<IActionResult> Index()
         {
-            return _context.Player != null ? View(await _context.Player.Where(p => p is PlayerMenace).OrderBy(p => -p.Wins).ThenBy(p => -p.Draws).ThenBy(p => p.Losses).ThenByDescending(p => p.Name).ToListAsync()) : Problem("Entity set 'MenaceContext.Player' is null.");
+            return _context.Player != null ? View(await _context.Player.OrderBy(p => -p.Wins).ThenBy(p => -p.Draws).ThenBy(p => p.Losses).ThenByDescending(p => p.Name).ToListAsync()) : Problem("Entity set 'MenaceContext.Player' is null.");
         }
 
         // GET: Players/Details/5
