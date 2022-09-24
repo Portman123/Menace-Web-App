@@ -4,7 +4,7 @@ var trainOnStartup = args.Contains("-train", StringComparer.OrdinalIgnoreCase);
 
 Player Menace1 = new PlayerMenace(new AIMenace(), "Menace1");
 Player Menace2 = new PlayerMenace(new AIMenace(), "Menace2");
-Player Rando = new PlayerRandom(new AIRandomMove(), "Rando");
+Player Rando = new PlayerRandom("Rando");
 Player Optimo1 = new PlayerOptimal("Optimo");
 Player Optimo2 = new PlayerOptimal("Optimo");
 Player Human1 = new PlayerHumanOnConsole("Human1");

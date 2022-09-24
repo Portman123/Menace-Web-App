@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Noughts_and_Crosses
 {
-    public class AIRandomMove : Entity, IAIEngine
+    public static class AIRandomMove
     {
-        public int[] PlayTurn(BoardPosition boardPos, int turn)
+        public static int[] PlayTurn(BoardPosition boardPos, int turn)
         {
             LinkedList<int[]> available = DetermineAvailableMoves(boardPos);
 
@@ -16,7 +16,7 @@ namespace Noughts_and_Crosses
             return available.ElementAt(RandomNumberGenerator.Next(available.Count));
         }
 
-        public LinkedList<int[]> DetermineAvailableMoves(BoardPosition boardPos)
+        public static LinkedList<int[]> DetermineAvailableMoves(BoardPosition boardPos)
         {
             // return a list of available moves to be made
             LinkedList<int[]> available = new LinkedList<int[]>();

@@ -18,7 +18,7 @@ namespace Menace.Services
                 case PlayerType.AIOptimal:
                     return new PlayerOptimal(playerName);
                 case PlayerType.AIRandom:
-                    return new PlayerRandom(new AIRandomMove(), playerName);
+                    return new PlayerRandom(playerName);
                 case PlayerType.AIMenace:
                     return new PlayerMenace(new AIMenace(), playerName);
                 default:

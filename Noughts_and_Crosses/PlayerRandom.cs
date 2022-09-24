@@ -8,19 +8,13 @@ namespace Noughts_and_Crosses
 {
     public class PlayerRandom : Player
     {
-        public AIRandomMove RandomEngine { get; set; }
         public PlayerRandom(string name) : base(name)
         {
         }
 
-        public PlayerRandom(AIRandomMove randomEngine, string name) : base(name)
-        {
-            RandomEngine = randomEngine;
-        }
-
         public override Turn PlayTurn(BoardPosition CurrentBoard, int turn, int turnNumber)
         {
-            int[] AIMove = RandomEngine.PlayTurn(CurrentBoard, turn);
+            int[] AIMove = AIRandomMove.PlayTurn(CurrentBoard, turn);
 
             return new Turn(this, CurrentBoard, CurrentBoard.MakeMove(AIMove[0], AIMove[1], turn), AIMove[0], AIMove[1], turnNumber);
         }

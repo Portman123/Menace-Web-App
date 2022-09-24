@@ -62,11 +62,12 @@ namespace Noughts_and_Crosses
 
                     if (g.Winner == null)
                     {
-                        beadUsed.Count += t.TurnNumber;
+                        //beadUsed.Count += t.TurnNumber;
                     }
                     else if (g.Winner == menace)
                     {
-                        beadUsed.Count += t.TurnNumber * 3;
+                        //beadUsed.Count += t.TurnNumber * 3;
+                        beadUsed.Count += t.TurnNumber;
                     }
                     else if (g.Winner != menace)
                     {
@@ -78,12 +79,13 @@ namespace Noughts_and_Crosses
 
         public void WinReinforcement(Bead b, int turnNumber)
         {
-            b.Count += turnNumber*3;
+            //b.Count += turnNumber*3;
+            b.Count += turnNumber;
         }
 
         public void DrawReinforcement(Bead b, int turnNumber)
         {
-            b.Count += turnNumber;
+            //b.Count += turnNumber;
         }
 
         public void LossReinforcement(Bead b, int turnNumber)

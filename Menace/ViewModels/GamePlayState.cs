@@ -23,7 +23,7 @@ namespace Menace.ViewModels
         public LinkedList<Bead>? Beads { get; set; }
 
 
-        //public LinkedList<Matchbox> MenaceEngine { get; set; }
+        public Matchbox? Matchbox { get; set; }
 
         //public Matchbox currentMatchbox { get; set; }
 
@@ -32,6 +32,8 @@ namespace Menace.ViewModels
         //public PlayerType Player1Type { get; set; }
 
         public Guid Player2Id { get; set; }
+
+        public string? MenaceName { get; set; }
 
         //public PlayerType Player2Type { get; set; }
     }

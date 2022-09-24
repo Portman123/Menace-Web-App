@@ -63,8 +63,8 @@
                         {
                             <a href="#" onclick="location.href='@( Url.Action("Build", "BuildMenace",
                                     new GameCreate { Type = GameType.MenaceP1, Player1Id = item.Id, Player2Id = Model.Single(p => p.Name == "Player Human").Id} ) )'">Play</a>
+                                    <a> | </a>
                             <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                         }
                     }
                 </td>
