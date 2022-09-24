@@ -142,6 +142,8 @@ namespace Menace.Controllers
                 IsGameActive = true,
                 CurrentPlayerSymbol = playerSymbol,
                 GameType = createGameInput.Type,
+                Player1Id = player1.Id,
+                Player2Id = player2.Id,
                 Beads = aiPlayer.MenaceEngine.MatchboxByBoardPos(boardPosition)?.Beads
             };
 
@@ -218,6 +220,8 @@ namespace Menace.Controllers
                     IsGameActive = true,
                     CurrentPlayerSymbol = humanSymbol,
                     GameType = gameState.GameType,
+                    Player1Id = humanPlayer.Id,
+                    Player2Id = aiPlayer.Id,
                     Beads = matchbox?.Beads
                 };
                 return View(newGameState);
@@ -232,6 +236,8 @@ namespace Menace.Controllers
         // Service Methods
         //-----------------
         private int MapPlayerLetterToPlayerNumber(string letter) => letter == "X" ? -1 : 1;
+
+
 
         private IActionResult HandleEndOfGame(GameHistory game, Turn lastTurn, string currentPlayerSymbol, PlayerMenace aiPlayer, GameType gameType)
         {
@@ -251,17 +257,21 @@ namespace Menace.Controllers
                 {
                     game.P1.Losses++;
                 }
+                // Reinforce aiPlayer
+                if (aiPlayer != null)
+                {
+                    ReinforcementIncremental.Reinforce(game, aiPlayer);
+                }
             }
-            else
+            else if (lastTurn.After.BoardFull())
             {
                 game.P1.Draws++;
                 game.P2.Draws++;
-            }
-
-            // Reinforce aiPlayer
-            if (aiPlayer != null)
-            {
-                ReinforcementIncremental.Reinforce(game, aiPlayer);
+                // Reinforce aiPlayer
+                if (aiPlayer != null)
+                {
+                    ReinforcementIncremental.Reinforce(game, aiPlayer);
+                }
             }
 
             _context.SaveChanges();
