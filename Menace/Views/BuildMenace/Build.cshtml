@@ -189,7 +189,7 @@
                             </div>
 
                             <div>
-                                <h5>Board State</h5>
+                                <h5>Board Position</h5>
                                 <p class="boardState">@line1</p>
                                 <p class="boardState">@line2</p>
                                 <p class="boardState">@line3</p>
@@ -198,8 +198,7 @@
                                     <table class="table table-striped table-sm">
                                         <thead>
                                             <tr>
-                                                <th>X Coord</th>
-                                                <th>Y Coord</th>
+                                                <th>Coordinate</th>
                                                 <th>Bead Count</th>
                                             </tr>
                                         </thead>
@@ -207,8 +206,7 @@
                                             @foreach (var bead in Model.Beads.OrderBy(b => -b.Count).ThenBy(b => b.X).ThenBy(b => b.Y))
                                             {
                                                 <tr>
-                                                    <td>@bead.X</td>
-                                                    <td>@bead.Y</td>
+                                                    <td>(@bead.X, @bead.Y)</td>
                                                     <td>@bead.Count</td>
                                                 </tr>
                                             }
