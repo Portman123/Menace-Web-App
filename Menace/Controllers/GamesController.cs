@@ -81,7 +81,7 @@ namespace Menace.Controllers
         public IActionResult Play()
         {
             // Set-up game
-            var player1 = GetPlayerHuman("Player Human");
+            var player1 = GetPlayerHuman(Player.HumanPlayerName);
 
             var player2 = GetPlayerMenace("Player Menace");
 

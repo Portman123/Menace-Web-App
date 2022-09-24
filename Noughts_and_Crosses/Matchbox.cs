@@ -13,6 +13,12 @@ namespace Noughts_and_Crosses
 
         public LinkedList<Bead> Beads { get; set; }
 
+        public int Wins { get; set; }
+
+        public int Draws { get; set; }
+
+        public int Losses { get; set; }
+
         // Constructors
         public Matchbox() { }
 

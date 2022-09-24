@@ -21,28 +21,6 @@ namespace MenaceData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AIOptimalMove",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AIOptimalMove", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AIRandomMove",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AIRandomMove", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BoardPosition",
                 columns: table => new
                 {
@@ -63,9 +41,7 @@ namespace MenaceData.Migrations
                     Draws = table.Column<int>(type: "int", nullable: false),
                     Losses = table.Column<int>(type: "int", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MenaceEngineId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    OptimalEngineId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    RandomEngineId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    MenaceEngineId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,18 +52,6 @@ namespace MenaceData.Migrations
                         principalTable: "AIMenace",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Player_AIOptimalMove_OptimalEngineId",
-                        column: x => x.OptimalEngineId,
-                        principalTable: "AIOptimalMove",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Player_AIRandomMove_RandomEngineId",
-                        column: x => x.RandomEngineId,
-                        principalTable: "AIRandomMove",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,6 +60,9 @@ namespace MenaceData.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BoardPositionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Wins = table.Column<int>(type: "int", nullable: false),
+                    Draws = table.Column<int>(type: "int", nullable: false),
+                    Losses = table.Column<int>(type: "int", nullable: false),
                     AIMenaceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -236,6 +203,11 @@ namespace MenaceData.Migrations
                 column: "BoardPositionId",
                 value: "         ");
 
+            migrationBuilder.InsertData(
+                table: "Player",
+                columns: new[] { "Id", "Discriminator", "Draws", "Losses", "Name", "Wins" },
+                values: new object[] { new Guid("4626a27c-1880-4c53-9425-05980077f947"), "PlayerHumanOnWeb", 0, 0, "Human", 0 });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Bead_MatchboxId",
                 table: "Bead",
@@ -287,16 +259,6 @@ namespace MenaceData.Migrations
                 column: "MenaceEngineId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Player_OptimalEngineId",
-                table: "Player",
-                column: "OptimalEngineId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Player_RandomEngineId",
-                table: "Player",
-                column: "RandomEngineId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Turn_AfterBoardPositionId",
                 table: "Turn",
                 column: "AfterBoardPositionId");
@@ -342,12 +304,6 @@ namespace MenaceData.Migrations
 
             migrationBuilder.DropTable(
                 name: "AIMenace");
-
-            migrationBuilder.DropTable(
-                name: "AIOptimalMove");
-
-            migrationBuilder.DropTable(
-                name: "AIRandomMove");
         }
     }
 }

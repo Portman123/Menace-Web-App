@@ -34,13 +34,13 @@ namespace Menace.Controllers
             {
                 if (createGameInput.Type == GameType.MenaceP1)
                 {
-                    createGameInput.Player1Id = GetOrCreatePlayerMenace($"Player Menace {_context.PlayerMenace.Count()}").Id;
-                    createGameInput.Player2Id = GetOrPlayerHuman("Player Human").Id;
+                    createGameInput.Player1Id = GetOrCreatePlayerMenace($"Menace {_context.PlayerMenace.Count()}").Id;
+                    createGameInput.Player2Id = GetOrPlayerHuman(Player.HumanPlayerName).Id;
                 }
                 else if (createGameInput.Type == GameType.MenaceP2)
                 {
-                    createGameInput.Player1Id = GetOrPlayerHuman("Player Human").Id;
-                    createGameInput.Player2Id = GetOrCreatePlayerMenace($"Player Menace {_context.PlayerMenace.Count()}").Id;
+                    createGameInput.Player1Id = GetOrPlayerHuman(Player.HumanPlayerName).Id;
+                    createGameInput.Player2Id = GetOrCreatePlayerMenace($"Menace {_context.PlayerMenace.Count()}").Id;
                 }
                 else { throw new Exception("Invalid input when choosing if Menace is P1 or P2"); }
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MenaceData.Migrations
 {
     [DbContext(typeof(MenaceContext))]
-    [Migration("20220919114050_v1")]
+    [Migration("20220924201509_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,28 +33,6 @@ namespace MenaceData.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AIMenace");
-                });
-
-            modelBuilder.Entity("Noughts_and_Crosses.AIOptimalMove", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AIOptimalMove");
-                });
-
-            modelBuilder.Entity("Noughts_and_Crosses.AIRandomMove", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AIRandomMove");
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.Bead", b =>
@@ -170,6 +148,15 @@ namespace MenaceData.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Draws")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Losses")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Wins")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AIMenaceId");
@@ -256,6 +243,16 @@ namespace MenaceData.Migrations
                     b.HasBaseType("Noughts_and_Crosses.Player");
 
                     b.HasDiscriminator().HasValue("PlayerHumanOnWeb");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("4626a27c-1880-4c53-9425-05980077f947"),
+                            Draws = 0,
+                            Losses = 0,
+                            Name = "Human",
+                            Wins = 0
+                        });
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.PlayerMenace", b =>
@@ -274,22 +271,12 @@ namespace MenaceData.Migrations
                 {
                     b.HasBaseType("Noughts_and_Crosses.Player");
 
-                    b.Property<Guid>("OptimalEngineId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("OptimalEngineId");
-
                     b.HasDiscriminator().HasValue("PlayerOptimal");
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.PlayerRandom", b =>
                 {
                     b.HasBaseType("Noughts_and_Crosses.Player");
-
-                    b.Property<Guid>("RandomEngineId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("RandomEngineId");
 
                     b.HasDiscriminator().HasValue("PlayerRandom");
                 });
@@ -409,28 +396,6 @@ namespace MenaceData.Migrations
                         .IsRequired();
 
                     b.Navigation("MenaceEngine");
-                });
-
-            modelBuilder.Entity("Noughts_and_Crosses.PlayerOptimal", b =>
-                {
-                    b.HasOne("Noughts_and_Crosses.AIOptimalMove", "OptimalEngine")
-                        .WithMany()
-                        .HasForeignKey("OptimalEngineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OptimalEngine");
-                });
-
-            modelBuilder.Entity("Noughts_and_Crosses.PlayerRandom", b =>
-                {
-                    b.HasOne("Noughts_and_Crosses.AIRandomMove", "RandomEngine")
-                        .WithMany()
-                        .HasForeignKey("RandomEngineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RandomEngine");
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.AIMenace", b =>

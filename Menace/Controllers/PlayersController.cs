@@ -42,7 +42,16 @@ namespace Menace.Controllers
                 return NotFound();
             }
 
-            return View(player);
+            PlayerMenace menacePlayer = PlayerFactory.GetPlayer(_context, player.Id, PlayerType.AIMenace) as PlayerMenace;
+
+            var details = new MenaceDetails
+            {
+                Player = player,
+                menaceEngine = menacePlayer.MenaceEngine,
+                Matchboxes = menacePlayer.MenaceEngine.Matchboxes
+            };
+
+            return View(details);
         }
 
         // GET: Players/Create

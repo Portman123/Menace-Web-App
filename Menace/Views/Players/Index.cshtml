@@ -59,10 +59,10 @@
                 </td>
                 <td>
                     @{
-                        if (item.Name != "Player Human")
+                        if (item.Name != Player.HumanPlayerName)
                         {
                             <a href="#" onclick="location.href='@( Url.Action("Build", "BuildMenace",
-                                    new GameCreate { Type = GameType.MenaceP1, Player1Id = item.Id, Player2Id = Model.Single(p => p.Name == "Player Human").Id} ) )'">Play</a>
+                                    new GameCreate { Type = GameType.MenaceP1, Player1Id = item.Id, Player2Id = Model.Single(p => p.Name == Player.HumanPlayerName).Id} ) )'">Play</a>
                                     <a> | </a>
                             <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                         }

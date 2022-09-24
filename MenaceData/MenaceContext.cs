@@ -81,6 +81,10 @@ namespace MenaceData
                 .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
 
+            // Player
+            modelBuilder.Entity<PlayerHumanOnWeb>()
+                .HasData(new PlayerHumanOnWeb(Noughts_and_Crosses.Player.HumanPlayerName));
+
             // Turn
             modelBuilder.Entity<Turn>()
                 .HasOne(t => t.Before)

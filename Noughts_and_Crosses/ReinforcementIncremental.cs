@@ -28,14 +28,20 @@ namespace Noughts_and_Crosses
 
                     if (g.Winner == null)
                     {
+                        boxUsed.Draws++;
+
                         DrawReinforcement(beadUsed, t.TurnNumber);
                     }
                     else if (g.Winner == menace)
                     {
+                        boxUsed.Wins++;
+
                         WinReinforcement(beadUsed, t.TurnNumber);
                     }
                     else if (g.Winner != menace)
                     {
+                        boxUsed.Losses++;
+
                         LossReinforcement(beadUsed, t.TurnNumber);
                     }
                 }
@@ -62,15 +68,16 @@ namespace Noughts_and_Crosses
 
                     if (g.Winner == null)
                     {
-                        //beadUsed.Count += t.TurnNumber;
+                        boxUsed.Draws++;
                     }
                     else if (g.Winner == menace)
                     {
-                        //beadUsed.Count += t.TurnNumber * 3;
+                        boxUsed.Wins++;
                         beadUsed.Count += t.TurnNumber;
                     }
                     else if (g.Winner != menace)
                     {
+                        boxUsed.Losses++;
                         beadUsed.Count = Math.Max(1, beadUsed.Count - t.TurnNumber);
                     }
                 }

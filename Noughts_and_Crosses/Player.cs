@@ -8,6 +8,8 @@ namespace Noughts_and_Crosses
 {
     public abstract class Player : Entity
     {
+        public const string HumanPlayerName = "Human";
+
         public string Name { get; set; }
         public int Wins { get; set; }
         public int Draws { get; set; }
