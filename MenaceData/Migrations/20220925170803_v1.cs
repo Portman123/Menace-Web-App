@@ -32,26 +32,14 @@ namespace MenaceData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Player",
+                name: "TrainingHistory",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Wins = table.Column<int>(type: "int", nullable: false),
-                    Draws = table.Column<int>(type: "int", nullable: false),
-                    Losses = table.Column<int>(type: "int", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MenaceEngineId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Player", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Player_AIMenace_MenaceEngineId",
-                        column: x => x.MenaceEngineId,
-                        principalTable: "AIMenace",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_TrainingHistory", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,6 +66,77 @@ namespace MenaceData.Migrations
                         column: x => x.BoardPositionId,
                         principalTable: "BoardPosition",
                         principalColumn: "BoardPositionId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Player",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Wins = table.Column<int>(type: "int", nullable: false),
+                    Draws = table.Column<int>(type: "int", nullable: false),
+                    Losses = table.Column<int>(type: "int", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MenaceEngineId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TrainingHistoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Player", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Player_AIMenace_MenaceEngineId",
+                        column: x => x.MenaceEngineId,
+                        principalTable: "AIMenace",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Player_TrainingHistory_TrainingHistoryId",
+                        column: x => x.TrainingHistoryId,
+                        principalTable: "TrainingHistory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TrainingRound",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoundNumber = table.Column<int>(type: "int", nullable: false),
+                    Wins = table.Column<int>(type: "int", nullable: false),
+                    Draws = table.Column<int>(type: "int", nullable: false),
+                    Losses = table.Column<int>(type: "int", nullable: false),
+                    TrainingHistoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrainingRound", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TrainingRound_TrainingHistory_TrainingHistoryId",
+                        column: x => x.TrainingHistoryId,
+                        principalTable: "TrainingHistory",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bead",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    X = table.Column<int>(type: "int", nullable: false),
+                    Y = table.Column<int>(type: "int", nullable: false),
+                    Count = table.Column<int>(type: "int", nullable: false),
+                    MatchboxId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bead", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bead_Matchbox_MatchboxId",
+                        column: x => x.MatchboxId,
+                        principalTable: "Matchbox",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -141,26 +200,6 @@ namespace MenaceData.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bead",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    X = table.Column<int>(type: "int", nullable: false),
-                    Y = table.Column<int>(type: "int", nullable: false),
-                    Count = table.Column<int>(type: "int", nullable: false),
-                    MatchboxId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bead", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Bead_Matchbox_MatchboxId",
-                        column: x => x.MatchboxId,
-                        principalTable: "Matchbox",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Turn",
                 columns: table => new
                 {
@@ -206,7 +245,7 @@ namespace MenaceData.Migrations
             migrationBuilder.InsertData(
                 table: "Player",
                 columns: new[] { "Id", "Discriminator", "Draws", "Losses", "Name", "Wins" },
-                values: new object[] { new Guid("4626a27c-1880-4c53-9425-05980077f947"), "PlayerHumanOnWeb", 0, 0, "Human", 0 });
+                values: new object[] { new Guid("7759658e-ff7b-440f-94d2-bd350c526f19"), "PlayerHumanOnWeb", 0, 0, "Human", 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bead_MatchboxId",
@@ -259,6 +298,16 @@ namespace MenaceData.Migrations
                 column: "MenaceEngineId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Player_TrainingHistoryId",
+                table: "Player",
+                column: "TrainingHistoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TrainingRound_TrainingHistoryId",
+                table: "TrainingRound",
+                column: "TrainingHistoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Turn_AfterBoardPositionId",
                 table: "Turn",
                 column: "AfterBoardPositionId");
@@ -288,6 +337,9 @@ namespace MenaceData.Migrations
                 name: "Game");
 
             migrationBuilder.DropTable(
+                name: "TrainingRound");
+
+            migrationBuilder.DropTable(
                 name: "Turn");
 
             migrationBuilder.DropTable(
@@ -304,6 +356,9 @@ namespace MenaceData.Migrations
 
             migrationBuilder.DropTable(
                 name: "AIMenace");
+
+            migrationBuilder.DropTable(
+                name: "TrainingHistory");
         }
     }
 }

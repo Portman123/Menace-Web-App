@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Noughts_and_Crosses
 {
@@ -7,13 +8,55 @@ namespace Noughts_and_Crosses
     {
         public AIMenace MenaceEngine { get; set; }
 
+        public TrainingHistory TrainingHistory { get; set; }
+
+        [NotMapped]
+        public TrainingRound CurrentTrainingRound { get; set; }
+
+
         public PlayerMenace(string name) : base(name)
         {
+            TrainingHistory = new TrainingHistory();
         }
 
         public PlayerMenace(AIMenace menaceEngine, string name) : base(name)
         {
             MenaceEngine = menaceEngine;
+            TrainingHistory = new TrainingHistory();
+        }
+
+        public TrainingRound StartTraining()
+        {
+            CurrentTrainingRound = TrainingHistory.AddRound();
+
+            return CurrentTrainingRound;
+        }
+
+        public TrainingRound StopTraining()
+        {
+            var round = CurrentTrainingRound;
+
+            CurrentTrainingRound = null;
+
+            return round;
+        }
+
+        private void LogTrainingRound(Game g)
+        {
+            if (CurrentTrainingRound == null) return;
+
+            if (g.Winner == this)
+            {
+                CurrentTrainingRound.Wins++;
+            }
+            else if (g.Winner == null)
+            {
+                CurrentTrainingRound.Draws++;
+            }
+            else
+            {
+                CurrentTrainingRound.Losses++;
+            }
         }
 
         public override Turn PlayTurn(BoardPosition CurrentBoard, int turn, int turnNumber)
@@ -25,24 +68,16 @@ namespace Noughts_and_Crosses
 
         public Turn PlayTurn(BoardPosition CurrentBoard)
         {
-            int turn = new int();
-            int turnNumber = 1;
+            var turn = CurrentBoard.TurnNumber % 2 == 0 ? -1 : 1;
 
-            for(int i=0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (CurrentBoard.Coords[i, j] != 0) turnNumber++;
-                }
-            }
-            turn = turnNumber % 2 == 0 ? -1 : 1;
-
-            return PlayTurn(CurrentBoard, turn, turnNumber);
+            return PlayTurn(CurrentBoard, turn, CurrentBoard.TurnNumber);
         }
 
         public void Reinforce(Game g)
         {
             MenaceEngine.Reinforce(g, this);
+
+            LogTrainingRound(g);
         }
 
         public override void LogDiagnostics()

@@ -386,6 +386,7 @@ namespace Menace.Controllers
             // Setup players
             PlayerMenace playerMenace;
             PlayerRandom playerRandom;
+
             if (createGameInput.Type == GameType.MenaceP1)
             {
                 playerMenace = PlayerFactory.GetPlayer(_context, createGameInput.Player1Id, PlayerType.AIMenace) as PlayerMenace;
@@ -400,7 +401,9 @@ namespace Menace.Controllers
 
 
             // train Menace
-            for (int i = 0; i < 1000; i++)
+            playerMenace.StartTraining();
+
+            for (int i = 0; i < 10; i++)
             {
                 var game1 = new Game(playerMenace, playerRandom);
                 var game2 = new Game(playerRandom, playerMenace);
@@ -409,7 +412,11 @@ namespace Menace.Controllers
                 game2.Train();
             }
 
+            var round = playerMenace.StopTraining();
+
             // Add new matchboxes and beads.
+            _context.TrainingRound.Add(round);
+
             foreach (Matchbox matchbox in playerMenace.MenaceEngine.Matchboxes)
             {
                 matchbox.BoardPosition = _context.BoardPosition.GetOrAddIfNotExists(matchbox.BoardPosition, b => b.BoardPositionId == matchbox.BoardPosition.BoardPositionId);

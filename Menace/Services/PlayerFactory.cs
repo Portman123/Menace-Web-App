@@ -42,6 +42,7 @@ namespace Menace.Services
                         .Include("MenaceEngine.Matchboxes")
                         .Include("MenaceEngine.Matchboxes.Beads")
                         .Include("MenaceEngine.Matchboxes.BoardPosition")
+                        .Include("TrainingHistory.Rounds")
                         .Single();
                     return menace;
                 default:

@@ -130,5 +130,9 @@ namespace MenaceData
         public DbSet<Turn> Turn { get; set; }
 
         public DbSet<Game> Game { get; set; }
+
+        public DbSet<TrainingRound> TrainingRound { get; set; }
+
+        public DbSet<TrainingHistory> TrainingHistory { get; set; }
     }
 }

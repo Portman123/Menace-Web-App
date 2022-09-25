@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MenaceData.Migrations
 {
     [DbContext(typeof(MenaceContext))]
-    [Migration("20220924201509_v1")]
+    [Migration("20220925170803_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,6 +196,45 @@ namespace MenaceData.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Player");
                 });
 
+            modelBuilder.Entity("Noughts_and_Crosses.TrainingHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrainingHistory");
+                });
+
+            modelBuilder.Entity("Noughts_and_Crosses.TrainingRound", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Draws")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Losses")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoundNumber")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TrainingHistoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Wins")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrainingHistoryId");
+
+                    b.ToTable("TrainingRound");
+                });
+
             modelBuilder.Entity("Noughts_and_Crosses.Turn", b =>
                 {
                     b.Property<Guid>("Id")
@@ -247,7 +286,7 @@ namespace MenaceData.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4626a27c-1880-4c53-9425-05980077f947"),
+                            Id = new Guid("7759658e-ff7b-440f-94d2-bd350c526f19"),
                             Draws = 0,
                             Losses = 0,
                             Name = "Human",
@@ -262,7 +301,12 @@ namespace MenaceData.Migrations
                     b.Property<Guid>("MenaceEngineId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("TrainingHistoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasIndex("MenaceEngineId");
+
+                    b.HasIndex("TrainingHistoryId");
 
                     b.HasDiscriminator().HasValue("PlayerMenace");
                 });
@@ -356,6 +400,13 @@ namespace MenaceData.Migrations
                     b.Navigation("BoardPosition");
                 });
 
+            modelBuilder.Entity("Noughts_and_Crosses.TrainingRound", b =>
+                {
+                    b.HasOne("Noughts_and_Crosses.TrainingHistory", null)
+                        .WithMany("History")
+                        .HasForeignKey("TrainingHistoryId");
+                });
+
             modelBuilder.Entity("Noughts_and_Crosses.Turn", b =>
                 {
                     b.HasOne("Noughts_and_Crosses.BoardPosition", "After")
@@ -395,7 +446,15 @@ namespace MenaceData.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Noughts_and_Crosses.TrainingHistory", "TrainingHistory")
+                        .WithMany()
+                        .HasForeignKey("TrainingHistoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("MenaceEngine");
+
+                    b.Navigation("TrainingHistory");
                 });
 
             modelBuilder.Entity("Noughts_and_Crosses.AIMenace", b =>
@@ -411,6 +470,11 @@ namespace MenaceData.Migrations
             modelBuilder.Entity("Noughts_and_Crosses.Matchbox", b =>
                 {
                     b.Navigation("Beads");
+                });
+
+            modelBuilder.Entity("Noughts_and_Crosses.TrainingHistory", b =>
+                {
+                    b.Navigation("History");
                 });
 #pragma warning restore 612, 618
         }

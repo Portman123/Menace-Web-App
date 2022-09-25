@@ -28,8 +28,6 @@ namespace Noughts_and_Crosses
             Matchboxes.AddLast(new Matchbox(newBoardPos));
         }
 
-
-
         // Find Matchbox/Check Existence in Menace by specifying board position
         public Matchbox MatchboxByBoardPos(BoardPosition boardPosition) //=> Matchboxes.Where(m => m.BoardPosition.SameAs(boardPosition)).FirstOrDefault();
         {
