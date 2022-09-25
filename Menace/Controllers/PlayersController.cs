@@ -47,6 +47,7 @@ namespace Menace.Controllers
             var details = new MenaceDetails
             {
                 Player = player,
+                PlayerId = player.Id,
                 menaceEngine = menacePlayer.MenaceEngine,
                 Matchboxes = menacePlayer.MenaceEngine.Matchboxes,
                 TrainingHistory = menacePlayer.TrainingHistory
@@ -174,6 +175,18 @@ namespace Menace.Controllers
             }
             
             await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Train([Bind("PlayerId, TrainingOption")] MenaceDetails menaceDetails)
+        {
+            if (menaceDetails.TrainingOption == "random")
+            {
+                TrainingService.TrainRandom(_context, menaceDetails.PlayerId);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
