@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-namespace Noughts_and_Crosses
+﻿namespace Noughts_and_Crosses
 {
-    public static class AIOptimalMove 
+    public static class AIOptimalMove
     {
         // this is a bit messy but techinically this could be adapted to play on more than just a 3x3 grid? not sure but it works for now
 
@@ -314,7 +306,7 @@ namespace Noughts_and_Crosses
         public static LinkedList<WinningPositionIntersect> DetermineIntersections()
         {
             LinkedList<WinningPosition> WinningPositions = DetermineWinningPositions();
-            LinkedList <WinningPositionIntersect> inters = new LinkedList<WinningPositionIntersect>();
+            LinkedList<WinningPositionIntersect> inters = new LinkedList<WinningPositionIntersect>();
             foreach (WinningPosition position1 in WinningPositions)
             {
                 foreach (WinningPosition position2 in WinningPositions)

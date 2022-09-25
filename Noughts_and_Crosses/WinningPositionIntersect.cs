@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Noughts_and_Crosses
+﻿namespace Noughts_and_Crosses
 {
     public class WinningPositionIntersect : Entity
     {
         public WinningPosition WinPos1 { get; set; }
         public WinningPosition WinPos2 { get; set; }
         public Coordinate IntersectCoord { get; set; }
-        
+
         public WinningPositionIntersect()
         {
             WinPos1 = new WinningPosition();

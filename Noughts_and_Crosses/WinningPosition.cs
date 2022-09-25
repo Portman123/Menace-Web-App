@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Noughts_and_Crosses
+﻿namespace Noughts_and_Crosses
 {
     public class WinningPosition : Entity
     {
@@ -24,7 +18,7 @@ namespace Noughts_and_Crosses
         {
             for (int i = 0; i < Coordinates.Length; i++)
             {
-                if (Coordinates[i] != comparison.Coordinates[i]) return false;
+                if (!Coordinates[i].Equals(comparison.Coordinates[i])) return false;
             }
             return true;
         }
@@ -37,7 +31,7 @@ namespace Noughts_and_Crosses
             // check if any coordinate in this position is a coordinate in the comparison
             for (int i = 0; i < Coordinates.Length; i++)
             {
-                for (int j=0; j < comparison.Coordinates.Length; j++)
+                for (int j = 0; j < comparison.Coordinates.Length; j++)
                 {
                     if (comparison.Coordinates[j].Equals(Coordinates[i])) return true;
                 }
