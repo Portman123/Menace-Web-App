@@ -104,14 +104,14 @@
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="btn" onclick="location.href='@( Url.Action("TrainOptimal", "BuildMenace",
-                                    new GameCreate { Type = Model.GameType, Player1Id = Model.Player1Id, Player2Id = Model.Player2Id } ) )'" />>
+                                    new GameCreate { GameType = Model.GameType, Player1Id = Model.Player1Id, Player2Id = Model.Player2Id } ) )'" />>
                             <span data-feather="file" class="align-text-bottom"></span>
                             Optimal AI
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="btn" onclick="location.href='@( Url.Action("TrainRandom", "BuildMenace",
-                                    new GameCreate { Type = Model.GameType, Player1Id = Model.Player1Id, Player2Id = Model.Player2Id } ) )'" />>
+                                    new GameCreate { GameType = Model.GameType, Player1Id = Model.Player1Id, Player2Id = Model.Player2Id } ) )'" />>
                             <span data-feather="file" class="align-text-bottom"></span>
                             Random AI
                             </a>
@@ -164,7 +164,7 @@
                         {
                             <div class="form-group">
                                 <input type="submit" value="New Game" class="btn btn-primary" id="submitButton" onclick="location.href='@( Url.Action("Build", "BuildMenace",
-                                    new GameCreate { Type = Model.GameType, Player1Id = Model.Player1Id, Player2Id = Model.Player2Id } ) )'" />
+                                    new GameCreate { GameType = Model.GameType, Player1Id = Model.Player1Id, Player2Id = Model.Player2Id } ) )'" />
                             </div>
                             <input type="hidden" id="hiddenBoardBeforeInput" value="@Model.BoardBeforeInput" />
                             <input type="hidden" id="hiddenBoardAfterInput" />

@@ -8,19 +8,17 @@ namespace Menace.Services
     {
         public static Game CreateGame(GameCreate input, MenaceContext context)
         {
-            PlayerMenace playerMenace = new PlayerMenace(new AIMenace(),$"Player {context.Player.Count()}");
+            PlayerMenace playerMenace = new PlayerMenace(new AIMenace(),$"Player {context.Player.Count()}", ReinforcementRewardFunction.RewardFunctionType.ThreePerWinOnePerDraw);
             Player playerHuman = new PlayerHumanOnWeb($"Player {context.Player.Count() + 1}");
 
-            
-
-            switch (input.Type)
+            switch (input.GameType)
             {
                 case GameType.MenaceP1:
                     return new Game(playerMenace, playerHuman);
                 case GameType.MenaceP2:
                     return new Game(playerHuman, playerMenace);
                 default:
-                    throw new Exception($"Unexpected game type{input.Type}");
+                    throw new Exception($"Unexpected game type{input.GameType}");
             }
         }
     }

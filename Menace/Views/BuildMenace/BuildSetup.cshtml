@@ -1,4 +1,5 @@
 ﻿@using Menace.ViewModels
+@using Noughts_and_Crosses
 
 @model GameCreate
 
@@ -15,20 +16,26 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Build Setup</h1>
-    <p>Do you want your MENACE to be: Player 1 (the opening player) or Player 2 (the opponent of the opening player).</p>
+    <h1 class="display-4">Create new Menace player</h1>
+    <p>Choose reward function type:</p>
     <div>
         <form asp-action="BuildSetup">
             <div class="form-group">
-                <input type="radio" asp-for="Type" value="0"/>
-                <label asp-for="Type">Player 1 (Opening)</label><br>
-                <input type="radio" asp-for="Type" value="1"/>
-                <label asp-for="Type">Player 2 (Second Player)</label><br>
-                <input type="submit" value="Build" class="btn btn-primary" />
+                <p>
+                    <input type="radio" asp-for="RewardFunctionType" value="0" id="ThreePerWinOnePerDraw" checked="checked" />
+                    <label for="ThreePerWinOnePerDraw">@( ReinforcementRewardFunction.MapRewardFunctionTypeToName(ReinforcementRewardFunction.RewardFunctionType.ThreePerWinOnePerDraw) )</label><br>
+                </p>
+                <p>
+                    <input type="radio" asp-for="RewardFunctionType" value="1" id="WinPlusTurnLossMinusTurn" />
+                    <label for="WinPlusTurnLossMinusTurn">@( ReinforcementRewardFunction.MapRewardFunctionTypeToName(ReinforcementRewardFunction.RewardFunctionType.WinPlusTurnLossMinusTurn) )</label><br>
+                </p>
+                <p>
+                    <input type="submit" value="Build" class="btn btn-primary" />
+                </p>
             </div>
         </form>
     </div>
-    
+
     @*<a class="btn btn-primary" asp-area="" asp-controller="Players" asp-action="Index">Player 1 (Opening)</a>
-    <a class="btn btn-primary" asp-area="" asp-controller="Players" asp-action="Index">Player 2 (Second Player)</a>*@
+        <a class="btn btn-primary" asp-area="" asp-controller="Players" asp-action="Index">Player 2 (Second Player)</a>*@
 </div>

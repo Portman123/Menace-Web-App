@@ -2,8 +2,8 @@
 
 var trainOnStartup = args.Contains("-train", StringComparer.OrdinalIgnoreCase);
 
-Player Menace1 = new PlayerMenace(new AIMenace(), "Menace1");
-Player Menace2 = new PlayerMenace(new AIMenace(), "Menace2");
+Player Menace1 = new PlayerMenace(new AIMenace(), "Menace1", ReinforcementRewardFunction.RewardFunctionType.ThreePerWinOnePerDraw);
+Player Menace2 = new PlayerMenace(new AIMenace(), "Menace2", ReinforcementRewardFunction.RewardFunctionType.ThreePerWinOnePerDraw);
 Player Rando = new PlayerRandom("Rando");
 Player Optimo1 = new PlayerOptimal("Optimo");
 Player Optimo2 = new PlayerOptimal("Optimo");

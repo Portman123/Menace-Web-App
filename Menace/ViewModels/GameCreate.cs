@@ -4,7 +4,9 @@ namespace Menace.ViewModels
 {
     public class GameCreate
     {
-        public GameType Type { get; set; }
+        public GameType GameType { get; set; }
+
+        public ReinforcementRewardFunction.RewardFunctionType RewardFunctionType { get; set; }
 
         public Guid Player1Id { get; set; }
 

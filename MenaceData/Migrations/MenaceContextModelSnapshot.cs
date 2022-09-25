@@ -288,7 +288,7 @@ namespace MenaceData.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1cf6f961-8ba9-4065-9e6e-05b93f2cde3f"),
+                            Id = new Guid("1b492cd4-b99e-4059-8303-38f72c09e2b7"),
                             Draws = 0,
                             Losses = 0,
                             Name = "Human",
@@ -302,6 +302,9 @@ namespace MenaceData.Migrations
 
                     b.Property<Guid>("MenaceEngineId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ReinforcementType")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("TrainingHistoryId")
                         .HasColumnType("uniqueidentifier");

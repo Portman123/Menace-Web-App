@@ -32,15 +32,15 @@ namespace Menace.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (createGameInput.Type == GameType.MenaceP1)
+                if (createGameInput.GameType == GameType.MenaceP1)
                 {
-                    createGameInput.Player1Id = GetOrCreatePlayerMenace($"Menace {_context.PlayerMenace.Count()}").Id;
+                    createGameInput.Player1Id = GetOrCreatePlayerMenace($"Menace {_context.PlayerMenace.Count()}", createGameInput.RewardFunctionType).Id;
                     createGameInput.Player2Id = GetOrPlayerHuman(Player.HumanPlayerName).Id;
                 }
-                else if (createGameInput.Type == GameType.MenaceP2)
+                else if (createGameInput.GameType == GameType.MenaceP2)
                 {
                     createGameInput.Player1Id = GetOrPlayerHuman(Player.HumanPlayerName).Id;
-                    createGameInput.Player2Id = GetOrCreatePlayerMenace($"Menace {_context.PlayerMenace.Count()}").Id;
+                    createGameInput.Player2Id = GetOrCreatePlayerMenace($"Menace {_context.PlayerMenace.Count()}", createGameInput.RewardFunctionType).Id;
                 }
                 else { throw new Exception("Invalid input when choosing if Menace is P1 or P2"); }
 
@@ -98,13 +98,13 @@ namespace Menace.Controllers
             Player player1;
             Player player2;
 
-            if (createGameInput.Type == GameType.MenaceP1)
+            if (createGameInput.GameType == GameType.MenaceP1)
             {
                 player1 = PlayerFactory.GetPlayer(_context, createGameInput.Player1Id, PlayerType.AIMenace);
                 player2 = PlayerFactory.GetPlayer(_context, createGameInput.Player2Id, PlayerType.Human);
 
             }
-            else if (createGameInput.Type == GameType.MenaceP2)
+            else if (createGameInput.GameType == GameType.MenaceP2)
             {
                 player1 = PlayerFactory.GetPlayer(_context, createGameInput.Player1Id, PlayerType.Human);
                 player2 = PlayerFactory.GetPlayer(_context, createGameInput.Player2Id, PlayerType.AIMenace);
@@ -141,7 +141,7 @@ namespace Menace.Controllers
                 GameHistoryId = newGame.Id,
                 IsGameActive = true,
                 CurrentPlayerSymbol = playerSymbol,
-                GameType = createGameInput.Type,
+                GameType = createGameInput.GameType,
                 Player1Id = player1.Id,
                 Player2Id = player2.Id,
                 Beads = aiPlayer.MenaceEngine.MatchboxByBoardPos(boardPosition)?.Beads,
@@ -306,14 +306,14 @@ namespace Menace.Controllers
             return player;
         }
 
-        private Player GetOrCreatePlayerMenace(string name)
+        private Player GetOrCreatePlayerMenace(string name, ReinforcementRewardFunction.RewardFunctionType rewardFunctionType)
         {
             var player = _context.Player.Where(p => p.Name == name).FirstOrDefault();
 
             if (player == null)
             {
                 var ai = new AIMenace();
-                player = new PlayerMenace(ai, name);
+                player = new PlayerMenace(ai, name, rewardFunctionType);
 
                 _context.AIMenace.Add(ai);
                 _context.Player.Add(player);
@@ -330,11 +330,11 @@ namespace Menace.Controllers
         [HttpGet]
         public IActionResult TrainOptimal(GameCreate createGameInput)
         {
-            if (createGameInput.Type == GameType.MenaceP1)
+            if (createGameInput.GameType == GameType.MenaceP1)
             {
                 TrainingService.TrainOptimal(_context, createGameInput.Player1Id);
             }
-            else if (createGameInput.Type == GameType.MenaceP2)
+            else if (createGameInput.GameType == GameType.MenaceP2)
             {
                 TrainingService.TrainOptimal(_context, createGameInput.Player2Id);
             }
@@ -349,11 +349,11 @@ namespace Menace.Controllers
         [HttpGet]
         public IActionResult TrainRandom(GameCreate createGameInput)
         {
-            if (createGameInput.Type == GameType.MenaceP1)
+            if (createGameInput.GameType == GameType.MenaceP1)
             {
                 TrainingService.TrainRandom(_context, createGameInput.Player1Id);
             }
-            else if (createGameInput.Type == GameType.MenaceP2)
+            else if (createGameInput.GameType == GameType.MenaceP2)
             {
                 TrainingService.TrainRandom(_context, createGameInput.Player2Id);
             }

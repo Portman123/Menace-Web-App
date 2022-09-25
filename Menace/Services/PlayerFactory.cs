@@ -20,7 +20,7 @@ namespace Menace.Services
                 case PlayerType.AIRandom:
                     return new PlayerRandom(playerName);
                 case PlayerType.AIMenace:
-                    return new PlayerMenace(new AIMenace(), playerName);
+                    return new PlayerMenace(new AIMenace(), playerName, ReinforcementRewardFunction.RewardFunctionType.ThreePerWinOnePerDraw);
                 default:
                     throw new Exception($"Unexpected player type {input.Type}");
             }

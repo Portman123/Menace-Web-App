@@ -79,7 +79,8 @@ namespace MenaceData.Migrations
                     Losses = table.Column<int>(type: "int", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MenaceEngineId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    TrainingHistoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    TrainingHistoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ReinforcementType = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -246,7 +247,7 @@ namespace MenaceData.Migrations
             migrationBuilder.InsertData(
                 table: "Player",
                 columns: new[] { "Id", "Discriminator", "Draws", "Losses", "Name", "Wins" },
-                values: new object[] { new Guid("1cf6f961-8ba9-4065-9e6e-05b93f2cde3f"), "PlayerHumanOnWeb", 0, 0, "Human", 0 });
+                values: new object[] { new Guid("1b492cd4-b99e-4059-8303-38f72c09e2b7"), "PlayerHumanOnWeb", 0, 0, "Human", 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bead_MatchboxId",

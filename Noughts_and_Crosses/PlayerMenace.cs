@@ -13,16 +13,18 @@ namespace Noughts_and_Crosses
         [NotMapped]
         public TrainingRound CurrentTrainingRound { get; set; }
 
+        public ReinforcementRewardFunction.RewardFunctionType ReinforcementType { get; set; }
 
         public PlayerMenace(string name) : base(name)
         {
             TrainingHistory = new TrainingHistory();
         }
 
-        public PlayerMenace(AIMenace menaceEngine, string name) : base(name)
+        public PlayerMenace(AIMenace menaceEngine, string name, ReinforcementRewardFunction.RewardFunctionType rewardFunctionType) : base(name)
         {
             MenaceEngine = menaceEngine;
             TrainingHistory = new TrainingHistory();
+            ReinforcementType = rewardFunctionType;
         }
 
         public TrainingRound StartTraining(string opponentName)

@@ -47,6 +47,7 @@ namespace Menace.Controllers
             var details = new MenaceDetails
             {
                 Player = player,
+                RewardFunctionType = ReinforcementRewardFunction.MapRewardFunctionTypeToName(menacePlayer.ReinforcementType),
                 PlayerId = player.Id,
                 menaceEngine = menacePlayer.MenaceEngine,
                 Matchboxes = menacePlayer.MenaceEngine.Matchboxes,

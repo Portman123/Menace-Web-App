@@ -68,7 +68,7 @@ namespace Menace.Controllers
             if (player == null)
             {
                 var ai = new AIMenace();
-                player = new PlayerMenace(ai, name);
+                player = new PlayerMenace(ai, name, ReinforcementRewardFunction.RewardFunctionType.ThreePerWinOnePerDraw);
 
                 _context.AIMenace.Add(ai);
                 _context.Player.Add(player);

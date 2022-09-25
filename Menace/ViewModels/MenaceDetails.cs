@@ -1,4 +1,5 @@
 ﻿using Noughts_and_Crosses;
+using System.ComponentModel.DataAnnotations;
 
 namespace Menace.ViewModels
 {
@@ -7,6 +8,9 @@ namespace Menace.ViewModels
         public Guid PlayerId { get; set; }
 
         public Player Player { get; set; }
+
+        [Display(Name = "Reward Function")]
+        public string RewardFunctionType { get; set; }
 
         public AIMenace menaceEngine { get; set; }
 
