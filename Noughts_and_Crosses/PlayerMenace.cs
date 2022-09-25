@@ -25,9 +25,9 @@ namespace Noughts_and_Crosses
             TrainingHistory = new TrainingHistory();
         }
 
-        public TrainingRound StartTraining()
+        public TrainingRound StartTraining(string opponentName)
         {
-            CurrentTrainingRound = TrainingHistory.AddRound();
+            CurrentTrainingRound = TrainingHistory.AddRound(opponentName);
 
             return CurrentTrainingRound;
         }

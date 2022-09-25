@@ -48,7 +48,8 @@ namespace Menace.Controllers
             {
                 Player = player,
                 menaceEngine = menacePlayer.MenaceEngine,
-                Matchboxes = menacePlayer.MenaceEngine.Matchboxes
+                Matchboxes = menacePlayer.MenaceEngine.Matchboxes,
+                TrainingHistory = menacePlayer.TrainingHistory
             };
 
             return View(details);

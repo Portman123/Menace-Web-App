@@ -104,6 +104,7 @@ namespace MenaceData.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RoundNumber = table.Column<int>(type: "int", nullable: false),
+                    Opponent = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Wins = table.Column<int>(type: "int", nullable: false),
                     Draws = table.Column<int>(type: "int", nullable: false),
                     Losses = table.Column<int>(type: "int", nullable: false),
@@ -245,7 +246,7 @@ namespace MenaceData.Migrations
             migrationBuilder.InsertData(
                 table: "Player",
                 columns: new[] { "Id", "Discriminator", "Draws", "Losses", "Name", "Wins" },
-                values: new object[] { new Guid("7759658e-ff7b-440f-94d2-bd350c526f19"), "PlayerHumanOnWeb", 0, 0, "Human", 0 });
+                values: new object[] { new Guid("1cf6f961-8ba9-4065-9e6e-05b93f2cde3f"), "PlayerHumanOnWeb", 0, 0, "Human", 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bead_MatchboxId",

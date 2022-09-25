@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MenaceData.Migrations
 {
     [DbContext(typeof(MenaceContext))]
-    [Migration("20220925170803_v1")]
+    [Migration("20220925183717_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -219,6 +219,10 @@ namespace MenaceData.Migrations
                     b.Property<int>("Losses")
                         .HasColumnType("int");
 
+                    b.Property<string>("Opponent")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("RoundNumber")
                         .HasColumnType("int");
 
@@ -286,7 +290,7 @@ namespace MenaceData.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7759658e-ff7b-440f-94d2-bd350c526f19"),
+                            Id = new Guid("1cf6f961-8ba9-4065-9e6e-05b93f2cde3f"),
                             Draws = 0,
                             Losses = 0,
                             Name = "Human",
@@ -403,7 +407,7 @@ namespace MenaceData.Migrations
             modelBuilder.Entity("Noughts_and_Crosses.TrainingRound", b =>
                 {
                     b.HasOne("Noughts_and_Crosses.TrainingHistory", null)
-                        .WithMany("History")
+                        .WithMany("Rounds")
                         .HasForeignKey("TrainingHistoryId");
                 });
 
@@ -474,7 +478,7 @@ namespace MenaceData.Migrations
 
             modelBuilder.Entity("Noughts_and_Crosses.TrainingHistory", b =>
                 {
-                    b.Navigation("History");
+                    b.Navigation("Rounds");
                 });
 #pragma warning restore 612, 618
         }

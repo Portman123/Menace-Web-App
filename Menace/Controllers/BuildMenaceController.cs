@@ -401,7 +401,7 @@ namespace Menace.Controllers
 
 
             // train Menace
-            playerMenace.StartTraining();
+            playerMenace.StartTraining("Random");
 
             for (int i = 0; i < 10; i++)
             {
