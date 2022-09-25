@@ -187,6 +187,11 @@ namespace Menace.Controllers
                 TrainingService.TrainRandom(_context, menaceDetails.PlayerId);
             }
 
+            if (menaceDetails.TrainingOption == "optimal")
+            {
+                TrainingService.TrainOptimal(_context, menaceDetails.PlayerId);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 

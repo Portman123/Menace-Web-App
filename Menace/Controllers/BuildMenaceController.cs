@@ -330,52 +330,18 @@ namespace Menace.Controllers
         [HttpGet]
         public IActionResult TrainOptimal(GameCreate createGameInput)
         {
-            // Setup players
-            PlayerMenace playerMenace;
-            PlayerOptimal playerOptimal;
             if (createGameInput.Type == GameType.MenaceP1)
             {
-                playerMenace = PlayerFactory.GetPlayer(_context, createGameInput.Player1Id, PlayerType.AIMenace) as PlayerMenace;
-                playerOptimal = new PlayerOptimal("Optimal Trainer");
+                TrainingService.TrainOptimal(_context, createGameInput.Player1Id);
             }
             else if (createGameInput.Type == GameType.MenaceP2)
             {
-                playerOptimal = new PlayerOptimal("Optimal Trainer");
-                playerMenace = PlayerFactory.GetPlayer(_context, createGameInput.Player2Id, PlayerType.AIMenace) as PlayerMenace;
+                TrainingService.TrainOptimal(_context, createGameInput.Player2Id);
             }
-            else { throw new Exception("Invalid input when choosing if Menace is P1 or P2"); }
-
-
-            // train Menace
-            for (int i=0; i < 1000; i++)
+            else
             {
-                var game1 = new Game(playerMenace, playerOptimal);
-                var game2 = new Game(playerOptimal, playerMenace);
-
-                game1.Train();
-                game2.Train();
+                throw new Exception("Invalid input when choosing if Menace is P1 or P2");
             }
-
-            // Add new matchboxes and beads.
-            foreach (Matchbox matchbox in playerMenace.MenaceEngine.Matchboxes)
-            {
-                matchbox.BoardPosition = _context.BoardPosition.GetOrAddIfNotExists(matchbox.BoardPosition, b => b.BoardPositionId == matchbox.BoardPosition.BoardPositionId);
-
-                if (_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id))
-                {
-                    _context.Entry(matchbox).Reference(m => m.BoardPosition).IsModified = false;
-
-                    foreach (var bead in matchbox.Beads)
-                    {
-                        _context.Bead.Add(bead);
-                    }
-                }
-            }
-
-            _context.SaveChanges();
-
-            // Display end of game UI
-            ModelState.Clear();
 
             return RedirectToAction(nameof(Build), createGameInput);
         }
