@@ -1,5 +1,6 @@
 ﻿@using Menace.ViewModels
 @using Noughts_and_Crosses
+
 @model IEnumerable<Noughts_and_Crosses.Player>
 
 @{
@@ -30,7 +31,7 @@
                 @Html.DisplayNameFor(model => model.Losses)
             </th>
             <th>
-                @Html.DisplayNameFor(model => (model as PlayerMenace).MenaceEngine.Matchboxes)
+                Games
             </th>
             <th></th>
         </tr>
@@ -55,7 +56,7 @@
                     @Html.DisplayFor(modelItem => item.Losses)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => (item as PlayerMenace).MenaceEngine.Matchboxes.Count)
+                    @( item.Wins + item.Draws + item.Losses )
                 </td>
                 <td>
                     @{
