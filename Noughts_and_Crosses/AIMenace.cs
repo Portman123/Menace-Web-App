@@ -13,14 +13,14 @@ namespace Noughts_and_Crosses
         // List of all Matchboxes
         public LinkedList<Matchbox> Matchboxes { get; set; }
 
-        [NotMapped]
-        public IReinforcement Reinforcer { get; set; }
+        //[NotMapped]
+        //public IReinforcement Reinforcer { get; set; }
 
         // Constructor
         public AIMenace()
         {
             Matchboxes = new LinkedList<Matchbox>();
-            Reinforcer = new ReinforcementIncremental();
+            //Reinforcer = new ReinforcementIncremental();
         }
 
         public void AddMatchbox(BoardPosition newBoardPos)
@@ -92,7 +92,7 @@ namespace Noughts_and_Crosses
 
         public void Reinforce(Game g, PlayerMenace p)
         {
-            Reinforcer.Reinforce(g, p);
+            ReinforcementIncremental.Reinforce(g.History, p);
         }
 
         //public void Reward(GameHistory game, string nameCheck)

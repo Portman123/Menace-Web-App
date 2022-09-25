@@ -17,12 +17,15 @@ namespace Noughts_and_Crosses
             throw new Exception($"Invalid game symbol value {value}");
         }
 
-        public static int MapSymbolToInt(char value)
+        public static int MapSymbolToInt(string value)
         {
-            if (value == 'X') return -1;
-            if (value == ' ') return 0;
-            if (value == 'O') return 1;
+            if (value == "X") return -1;
+            if (value == " ") return 0;
+            if (value == "O") return 1;
             throw new Exception($"Invalid game symbol {value}");
+
         }
+
+        public static int MapSymbolToInt(char value) => MapSymbolToInt(value.ToString());
     }
 }

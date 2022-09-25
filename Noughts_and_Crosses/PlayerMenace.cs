@@ -56,7 +56,7 @@ namespace Noughts_and_Crosses
             Console.Write(MenaceEngine.NumOfMoves());
             Console.WriteLine("");
             Console.Write("Number of Beads: ");
-            Console.Write(MenaceEngine.NumOfBeads());
+            Console.WriteLine(MenaceEngine.NumOfBeads());
         }
     }
 }

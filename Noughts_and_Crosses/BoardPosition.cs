@@ -42,7 +42,7 @@ namespace Noughts_and_Crosses
         {
             get
             {
-                return IsWinningPosition || BoardFull();
+                return IsWinningPosition || IsBoardFull;
             }
         }
 
@@ -76,6 +76,8 @@ namespace Noughts_and_Crosses
                 }
             }
         }
+
+        public bool IsFree(int position) => position > -1 && position < 9 && ' ' == BoardPositionId[position];
 
         // Constructor
         public BoardPosition(int[,] coords)
@@ -156,16 +158,19 @@ namespace Noughts_and_Crosses
             return 0;
         }
 
-        public bool BoardFull()
+        public bool IsBoardFull
         {
-            for (int i = 0; i < 3; i++)
+            get
             {
-                for (int j = 0; j < 3; j++)
+                for (int i = 0; i < 3; i++)
                 {
-                    if (Coords[i, j] == 0) return false;
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (Coords[i, j] == 0) return false;
+                    }
                 }
+                return true;
             }
-            return true;
         }
 
         public bool SameAs(BoardPosition comparison) => BoardPositionId.Equals(comparison.BoardPositionId);
@@ -187,7 +192,7 @@ namespace Noughts_and_Crosses
                     // Interpret BoardPosition data
                     if (Coords[i, j] == -1) { output.Append(" X "); }
                     else if (Coords[i, j] == 1) { output.Append(" O "); }
-                    else if (Coords[i, j] == 0) { output.Append(" - "); }
+                    else if (Coords[i, j] == 0) { output.Append($" {i * 3 + j + 1} "); }
                     else { output.Append("ERROR: Positional data is not in the correct format."); }
                     output.Append("|");
                 }

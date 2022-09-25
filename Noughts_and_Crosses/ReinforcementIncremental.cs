@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Noughts_and_Crosses
 {
-    public class ReinforcementIncremental : IReinforcement
+    public class ReinforcementIncremental
     {
+/*
         public void Reinforce(Game g, PlayerMenace menace)
         {
             // Ensure menace played in the game given
@@ -47,7 +48,7 @@ namespace Noughts_and_Crosses
                 }
             }
         }
-
+*/
         public static void Reinforce(GameHistory g, PlayerMenace menace)
         {
             // Ensure menace played in the game given
@@ -77,27 +78,26 @@ namespace Noughts_and_Crosses
                     }
                     else if (g.Winner != menace)
                     {
+                        //boxUsed.Losses++;
+                        //beadUsed.Count = Math.Max(1, beadUsed.Count - t.TurnNumber);
+
                         boxUsed.Losses++;
-                        beadUsed.Count = Math.Max(1, beadUsed.Count - t.TurnNumber);
+
+                        beadUsed.Count = beadUsed.Count - t.TurnNumber;
+
+                        // nothing could go wrong...
+                        if (beadUsed.Count < 1)
+                        {
+                            var deficit = -beadUsed.Count;
+
+                            foreach (Bead b in boxUsed.Beads)
+                            {
+                                b.Count += deficit + 1;
+                            }
+                        }
                     }
                 }
             }
-        }
-
-        public void WinReinforcement(Bead b, int turnNumber)
-        {
-            //b.Count += turnNumber*3;
-            b.Count += turnNumber;
-        }
-
-        public void DrawReinforcement(Bead b, int turnNumber)
-        {
-            //b.Count += turnNumber;
-        }
-
-        public void LossReinforcement(Bead b, int turnNumber)
-        {
-            b.Count = Math.Max(1, b.Count - turnNumber);
         }
     }
 }

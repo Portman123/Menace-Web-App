@@ -55,7 +55,7 @@ namespace Menace.Controllers
         {
             initialBoardPosition = _context.BoardPosition.GetOrAddIfNotExists(initialBoardPosition, b => b.BoardPositionId == initialBoardPosition.BoardPositionId);
 
-            var aiTurn = aiPlayer.PlayTurn(initialBoardPosition, MapPlayerLetterToPlayerNumber(playerSymbol), turnNumber);
+            var aiTurn = aiPlayer.PlayTurn(initialBoardPosition, GameSymbol.MapSymbolToInt(playerSymbol), turnNumber);
 
             aiTurn.After = _context.BoardPosition.GetOrAddIfNotExists(aiTurn.After, b => b.BoardPositionId == aiTurn.After.BoardPositionId);
 
@@ -239,18 +239,11 @@ namespace Menace.Controllers
 
         // Service Methods
         //-----------------
-        private int MapPlayerLetterToPlayerNumber(string letter) => letter == "X" ? -1 : 1;
-
-
-
         private IActionResult HandleEndOfGame(GameHistory game, Turn lastTurn, string currentPlayerSymbol, PlayerMenace aiPlayer, GameType gameType)
         {
             // Record final state
-            game.IsGameFinished = true;
-
             if (lastTurn.After.IsWinningPosition)
             {
-                game.Winner = lastTurn.TurnPlayer;
                 game.Winner.Wins++;
                 // Convoluted but meh
                 if (game.P1 == game.Winner)
@@ -267,7 +260,7 @@ namespace Menace.Controllers
                     ReinforcementIncremental.Reinforce(game, aiPlayer);
                 }
             }
-            else if (lastTurn.After.BoardFull())
+            else if (lastTurn.After.IsBoardFull)
             {
                 game.P1.Draws++;
                 game.P2.Draws++;

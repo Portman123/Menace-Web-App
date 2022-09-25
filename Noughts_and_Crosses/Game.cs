@@ -48,7 +48,7 @@ namespace Noughts_and_Crosses
             while (true)
             {
                 // Player 1 turn
-                Turn p1Turn = P1.PlayTurn(CurrentBoard, 1, CurrentBoard.TurnNumber);
+                Turn p1Turn = P1.PlayTurn(CurrentBoard, GameSymbol.MapSymbolToInt("X"), CurrentBoard.TurnNumber);
                 CurrentBoard = p1Turn.After;
                 History.AddMove(p1Turn);
                 CurrentBoard.PrintBoard();
@@ -57,7 +57,7 @@ namespace Noughts_and_Crosses
                 if (CurrentBoard.IsGameOver) break;
 
                 // Player 2 Turn 
-                Turn p2Turn = P2.PlayTurn(CurrentBoard, -1, CurrentBoard.TurnNumber);
+                Turn p2Turn = P2.PlayTurn(CurrentBoard, GameSymbol.MapSymbolToInt("O"), CurrentBoard.TurnNumber);
                 CurrentBoard = p2Turn.After;
                 History.AddMove(p2Turn);
                 CurrentBoard.PrintBoard();
@@ -79,33 +79,35 @@ namespace Noughts_and_Crosses
         public void Train()
         {
             if (Finished) throw new Exception("Cannot play a game that has already Finished!");
-            int turnNumber = 1;
 
             // Game Loop
             while (true)
             {
                 // Player 1 turn
-                Turn p1Turn = P1.PlayTurn(CurrentBoard, 1, turnNumber);
-                CurrentBoard = p1Turn.After;
-                History.AddMove(p1Turn);
-                turnNumber++;
+                Turn p1Turn = P1.PlayTurn(CurrentBoard, GameSymbol.MapSymbolToInt("X"), CurrentBoard.TurnNumber);
 
+                CurrentBoard = p1Turn.After;
+
+                History.AddMove(p1Turn);
 
                 // Check Game End
-                if (CurrentBoard.IsGameOver) break;
+                if (p1Turn.After.IsGameOver) break;
 
                 // Player 2 Turn 
-                Turn p2Turn = P2.PlayTurn(CurrentBoard, -1, turnNumber);
-                CurrentBoard = p2Turn.After;
-                History.AddMove(p2Turn);
-                turnNumber++;
+                Turn p2Turn = P2.PlayTurn(p1Turn.After, GameSymbol.MapSymbolToInt("O"), p1Turn.After.TurnNumber);
 
+                CurrentBoard = p2Turn.After;
+
+                History.AddMove(p2Turn);
 
                 // Check Game End
-                if (CurrentBoard.IsGameOver) break;
+                if (p2Turn.After.IsGameOver) break;
             }
+
             Finished = true;
+
             DetermineWinner();
+
             //AnnounceWinner();
 
             // Apply Reinforcements
@@ -117,13 +119,13 @@ namespace Noughts_and_Crosses
         public void AnnounceWinner()
         {
             // Write winner to console
-            if (CurrentBoard.CheckWin() == 1)
+            if (CurrentBoard.CheckWin() == GameSymbol.MapSymbolToInt("X"))
             {
                 Console.WriteLine("");
                 Console.Write(P1.Name);
                 Console.Write(" wins!");
             }
-            else if (CurrentBoard.CheckWin() == -1)
+            else if (CurrentBoard.CheckWin() == GameSymbol.MapSymbolToInt("O"))
             {
                 Console.WriteLine("");
                 Console.Write(P2.Name);
@@ -136,15 +138,17 @@ namespace Noughts_and_Crosses
         public void DetermineWinner()
         {
             // Write winner to console
-            if (CurrentBoard.CheckWin() == 1)
+            if (CurrentBoard.CheckWin() == GameSymbol.MapSymbolToInt("X"))
             {
                 Winner = P1;
-                P1.Wins++; P2.Losses++;
+                P1.Wins++;
+                P2.Losses++;
             }
-            else if (CurrentBoard.CheckWin() == -1)
+            else if (CurrentBoard.CheckWin() == GameSymbol.MapSymbolToInt("O"))
             {
                 Winner = P2;
-                P2.Wins++; P1.Losses++;
+                P2.Wins++;
+                P1.Losses++;
             }
             else if (CurrentBoard.CheckWin() == 0)
             {

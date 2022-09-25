@@ -104,16 +104,11 @@ namespace Menace.Controllers
             return View(gameState);
         }
 
-        private int MapPlayerLetterToPlayerNumber(string letter) => letter == "X" ? -1 : 1;
-
         private IActionResult HandleEndOfGame(GameHistory game, Turn lastTurn, string currentPlayerSymbol, PlayerMenace aiPlayer)
         {
             // Record final state
-            game.IsGameFinished = true;
-
             if (lastTurn.After.IsWinningPosition)
             {
-                game.Winner = lastTurn.TurnPlayer;
                 game.Winner.Wins++;
                 // Convoluted but meh
                 if (game.P1 == game.Winner)
@@ -204,7 +199,7 @@ namespace Menace.Controllers
                 }
 
                 // Make AI play its turn
-                var aiTurn = aiPlayer.PlayTurn(boardAfterInput, MapPlayerLetterToPlayerNumber(gameState.CurrentPlayerSymbol), boardAfterInput.TurnNumber);
+                var aiTurn = aiPlayer.PlayTurn(boardAfterInput, GameSymbol.MapSymbolToInt(gameState.CurrentPlayerSymbol), boardAfterInput.TurnNumber);
 
                 aiTurn.After = _context.BoardPosition.GetOrAddIfNotExists(aiTurn.After, b => b.BoardPositionId == aiTurn.After.BoardPositionId);
 

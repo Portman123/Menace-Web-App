@@ -27,6 +27,13 @@ namespace Noughts_and_Crosses
         public void AddMove(Turn t)
         {
             Turns.AddLast(t);
+
+            IsGameFinished = t.After.IsGameOver;
+
+            if (t.After.IsWinningPosition)
+            {
+                Winner = t.TurnPlayer;
+            }
         }
 
         public void Display()
