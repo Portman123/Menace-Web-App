@@ -332,11 +332,11 @@ namespace Menace.Controllers
         {
             if (createGameInput.GameType == GameType.MenaceP1)
             {
-                TrainingService.TrainOptimal(_context, createGameInput.Player1Id);
+                TrainingService.TrainOptimal(_context, createGameInput.Player1Id, 100);
             }
             else if (createGameInput.GameType == GameType.MenaceP2)
             {
-                TrainingService.TrainOptimal(_context, createGameInput.Player2Id);
+                TrainingService.TrainOptimal(_context, createGameInput.Player2Id, 100);
             }
             else
             {
@@ -351,11 +351,11 @@ namespace Menace.Controllers
         {
             if (createGameInput.GameType == GameType.MenaceP1)
             {
-                TrainingService.TrainRandom(_context, createGameInput.Player1Id);
+                TrainingService.TrainRandom(_context, createGameInput.Player1Id, 100);
             }
             else if (createGameInput.GameType == GameType.MenaceP2)
             {
-                TrainingService.TrainRandom(_context, createGameInput.Player2Id);
+                TrainingService.TrainRandom(_context, createGameInput.Player2Id, 100);
             }
             else
             {

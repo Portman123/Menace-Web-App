@@ -19,5 +19,7 @@ namespace Menace.ViewModels
         public TrainingHistory TrainingHistory { get; set; }
 
         public string TrainingOption { get; set; }
+
+        public int NumberOfTrainingGames { get; set; }
     }
 }

@@ -69,13 +69,20 @@
 </div>
 
 <form asp-action="Train">
-    <span>
-        Train now versus:&nbsp;
-        <input type="radio" asp-for="TrainingOption" value="random" id="random" checked="checked" /><label for="random">Random</label>&nbsp;
-        <input type="radio" asp-for="TrainingOption" value="optimal" id="optimal" /><label for="optimal">Optimal</label>&nbsp;
-    </span>
-    <input name="submit" type="submit" value="Train" class="btn btn-primary" />
-
+    <p>
+        <span>
+            Train now versus:&nbsp;
+            <input type="radio" asp-for="TrainingOption" value="random" id="random" checked="checked" /><label for="random">Random</label>&nbsp;
+            <input type="radio" asp-for="TrainingOption" value="optimal" id="optimal" /><label for="optimal">Optimal</label>&nbsp;
+        </span>
+    </p>
+    <p>
+        <label for="quantity">Number of training games to play (between 1 and 1000):</label>
+        <input type="number" asp-for="NumberOfTrainingGames" id="quantity" value="100" min="1" max="1000" />
+    </p>
+    <p>
+        <input name="submit" type="submit" value="Train" class="btn btn-primary" />
+    </p>
     <input type="hidden" asp-for="PlayerId" />
 </form>
 

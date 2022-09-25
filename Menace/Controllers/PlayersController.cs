@@ -181,16 +181,16 @@ namespace Menace.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Train([Bind("PlayerId, TrainingOption")] MenaceDetails menaceDetails)
+        public async Task<ActionResult> Train([Bind("PlayerId, TrainingOption, NumberOfTrainingGames")] MenaceDetails menaceDetails)
         {
             if (menaceDetails.TrainingOption == "random")
             {
-                TrainingService.TrainRandom(_context, menaceDetails.PlayerId);
+                TrainingService.TrainRandom(_context, menaceDetails.PlayerId, menaceDetails.NumberOfTrainingGames);
             }
 
             if (menaceDetails.TrainingOption == "optimal")
             {
-                TrainingService.TrainOptimal(_context, menaceDetails.PlayerId);
+                TrainingService.TrainOptimal(_context, menaceDetails.PlayerId, menaceDetails.NumberOfTrainingGames);
             }
 
             return RedirectToAction(nameof(Index));

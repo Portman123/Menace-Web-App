@@ -6,27 +6,27 @@ namespace Menace.Services
 {
     public class TrainingService
     {
-        public static void TrainOptimal(MenaceContext context, Guid menacePlayerId)
+        public static void TrainOptimal(MenaceContext context, Guid menacePlayerId, int numberOfGames)
         {
             var playerOptimal = new PlayerOptimal("Optimal Trainer");
 
-            Train(context, menacePlayerId, playerOptimal, "Optimal");
+            Train(context, menacePlayerId, playerOptimal, "Optimal", numberOfGames);
         }
 
-        public static void TrainRandom(MenaceContext context, Guid menacePlayerId)
+        public static void TrainRandom(MenaceContext context, Guid menacePlayerId, int numberOfGames)
         {
             var playerRandom = new PlayerRandom("Random Trainer");
 
-            Train(context, menacePlayerId, playerRandom, "Random");
+            Train(context, menacePlayerId, playerRandom, "Random", numberOfGames);
         }
 
-        private static void Train(MenaceContext context, Guid menacePlayerId, Player trainer, string trainerName)
+        private static void Train(MenaceContext context, Guid menacePlayerId, Player trainer, string trainerName, int numberOfGames)
         {
             var playerMenace = PlayerFactory.GetPlayer(context, menacePlayerId, PlayerType.AIMenace) as PlayerMenace;
 
             playerMenace.StartTraining(trainerName);
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < numberOfGames; i++)
             {
                 var game1 = new Game(playerMenace, trainer);
 
