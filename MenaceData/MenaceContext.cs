@@ -20,6 +20,40 @@ namespace MenaceData
         //
         // This class will inherit from DbContext and be the custom created link
         // LazyLoadingEnabled
+
+
+
+        // Series of DbSets
+        //  Represents an entity used for CRUD operations
+        //      DbContext represents the database 
+        //      DbSet represents the tables in the DB
+        public DbSet<BoardPosition> BoardPosition { get; set; }
+
+        public DbSet<Bead> Bead { get; set; }
+
+        public DbSet<Matchbox> Matchbox { get; set; }
+
+        public DbSet<AIMenace> AIMenace { get; set; }
+
+        public DbSet<Player> Player { get; set; }
+
+        public DbSet<PlayerMenace> PlayerMenace { get; set; }
+
+        public DbSet<PlayerOptimal> PlayerOptimal { get; set; }
+
+        public DbSet<PlayerRandom> PlayerRandom { get; set; }
+
+        public DbSet<PlayerHumanOnWeb> PlayerHumanOnWeb { get; set; }
+
+        public DbSet<GameHistory> GameHistory { get; set; }
+
+        public DbSet<Turn> Turn { get; set; }
+
+        public DbSet<Game> Game { get; set; }
+
+        public DbSet<TrainingRound> TrainingRound { get; set; }
+
+        public DbSet<TrainingHistory> TrainingHistory { get; set; }
         public MenaceContext()
         {
         }
@@ -102,37 +136,6 @@ namespace MenaceData
                 .OnDelete(DeleteBehavior.NoAction);
         }
 
-        // Series of DbSets
-        //  Represents an entity used for CRUD operations
-        //      DbContext represents the database 
-        //      DbSet represents the tables in the DB
-
-        public DbSet<BoardPosition> BoardPosition { get; set; }
-
-        public DbSet<Bead> Bead { get; set; }
-
-        public DbSet<Matchbox> Matchbox { get; set; }
-
-        public DbSet<AIMenace> AIMenace { get; set; }
-
-        public DbSet<Player> Player { get; set; }
-
-        public DbSet<PlayerMenace> PlayerMenace { get; set; }
-
-        public DbSet<PlayerOptimal> PlayerOptimal { get; set; }
-
-        public DbSet<PlayerRandom> PlayerRandom { get; set; }
-
-        public DbSet<PlayerHumanOnWeb> PlayerHumanOnWeb { get; set; }
-
-        public DbSet<GameHistory> GameHistory { get; set; }
-
-        public DbSet<Turn> Turn { get; set; }
-
-        public DbSet<Game> Game { get; set; }
-
-        public DbSet<TrainingRound> TrainingRound { get; set; }
-
-        public DbSet<TrainingHistory> TrainingHistory { get; set; }
+        
     }
 }

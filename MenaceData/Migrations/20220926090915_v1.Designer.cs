@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MenaceData.Migrations
 {
     [DbContext(typeof(MenaceContext))]
-    [Migration("20220925202632_v1")]
+    [Migration("20220926090915_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -290,7 +290,7 @@ namespace MenaceData.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1b492cd4-b99e-4059-8303-38f72c09e2b7"),
+                            Id = new Guid("2b4bb1f3-bbc5-48fb-bc16-edbf574b4979"),
                             Draws = 0,
                             Losses = 0,
                             Name = "Human",

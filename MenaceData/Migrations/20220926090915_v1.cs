@@ -247,7 +247,7 @@ namespace MenaceData.Migrations
             migrationBuilder.InsertData(
                 table: "Player",
                 columns: new[] { "Id", "Discriminator", "Draws", "Losses", "Name", "Wins" },
-                values: new object[] { new Guid("1b492cd4-b99e-4059-8303-38f72c09e2b7"), "PlayerHumanOnWeb", 0, 0, "Human", 0 });
+                values: new object[] { new Guid("2b4bb1f3-bbc5-48fb-bc16-edbf574b4979"), "PlayerHumanOnWeb", 0, 0, "Human", 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bead_MatchboxId",
