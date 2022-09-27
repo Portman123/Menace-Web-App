@@ -1,9 +1,9 @@
 ﻿USE [Menace]
 
 DROP TABLE Player
---DROP TABLE Games
+DROP TABLE Game
 DROP TABLE Turn
---DROP TABLE GameHistories
+DROP TABLE GameHistory
 DROP TABLE Bead
 DROP TABLE Matchbox
 DROP TABLE BoardPosition

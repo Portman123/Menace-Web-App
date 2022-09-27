@@ -2,7 +2,7 @@
 {
     public static class AIOptimalMove
     {
-        // this is a bit messy but techinically this could be adapted to play on more than just a 3x3 grid? not sure but it works for now
+        // this is a bit messy 
         public static readonly Coordinate TopLeft = new Coordinate(0, 0);
         public static readonly Coordinate TopMiddle = new Coordinate(0, 1);
         public static readonly Coordinate TopRight = new Coordinate(0, 2);

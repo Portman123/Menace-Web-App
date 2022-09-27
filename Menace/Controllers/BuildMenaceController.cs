@@ -365,85 +365,25 @@ namespace Menace.Controllers
             return RedirectToAction(nameof(Build), createGameInput);
         }
 
-        //[HttpGet]
-        //public IActionResult TrainMenace(GameCreate createGameInput)
-        //{
-        //    // Setup players
-        //    PlayerMenace playerMenace;
-        //    PlayerMenace playerMenaceTrainer;
+        [HttpGet]
+        public IActionResult TrainMenace(GameCreate createGameInput)
+        {
+            // Setup players
+            PlayerMenace playerMenace;
+            PlayerMenace playerMenaceTrainer;
 
-        //    // Get Menace Player
-        //    if (createGameInput.Type == GameType.MenaceP1)
-        //    {
-        //        // Get user's player Menace
-        //        playerMenace = PlayerFactory.GetPlayer(_context, createGameInput.Player1Id, PlayerType.AIMenace) as PlayerMenace;
-        //    }
-        //    else if (createGameInput.Type == GameType.MenaceP2)
-        //    {
-        //        // Get user's player Menace
-        //        playerMenace = PlayerFactory.GetPlayer(_context, createGameInput.Player2Id, PlayerType.AIMenace) as PlayerMenace;
-        //    }
-        //    else { throw new Exception("Invalid input when choosing if Menace is P1 or P2"); }
+            // Get Menace Player
+            if (createGameInput.GameType == GameType.MenaceP1)
+            {
+                TrainingService.TrainMenace(_context, createGameInput.Player1Id, 100);
+            }
+            else if (createGameInput.GameType == GameType.MenaceP2)
+            {
+                TrainingService.TrainMenace(_context, createGameInput.Player2Id, 100);
+            }
+            else { throw new Exception("Invalid input when choosing if Menace is P1 or P2"); }
 
-
-        //    // Get Menace Trainer (Pick random Menace from database)
-        //    var MenacePlayers = _context.Player.Where(p => p is PlayerMenace && p.Id != playerMenace.Id).ToList();
-        //    var temp = MenacePlayers[RandomNumberGenerator.Next(MenacePlayers.Count)];
-        //    playerMenaceTrainer = PlayerFactory.GetPlayer(_context, temp.Id, PlayerType.AIMenace) as PlayerMenace;
-
-        //    // if there are no other menaces for menace to train against then don't try to train...
-        //    if (playerMenaceTrainer == null) return RedirectToAction(nameof(Build), createGameInput);
-
-        //    // train Menace
-        //    for (int i = 0; i < 1000; i++)
-        //    {
-        //        var game1 = new Game(playerMenace, playerMenaceTrainer);
-        //        var game2 = new Game(playerMenaceTrainer, playerMenace);
-
-        //        game1.Train();
-        //        game2.Train();
-        //    }
-
-        //    // Add new matchboxes and beads.
-        //    foreach (Matchbox matchbox in playerMenace.MenaceEngine.Matchboxes)
-        //    {
-        //        matchbox.BoardPosition = _context.BoardPosition.GetOrAddIfNotExists(matchbox.BoardPosition, b => b.BoardPositionId == matchbox.BoardPosition.BoardPositionId);
-
-        //        if (_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id))
-        //        {
-        //            _context.Entry(matchbox).Reference(m => m.BoardPosition).IsModified = false;
-
-        //            foreach (var bead in matchbox.Beads)
-        //            {
-        //                _context.Bead.Add(bead);
-        //            }
-        //        }
-        //    }
-
-        //    // Add new matchboxes and beads.
-        //    foreach (Matchbox matchbox in playerMenaceTrainer.MenaceEngine.Matchboxes)
-        //    {
-        //        matchbox.BoardPosition = _context.BoardPosition.GetOrAddIfNotExists(matchbox.BoardPosition, b => b.BoardPositionId == matchbox.BoardPosition.BoardPositionId);
-
-        //        if (_context.Matchbox.AddIfNotExists(matchbox, m => m.Id == matchbox.Id))
-        //        {
-        //            _context.Entry(matchbox).Reference(m => m.BoardPosition).IsModified = false;
-
-        //            foreach (var bead in matchbox.Beads)
-        //            {
-        //                _context.Bead.Add(bead);
-        //            }
-        //        }
-        //    }
-
-        //    // Don't add progress of the random Menace??
-
-        //    _context.SaveChanges();
-
-        //    // Display end of game UI
-        //    ModelState.Clear();
-
-        //    return RedirectToAction(nameof(Build), createGameInput);
-        //}
+            return RedirectToAction(nameof(Build), createGameInput);
+        }
     }
 }
